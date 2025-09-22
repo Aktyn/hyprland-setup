@@ -39,4 +39,4 @@ echo "Setting up SDDM theme."
 sudo install -d -m 0755 /etc/sddm.conf.d
 sudo cp -f ./sddm/sddm.conf /etc/sddm.conf.d/aktyn.conf
 sudo mkdir -p /usr/share/sddm/themes/aktyn
-sudo cp -r -f ./sddm/theme /usr/share/sddm/themes/aktyn
+sudo cp -r -f ./sddm/theme/* /usr/share/sddm/themes/aktyn
