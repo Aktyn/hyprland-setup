@@ -13,4 +13,4 @@ if ! is_installed inotify-tools; then
 fi
 
 ./install.sh
-while inotifywait -r -qq -e modify install.sh defaults/** sddm/**; do ./install.sh; done
+while inotifywait -r -qq -e modify install.sh defaults/** quickshell/** sddm/**; do ./install.sh; done

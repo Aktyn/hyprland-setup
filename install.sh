@@ -107,14 +107,20 @@ install_package qt5-declarative
 install_package qt5-graphicaleffects
 install_aur_package quickshell
 
-echo "Copying hyprland config files"
-
 cd $curr
-#TODO: download directory from repository if there are no defaults found locally
+#TODO: clone repository if required files are not found locally
+
+echo "Copying hyprland config files"
 cp -r ./defaults/. ~/.config/hypr/
 
-hyprctl reload > /dev/null 2>&1 || true
+echo "Copying quickshell config files"
+mkdir -p ~/.config/quickshell/aktyn
+cp -r ./quickshell/* ~/.config/quickshell/aktyn/
 
-$curr/sddm/setup.sh #TODO: also download from repository if not found locally
+killall qs > /dev/null 2>&1 || true
+hyprctl reload > /dev/null 2>&1 || true
+qs -c aktyn > /dev/null 2>&1 &
+
+$curr/sddm/setup.sh
 
 echo "Setup complete. System restart is recommended."
