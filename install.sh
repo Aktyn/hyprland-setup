@@ -104,6 +104,7 @@ install_package qt6-imageformats
 install_package qt5-svg
 install_package qt6-svg
 install_package qt5-declarative
+install_package qt5-graphicaleffects
 install_aur_package quickshell
 
 echo "Copying hyprland config files"
