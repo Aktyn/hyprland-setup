@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"aktyn",
+			"blueman",
+			"devel",
+			"getoption",
+			"graphicaleffects",
+			"hypr",
+			"hyprctl",
+			"imageformats",
+			"inotify",
+			"inotifywait",
+			"killall",
+			"makepkg",
+			"noconfirm",
+			"pacman",
+			"qtcreator",
+			"quickshell",
+			"upower"
+		]
+	}
+}

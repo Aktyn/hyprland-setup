@@ -1,42 +1,11 @@
 import Quickshell
-import Quickshell.Io
-import QtQuick
 
-PanelWindow {
-  height: 32
-  // aboveWindows: false
-  // exclusionMode: ExclusionMode.Auto
+import "./common/"
+import "./components/"
 
-  anchors {
-    top: true
-    left: true
-    right: true
-  }
-
-  color: "#456"
-
-  Text {
-    id: clock
-
-    anchors.centerIn: parent
-    text: "---"
-    color: "#fff"
-
-    Process {
-      id: dateProc
-
-      command: ["date", "+%d-%m-%Y %H:%M"]
-      running: false
-      stdout: StdioCollector {
-        onStreamFinished: clock.text = this.text
-      }
+Scope {
+    LazyLoader {
+        active: true
+        component: Bar {}
     }
-
-    Timer {
-      interval: 1000 //TODO: align to system clock seconds for better accuracy
-      running: true
-      repeat: true
-      onTriggered: dateProc.running = true
-    }
-  }
 }

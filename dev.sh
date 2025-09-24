@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script runs install.sh every time file inside defaults/ directory is modifed
+# This script runs install.sh every time file inside defaults/ directory is modified
 
 is_installed() {
     local package="$1"
