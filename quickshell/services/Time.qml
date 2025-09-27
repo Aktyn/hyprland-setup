@@ -13,21 +13,4 @@ Singleton {
     id: clock
     precision: SystemClock.Minutes
   }
-
-  // Process {
-  //   id: dateProc
-  //   command: ["date", "+%d-%m-%Y %H:%M:%S"]
-  //   running: true
-
-  //   stdout: StdioCollector {
-  //     onStreamFinished: timeSingleton.time = this.text
-  //   }
-  // }
-
-  // Timer {
-  //   interval: 1000
-  //   running: true
-  //   repeat: true
-  //   onTriggered: dateProc.running = true
-  // }
 }

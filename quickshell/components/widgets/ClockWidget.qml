@@ -1,8 +1,11 @@
 import QtQuick
 
-import "../../services/"
+import "../../services"
+import "../../common"
 
 Text {
-    color: "#fff"
-    text: Time.time
+  color: Style.colors.colorOnBackground
+  text: Time.time
+  horizontalAlignment: Text.AlignHCenter
+  verticalAlignment: Text.AlignVCenter
 }

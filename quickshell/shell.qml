@@ -1,11 +1,9 @@
 import Quickshell
 
-import "./common/"
-import "./components/"
+import "components"
+import "components/bar"
 
-Scope {
-    LazyLoader {
-        active: true
-        component: Bar {}
-    }
+ShellRoot {
+  Bar {}
+  Wallpaper {}
 }
