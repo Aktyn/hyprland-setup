@@ -19,10 +19,7 @@ Item {
   implicitWidth: Math.min(colLayout.implicitWidth, 384)
 
   Behavior on implicitWidth {
-    NumberAnimation {
-      duration: 400
-      easing.type: Easing.InOutQuad
-    }
+    animation: Style.animation.elementMoveFast.numberAnimation.createObject(this)
   }
 
   ColumnLayout {
@@ -37,10 +34,14 @@ Item {
     StyledText {
       id: activeWindowClass
       Layout.fillWidth: true
+
+      property string content: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? root.activeWindow?.appId : (root.biggestWindow?.class) ?? "Desktop"
+
+      visible: this.content.length > 0
       font.pixelSize: Style.font.pixelSize.smaller
       color: Style.colors.outline
       elide: Text.ElideRight
-      text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? root.activeWindow?.appId : (root.biggestWindow?.class) ?? "Desktop"
+      text: this.content
     }
 
     StyledText {

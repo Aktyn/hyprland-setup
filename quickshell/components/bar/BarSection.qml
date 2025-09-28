@@ -6,8 +6,8 @@ Item {
   height: parent.height
 
   default property alias items: rowLayout.children
-  // property QQuickAnchorLine rightAnchor: QQuickAnchorLine.right
   property bool mirror: false
+  property bool stretch: false
 
   RowLayout {
     id: rowLayout
@@ -18,8 +18,8 @@ Item {
     anchors {
       top: parent.top
       bottom: parent.bottom
-      left: root.mirror ? parent.left : undefined
-      // right: root.mirror ? parent.right : undefined
+      left: root.mirror || root.stretch ? parent.left : undefined
+      right: root.stretch ? parent.right : undefined
     }
   }
 }

@@ -21,6 +21,8 @@ Singleton {
   }
 
   function generateMaterialYouColors(imagePath) {
+    //TODO: also update hyprland border colors and customize application styles according to the generated colors
+
     console.info("Generating json with material you colors based on: " + imagePath);
     const output = Consts.path.colorsFile.replace(/^file:\/\//, "")
     proc.command = ["python", Quickshell.shellPath("scripts/generate-material-you-colors.py"), imagePath, output];

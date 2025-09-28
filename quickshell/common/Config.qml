@@ -35,9 +35,10 @@ Singleton {
       id: configJsonAdapter
 
       property JsonObject bar: JsonObject {
+        property list<string> screenList: []
         property int height: 32
         property real shadowOpacity: 0.5
-        property list<string> screenList: []
+        property real desaturateTrayIcons: 0.5 // 1.0 means fully grayscale
       }
 
       property JsonObject wallpaper: JsonObject {

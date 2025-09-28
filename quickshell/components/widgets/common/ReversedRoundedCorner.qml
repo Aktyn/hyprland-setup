@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Shapes
 
-import "../../common"
+import "../../../common"
 
 Item {
   id: root
@@ -14,7 +14,7 @@ Item {
   }
   property int corner: CornerEnum.TopLeft // Default to TopLeft
 
-  property int implicitSize: HyprlandInfo.decoration.rounding + HyprlandInfo.general.gapsOut[0]
+  property int implicitSize: Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
   property color color: Style.colors.background ?? "#fff"
 
   implicitWidth: this.implicitSize
