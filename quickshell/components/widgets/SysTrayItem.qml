@@ -8,7 +8,6 @@ import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
 import "../../common"
-import "./common"
 
 MouseArea {
   id: root
@@ -23,10 +22,10 @@ MouseArea {
   implicitWidth: root.trayItemSize
   onClicked: event => {
     switch (event.button) {
-      case Qt.LeftButton:
+    case Qt.LeftButton:
       item.activate();
       break;
-      case Qt.RightButton:
+    case Qt.RightButton:
       if (item.hasMenu) {
         menu.open();
       }

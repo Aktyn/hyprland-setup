@@ -36,7 +36,7 @@ Singleton {
 
       property JsonObject bar: JsonObject {
         property list<string> screenList: []
-        property int height: 32
+        property int height: 36
         property real shadowOpacity: 0.5
         property real desaturateTrayIcons: 0.5 // 1.0 means fully grayscale
       }

@@ -4,14 +4,14 @@ import "../../../common"
 
 Text {
   id: root
-  property real iconSize: Style.font.pixelSize.small
+  property int iconSize: Style.font.pixelSize.small
   property real fill: 0
   property real truncatedFill: Math.round(fill * 100) / 100 // Reduce memory consumption spikes from constant font remapping
   renderType: Text.NativeRendering
   font {
     hintingPreference: Font.PreferFullHinting
     family: Style.font.family.iconMaterial ?? "Material Symbols Rounded"
-    pixelSize: 0
+    pixelSize: root.iconSize
     weight: Font.Normal + (Font.DemiBold - Font.Normal) * fill
     variableAxes: {
       "FILL": truncatedFill,

@@ -10,6 +10,6 @@ Text {
     family: Style.font.family.main ?? "sans-serif"
     pixelSize: Style.font.pixelSize.small ?? 15
   }
-  color: Style.colors.colorOnSurface ?? "black"
+  color: Style.colors.colorOnBackground ?? "black"
   linkColor: Style.colors.primary
 }

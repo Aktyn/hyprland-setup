@@ -52,11 +52,14 @@ Singleton {
   }
 
   property QtObject sizes: QtObject {
-    property real spacingExtraSmall: 2
-    property real spacingSmall: 4
-    property real spacingMedium: 8
-    property real spacingLarge: 16
-    property real spacingExtraLarge: 24
+    property int spacingExtraSmall: 2
+    property int spacingSmall: 4
+    property int spacingMedium: 8
+    property int spacingLarge: 16
+    property int spacingExtraLarge: 24
+
+    property int iconLarge: 24
+    property int iconExtraLarge: 32
   }
 
   //TODO: clean up

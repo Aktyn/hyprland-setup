@@ -8,9 +8,11 @@
 		"cSpell.words": [
 			"aktyn",
 			"blueman",
+			"desaturate",
 			"devel",
 			"getoption",
 			"graphicaleffects",
+			"grayscale",
 			"hypr",
 			"hyprctl",
 			"imageformats",
@@ -22,6 +24,7 @@
 			"pacman",
 			"qtcreator",
 			"quickshell",
+			"Toplevel",
 			"upower"
 		]
 	}

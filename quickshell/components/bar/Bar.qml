@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import QtQuick.Effects
 
 import "."
-import ".."
 import "../widgets"
 import "../widgets/common"
 import "../../common"
@@ -162,8 +161,6 @@ LazyLoader {
                   anchors.centerIn: parent
                   spacing: Style.sizes.spacingMedium
 
-                  property bool openPanel: false
-
                   StyledButton {
                     id: clockWidgetButton
 
@@ -171,7 +168,7 @@ LazyLoader {
                     implicitWidth: clockWidget.width + Style.sizes.spacingMedium * 2
                     implicitHeight: clockWidget.height + Style.sizes.spacingExtraSmall * 2
 
-                    toggled: middleContent.openPanel
+                    toggled: GlobalState.bar.calendarPanel.open
 
                     ClockWidget {
                       id: clockWidget
@@ -181,25 +178,30 @@ LazyLoader {
                     }
 
                     onPressed: {
-                      middleContent.openPanel = !middleContent.openPanel;
-                      calendarAdjacentPanel.screen = barPanel.screen;
+                      GlobalState.bar.calendarPanel.open = !GlobalState.bar.calendarPanel.open;
+                      GlobalState.bar.calendarPanel.screen = barPanel.screen;
                     }
                   }
 
-                  BarAdjacentPanel {
-                    id: calendarAdjacentPanel
+                  LazyLoader {
+                    active: true
 
-                    screen: barPanel.screen
-                    show: middleContent.openPanel
+                    BarAdjacentPanel {
+                      id: calendarPanelContainer
 
-                    onShowChanged: {
-                      console.log("Test: " + this.show + " | " + middleContent.openPanel)
+                      screen: GlobalState.bar.calendarPanel.screen
+                      show: GlobalState.bar.calendarPanel.open
+
+                      onBackgroundClick: function () {
+                        GlobalState.bar.calendarPanel.open = false;
+                      }
+
+                      Component.onCompleted: {
+                        GlobalState.bar.calendarPanel.requestFocus = calendarPanelContainer.onRequestFocus;
+                      }
+
+                      CalendarPanel {}
                     }
-
-                    // Component.onCompleted: {
-                    // console.log("Calendar panel loaded " + barPanel.screen);
-                    // }
-                    CalendarPanel {}
                   }
                 }
               }

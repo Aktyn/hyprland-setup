@@ -7,12 +7,13 @@ import "../../../services"
 
 Button {
   id: root
+
   property bool toggled
   property string buttonText
   property real buttonRadius: Style.rounding.small
   property real buttonRadiusPressed: buttonRadius
   property real buttonEffectiveRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
-  property int rippleDuration: 600
+  readonly property int rippleDuration: 600
   property bool rippleEnabled: true
   property var downAction // When left clicking (down)
   property var releaseAction // When left clicking (release)
@@ -56,56 +57,56 @@ Button {
     cursorShape: Qt.PointingHandCursor
     acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
     onPressed: event => {
-                 if (event.button === Qt.RightButton) {
-                   if (root.altAction)
-                   root.altAction();
-                   return;
-                 }
-                 if (event.button === Qt.MiddleButton) {
-                   if (root.middleClickAction)
-                   root.middleClickAction();
-                   return;
-                 }
-                 root.down = true;
-                 if (root.downAction) {
-                   root.downAction();
-                 }
-                 if (!root.rippleEnabled) {
-                   return;
-                 }
+      if (event.button === Qt.RightButton) {
+        if (root.altAction)
+          root.altAction();
+        return;
+      }
+      if (event.button === Qt.MiddleButton) {
+        if (root.middleClickAction)
+          root.middleClickAction();
+        return;
+      }
+      root.down = true;
+      if (root.downAction) {
+        root.downAction();
+      }
+      if (!root.rippleEnabled) {
+        return;
+      }
 
-                 const {
-                   x,
-                   y
-                 } = event;
-                 startRipple(x, y);
-               }
+      const {
+        x,
+        y
+      } = event;
+      startRipple(x, y);
+    }
     onReleased: event => {
-                  root.down = false;
-                  if (event.button !== Qt.LeftButton) {
-                    return;
-                  }
-                  if (root.releaseAction) {
-                    root.releaseAction();
-                  }
-                  root.click(); // Because the MouseArea already consumed the event
-                  if (!root.rippleEnabled) {
-                    return;
-                  }
-                  rippleFadeAnim.restart();
-                }
+      root.down = false;
+      if (event.button !== Qt.LeftButton) {
+        return;
+      }
+      if (root.releaseAction) {
+        root.releaseAction();
+      }
+      root.click(); // Because the MouseArea already consumed the event
+      if (!root.rippleEnabled) {
+        return;
+      }
+      rippleFadeAnim.restart();
+    }
     onCanceled: event => {
-                  root.down = false;
-                  if (!root.rippleEnabled) {
-                    return;
-                  }
-                  rippleFadeAnim.restart();
-                }
+      root.down = false;
+      if (!root.rippleEnabled) {
+        return;
+      }
+      rippleFadeAnim.restart();
+    }
   }
 
   RippleAnim {
     id: rippleFadeAnim
-    duration: rippleDuration * 2
+    duration: root.rippleDuration * 2
     target: ripple
     property: "opacity"
     to: 0
