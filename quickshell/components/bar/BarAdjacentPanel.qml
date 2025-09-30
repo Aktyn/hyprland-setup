@@ -9,6 +9,13 @@ import "../widgets/common"
 Scope {
   id: root
 
+  enum Side {
+    Middle = 1,
+    Left = 3,
+    Right = 4
+  }
+  property int side: BarAdjacentPanel.Side.Middle
+
   default property alias items: panelContent.children
   required property ShellScreen screen
   property bool show: false
@@ -17,13 +24,10 @@ Scope {
   readonly property int cornerSize: Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
   readonly property int slideDuration: 300
 
+  property bool closeOnBackgroundClick: true
   property var onBackgroundClick
 
   property alias onRequestFocus: panel.onRequestFocus
-
-  // onShowChanged: {
-  //   grab.active = root.show;
-  // }
 
   PanelWindow {
     id: pointerCatcher
@@ -39,7 +43,7 @@ Scope {
 
     exclusionMode: ExclusionMode.Ignore
     aboveWindows: true
-    visible: root.show
+    visible: root.show && root.closeOnBackgroundClick
 
     color: "transparent"
 
@@ -67,6 +71,8 @@ Scope {
 
     anchors.top: true
     margins.top: Config.bar.height
+    anchors.left: root.side === BarAdjacentPanel.Side.Left
+    anchors.right: root.side === BarAdjacentPanel.Side.Right
 
     HyprlandFocusGrab {
       id: grab

@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 
@@ -26,8 +25,7 @@ LazyLoader {
         aboveWindows: false
         color: Style.colors.background
 
-        property int topMargin: Config.bar.screenList.length === 0 || Config.bar.screenList.includes(screen.name)
-                                ? Config.bar.height : 0
+        property int topMargin: Config.bar.screenList.length === 0 || Config.bar.screenList.includes(screen.name) ? Config.bar.height : 0
 
         property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
@@ -65,10 +63,8 @@ LazyLoader {
           property real screenAspect: wallpaperPanel.screen.width / wallpaperPanel.screen.height
           property real bgAspect: wallpaperPanel.wallpaperWidth / wallpaperPanel.wallpaperHeight
 
-          x: screenAspect < bgAspect ? -((wallpaperPanel.wallpaperWidth / wallpaperPanel.wallpaperHeight
-                                          * sourceSize.height) - sourceSize.width) / 2 : 0
-          y: screenAspect > bgAspect ? -((wallpaperPanel.wallpaperHeight / wallpaperPanel.wallpaperWidth
-                                          * sourceSize.width) - sourceSize.height) / 2 : 0
+          x: screenAspect < bgAspect ? -((wallpaperPanel.wallpaperWidth / wallpaperPanel.wallpaperHeight * sourceSize.height) - sourceSize.width) / 2 : 0
+          y: screenAspect > bgAspect ? -((wallpaperPanel.wallpaperHeight / wallpaperPanel.wallpaperWidth * sourceSize.width) - sourceSize.height) / 2 : 0
 
           source: Config.wallpaper.path
           fillMode: Image.PreserveAspectCrop

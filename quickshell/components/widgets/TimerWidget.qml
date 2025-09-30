@@ -42,7 +42,7 @@ ColumnLayout {
         root.remainingSeconds = 0;
 
         console.info("Timer finished");
-        Quickshell.execDetached(["notify-send", " Timer finished!", "--urgency", "CRITICAL", "--transient", "--icon", Quickshell.shellPath("assets/icons/timer-alert.svg")]);
+        Quickshell.execDetached(["notify-send", "Timer finished!", "--urgency", "CRITICAL", "--transient", "--icon", Quickshell.shellPath("assets/icons/timer-alert.svg")]);
       }
     }
   }

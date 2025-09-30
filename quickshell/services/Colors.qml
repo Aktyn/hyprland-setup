@@ -17,7 +17,7 @@ Singleton {
   }
 
   /**
-   * Transparentizes a color by a given percentage
+   * Transparentize a color by a given percentage
    * @param {string} color
    * @param {number} alpha
    * @returns {Qt.rgba}

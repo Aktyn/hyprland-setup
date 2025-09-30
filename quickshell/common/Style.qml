@@ -58,6 +58,7 @@ Singleton {
     property int spacingLarge: 16
     property int spacingExtraLarge: 24
 
+    property int iconMedium: 20
     property int iconLarge: 24
     property int iconExtraLarge: 32
   }

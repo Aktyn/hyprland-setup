@@ -7,7 +7,15 @@ import "../../../common"
 ToolTip {
   id: root
 
-  property string content
+  enum TooltipSide {
+    Left = 1,
+    Right = 2,
+    Top = 3,
+    Bottom = 4
+  }
+  property int side: StyledTooltip.TooltipSide.Bottom
+
+  required property string content
   property bool extraVisibleCondition: true
   property bool alternativeVisibleCondition: false
   property bool internalVisibleCondition: {
@@ -23,6 +31,9 @@ ToolTip {
     animation: Style.animation.elementMoveFast.numberAnimation.createObject(this)
   }
 
+  // x: Math.round((parent.width - width) / 2) // - parent.width / 2 - contentItemBackground.width / 2
+  // y: Math.round((parent.height - height) / 2)
+
   background: null
 
   contentItem: Item {
@@ -32,9 +43,39 @@ ToolTip {
 
     Rectangle {
       id: backgroundRectangle
-      anchors.top: contentItemBackground.top
-      anchors.horizontalCenter: contentItemBackground.horizontalCenter
-      // anchors.verticalCenter: contentItemBackground.verticalCenter
+
+      anchors.horizontalCenter: switch (root.side) {
+      case StyledTooltip.TooltipSide.Top:
+      case StyledTooltip.TooltipSide.Bottom:
+        return contentItemBackground.horizontalCenter;
+      default:
+        return undefined;
+      }
+      anchors.verticalCenter: switch (root.side) {
+      case StyledTooltip.TooltipSide.Left:
+      case StyledTooltip.TooltipSide.Right:
+        return contentItemBackground.verticalCenter;
+      default:
+        return undefined;
+      }
+
+      anchors.top: switch (root.side) {
+      case StyledTooltip.TooltipSide.Bottom:
+        return contentItemBackground.top;
+      }
+      anchors.bottom: switch (root.side) {
+      case StyledTooltip.TooltipSide.Top:
+        return contentItemBackground.bottom;
+      }
+      anchors.left: switch (root.side) {
+      case StyledTooltip.TooltipSide.Right:
+        return contentItemBackground.left;
+      }
+      anchors.right: switch (root.side) {
+      case StyledTooltip.TooltipSide.Left:
+        return contentItemBackground.right;
+      }
+
       color: Style.colors.surfaceBright
       radius: Style.rounding.verysmall
       width: root.internalVisibleCondition ? (tooltipTextObject.width + 2 * root.horizontalPadding) : 0

@@ -10,9 +10,14 @@ RowLayout {
 
   property alias color: clockText.color
 
-  MaterialSymbol {
+  CustomIcon {
     visible: GlobalState.bar.calendarPanel.timer.running
-    text: "hourglass"
+
+    height: Style.sizes.iconMedium
+    width: height
+
+    source: "timer-sand"
+    colorize: true
     color: Style.colors.primary
   }
 

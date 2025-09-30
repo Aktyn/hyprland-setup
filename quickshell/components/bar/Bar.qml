@@ -95,148 +95,19 @@ LazyLoader {
               anchors.fill: parent
               spacing: Style.sizes.spacingLarge
 
-              // Left
-              BarSection {
-                id: leftRect
-                width: Math.max(0, (contentRoot.width - middleRect.implicitWidth) / 2 - row.spacing)
-
-                stretch: true
-
-                // Rectangle {
-                //   color: "#80ff5555"
-                //   anchors.fill: parent
-                // }
-
-                StyledButton {
-                  Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                  Layout.fillWidth: false
-                  Layout.rightMargin: Style.sizes.spacingMedium
-                  property real buttonPadding: Style.sizes.spacingExtraSmall
-                  implicitWidth: Math.min(64, Config.bar.height - Style.sizes.spacingSmall * 2)
-                  implicitHeight: implicitWidth
-
-                  buttonRadius: Style.rounding.full
-                  toggled: false
-
-                  //TODO
-                  // GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
-                  onPressed: {
-                    console.log("Left icon button pressed");
-                  }
-
-                  CustomIcon {
-                    id: distroIcon
-                    anchors.centerIn: parent
-                    height: parent.height - parent.buttonPadding * 2
-                    width: height
-
-                    source: "aktyn-logo"
-                    colorize: true
-                    color: Style.colors.colorOnSurface
-                  }
-                }
-
-                ActiveWindowInfo {}
-
-                // Space separator
-                Item {
-                  Layout.fillWidth: true
-                }
-
-                Text {
-                  Layout.alignment: Qt.AlignRight
-                  text: "LEFT"
-                  color: "#fff"
-                }
+              BarLeft {
+                id: leftSection
+                width: Math.max(0, (contentRoot.width - middleSection.implicitWidth) / 2 - row.spacing)
               }
 
-              // Middle
-              Item {
-                id: middleRect
-                height: parent.height
-                implicitWidth: middleContent.implicitWidth
-
-                RowLayout {
-                  id: middleContent
-                  anchors.centerIn: parent
-                  spacing: Style.sizes.spacingMedium
-
-                  StyledButton {
-                    id: clockWidgetButton
-
-                    Layout.alignment: Qt.AlignVCenter
-                    implicitWidth: clockWidget.width + Style.sizes.spacingMedium * 2
-                    implicitHeight: clockWidget.height + Style.sizes.spacingExtraSmall * 2
-
-                    toggled: GlobalState.bar.calendarPanel.open
-
-                    ClockWidget {
-                      id: clockWidget
-                      anchors.centerIn: parent
-                      Layout.alignment: Qt.AlignHCenter
-                      color: Style.colors.colorOnSurface
-                    }
-
-                    onPressed: {
-                      GlobalState.bar.calendarPanel.open = !GlobalState.bar.calendarPanel.open;
-                      GlobalState.bar.calendarPanel.screen = barPanel.screen;
-                    }
-                  }
-
-                  LazyLoader {
-                    active: true
-
-                    BarAdjacentPanel {
-                      id: calendarPanelContainer
-
-                      screen: GlobalState.bar.calendarPanel.screen
-                      show: GlobalState.bar.calendarPanel.open
-
-                      onBackgroundClick: function () {
-                        GlobalState.bar.calendarPanel.open = false;
-                      }
-
-                      Component.onCompleted: {
-                        GlobalState.bar.calendarPanel.requestFocus = calendarPanelContainer.onRequestFocus;
-                      }
-
-                      CalendarPanel {}
-                    }
-                  }
-                }
+              BarMiddle {
+                id: middleSection
+                screen: barPanel.screen
               }
 
-              // Right
-              BarSection {
-                id: rightRect
-                width: leftRect.width
-
-                mirror: true
-                stretch: true
-
-                // Rectangle {
-                //   color: "#8055ff55"
-                //   anchors.fill: parent
-                // }
-
-                Text {
-                  text: "TODO: settings panel"
-                  color: "#fff"
-                }
-
-                SysTray {}
-
-                NetworkBandwidth {}
-
-                // Space separator
-                Item {
-                  Layout.fillWidth: true
-                }
-
-                Text {
-                  text: "RIGHT"
-                  color: "#fff"
-                }
+              BarRight {
+                width: leftSection.width
+                screen: barPanel.screen
               }
             }
           }
