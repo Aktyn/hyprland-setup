@@ -4,53 +4,91 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Notifications
 
-import "../common"
-
 Singleton {
   id: notificationsRoot
 
-  signal notify(notification: Notification)
+  component NotificationObject: QtObject {
+    id: wrapper
+
+    required property Notification notification
+
+    property bool isNew: true
+    property double time: 0
+    property int timeout: 5000
+
+    property Timer timer
+
+    //TODO: execute on button click to force new notifications acknowledgement
+    function acknowledge() {
+      wrapper.isNew = false;
+    }
+  }
+  component NotificationTimer: Timer {
+    required property NotificationObject notificationObject
+
+    interval: 5000
+    running: true
+    onTriggered: function () {
+      this.notificationObject.acknowledge();
+      this.destroy();
+    }
+  }
+
+  property int notificationsHistoryLimit: 64
+  property list<NotificationObject> list: []
+  property bool hasUnread: list.some(n => n.isNew)
+
+  function destroyNotification(notificationObject: NotificationObject) {
+    notificationObject.timer?.stop();
+    notificationObject.notification.dismiss();
+    notificationObject.destroy();
+  }
+
+  function clearAll() {
+    for (const notificationObject of notificationsRoot.list) {
+      notificationsRoot.destroyNotification(notificationObject);
+    }
+    notificationsRoot.list = [];
+  }
+
+  signal notify(notification: NotificationObject)
 
   //NOTE: make sure there is no notification service running (e.g.: swaync) that blocks org.freedesktop.Notifications dbus
   NotificationServer {
-    // id: notifServer
-    // actionIconsSupported: true
-    // actionsSupported: true
-    // bodyHyperlinksSupported: true
-    // bodyImagesSupported: true
-    // bodyMarkupSupported: true
-    // bodySupported: true
-    // imageSupported: true
-    // keepOnReload: false
-    // persistenceSupported: true
-
-    onNotification: notification => {
-      // console.log("NOTIFICATION", notification.id, notification.summary, notification.body);
+    onNotification: function (notification) {
       notification.tracked = true;
-      notification.timeout = notification.expireTimeout < 0 ? 5000 : notification.expireTimeout;
-      notification.new = true;
-      // const newNotifObject = notifComponent.createObject(root, {
-      //   "notificationId": notification.id + root.idOffset,
-      //   "notification": notification,
-      //   "time": Date.now()
-      // });
-      // root.list = [...root.list, newNotifObject];
 
-      // // Popup
-      // if (!root.popupInhibited) {
-      //   newNotifObject.popup = true;
-      //   if (notification.expireTimeout != 0) {
-      //     newNotifObject.timer = notifTimerComponent.createObject(root, {
-      //       "notificationId": newNotifObject.notificationId,
-      //       "interval": notification.expireTimeout < 0 ? 5000 : notification.expireTimeout
-      //     });
-      //   }
-      // }
+      const expireTimeout = notification.expireTimeout <= 0 ? 5000 : notification.expireTimeout;
+      const realTimeout = notification.urgency === NotificationUrgency.Critical ? ~(1 << 31) : expireTimeout;
 
-      // root.notify(newNotifObject);
-      notificationsRoot.notify(notification);
-    // // console.log(notifToString(newNotifObject));
-    // notifFileView.setText(stringifyList(root.list));
+      const notificationObject = notificationObjectComponent.createObject(notificationsRoot, {
+        notification: notification,
+        time: Date.now(),
+        timeout: realTimeout
+      });
+
+      if (notification.urgency !== NotificationUrgency.Critical) {
+        notificationObject.timer = notificationTimerComponent.createObject(notificationsRoot, {
+          notificationObject: notificationObject,
+          interval: expireTimeout
+        });
+      }
+
+      notificationsRoot.list = [notificationObject, ...notificationsRoot.list];
+      while (notificationsRoot.list.length > notificationsRoot.notificationsHistoryLimit) {
+        const notificationToRemove = notificationsRoot.list.pop();
+        notificationsRoot.destroyNotification(notificationToRemove);
+      }
+      notificationsRoot.notify(notificationObject);
     }
+  }
+
+  Component {
+    id: notificationObjectComponent
+    NotificationObject {}
+  }
+  Component {
+    id: notificationTimerComponent
+    NotificationTimer {}
   }
 }

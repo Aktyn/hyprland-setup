@@ -170,8 +170,12 @@ Scope {
 
           ColumnLayout {
             id: panelContent
+            clip: true
             opacity: root.show ? 1 : 0
             Behavior on opacity {
+              animation: Style.animation.elementMove.numberAnimation.createObject(this)
+            }
+            Behavior on implicitHeight {
               animation: Style.animation.elementMove.numberAnimation.createObject(this)
             }
           }

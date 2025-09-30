@@ -2,7 +2,8 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Io
+
+import "../services"
 
 Singleton {
   property QtObject bar: QtObject {
@@ -23,14 +24,14 @@ Singleton {
       property ShellScreen screen: Quickshell.screens[0]
       property var requestFocus
 
-      property Timer newNotificationAutoHide: Timer {
-        running: false
-        repeat: false
+      // property Timer newNotificationAutoHide: Timer {
+      //   running: false
+      //   repeat: false
 
-        onTriggered: {
-          _notificationsPanel.open = false;
-        }
-      }
+      //   onTriggered: {
+      //     _notificationsPanel.open = false;
+      //   }
+      // }
     }
   }
 }

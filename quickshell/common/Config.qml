@@ -4,6 +4,9 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
+import "."
+import "../services"
+
 Singleton {
   id: root
   property bool ready: false
@@ -16,7 +19,7 @@ Singleton {
     watchChanges: true
 
     onFileChanged: {
-      this.reload();
+      reload();
     }
 
     onAdapterUpdated: writeAdapter()
@@ -43,6 +46,12 @@ Singleton {
 
       property JsonObject wallpaper: JsonObject {
         property string path: ""
+
+        onPathChanged: {
+          if (this.path && Colors.ready && this.path !== Style.wallpaper) {
+            ScriptRunner.generateMaterialYouColors(this.path);
+          }
+        }
       }
     }
   }

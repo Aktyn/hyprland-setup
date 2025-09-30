@@ -62,7 +62,7 @@ LazyLoader {
             offset.y: 0
             blur: Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
             spread: 0
-            color: Colors.transparentize("#000", Config.bar.shadowOpacity)
+            color: Colors.transparentize(Style.colors.shadow, Config.bar.shadowOpacity)
           }
 
           // Background

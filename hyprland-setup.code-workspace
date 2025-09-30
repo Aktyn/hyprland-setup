@@ -19,6 +19,7 @@
 			"imageformats",
 			"inotify",
 			"inotifywait",
+			"kded",
 			"killall",
 			"makepkg",
 			"noconfirm",
