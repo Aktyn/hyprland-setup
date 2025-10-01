@@ -1,7 +1,8 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"path": ".",
+			"name": "Root"
 		}
 	],
 	"settings": {
@@ -9,6 +10,7 @@
 			"aktyn",
 			"blueman",
 			"dbus",
+			"Demi",
 			"desaturate",
 			"devel",
 			"getoption",
@@ -24,11 +26,19 @@
 			"makepkg",
 			"noconfirm",
 			"pacman",
+			"qmlls",
 			"qtcreator",
 			"quickshell",
+			"rgba",
 			"swaync",
+			"theqtcompany",
 			"Toplevel",
 			"upower"
-		]
+		],
+		"cmake.cacheInit": "quickshell/qmlls.cmake",
+		"cmake.sourceDirectory": "${workspaceFolder}/quickshell",
+		"[qml]": {
+			"editor.defaultFormatter": "theqtcompany.qt-qml"
+		}
 	}
 }

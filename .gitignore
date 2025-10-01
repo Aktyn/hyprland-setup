@@ -1,3 +1,5 @@
 temp/
+build/
 .env
 .qtcreator/
+.qmlls.ini

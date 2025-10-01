@@ -1,13 +1,11 @@
 import QtQuick
 import Quickshell
-import QtQuick.Layouts
 import QtQuick.Effects
 
+import "../../common"
+import "../../services"
 import "."
-import "../widgets"
 import "../widgets/common"
-import qs.common
-import qs.services
 
 LazyLoader {
   id: bar

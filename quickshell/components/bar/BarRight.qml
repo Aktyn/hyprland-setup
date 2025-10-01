@@ -1,14 +1,13 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
 import Quickshell.Services.Notifications
 
+import "../../common"
+import "../../services"
 import "."
 import "../widgets"
 import "../widgets/common"
-import qs.common
-import qs.services
 
 BarSection {
   id: section
@@ -42,7 +41,7 @@ BarSection {
       GlobalState.bar.notificationsPanel.screen = section.screen;
 
       for (const notificationObject of Notifications.list) {
-        if (notificationObject.isNew && notificationObject.notification.urgency === NotificationUrgency.Critical) {
+        if (notificationObject.isNew && notificationObject.urgency === NotificationUrgency.Critical) {
           notificationObject.acknowledge();
           open = false;
         }
@@ -58,7 +57,7 @@ BarSection {
 
       source: Notifications.hasUnread ? "bell-badge" : "bell"
       colorize: true
-      color: Notifications.hasUnread ? Style.colors.primary : Style.colors.outline //TODO: Style.colors.primary if there are unread notifications
+      color: Notifications.hasUnread ? Style.colors.primary : Style.colors.outline
     }
 
     Component.onCompleted: {
@@ -66,8 +65,7 @@ BarSection {
     }
 
     function showNewNotification(notificationObject: Notifications.NotificationObject) {
-      //TODO: style notification item according to various notification parameters
-      console.log("New notification:", JSON.stringify(notificationObject.notification, null, 2));
+      console.log("New notification:", JSON.stringify(notificationObject.notificationHandle, null, 2));
     }
 
     LazyLoader {
@@ -81,16 +79,9 @@ BarSection {
         screen: GlobalState.bar.notificationsPanel.screen
         show: GlobalState.bar.notificationsPanel.open && Notifications.list.length > 0 || notificationsPanel.newNotifications.length > 0
 
-        // closeOnBackgroundClick: !GlobalState.bar.notificationsPanel.newNotificationAutoHide.running
         closeOnBackgroundClick: GlobalState.bar.notificationsPanel.open
-        //  && !notificationsPanel.newNotifications.some(n => n.notification.urgency === NotificationUrgency.Critical)
         onBackgroundClick: function () {
           GlobalState.bar.notificationsPanel.open = false;
-        // for (const notificationObject of Notifications.list) {
-        //   if (notificationObject.isNew) {
-        //     notificationObject.acknowledge();
-        //   }
-        // }
         }
 
         Component.onCompleted: {

@@ -3,7 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-import qs.common
+import "../common"
 
 Singleton {
   property bool ready: false

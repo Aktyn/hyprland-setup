@@ -10,7 +10,12 @@ Singleton {
   component NotificationObject: QtObject {
     id: wrapper
 
-    required property Notification notification
+    required property Notification notificationHandle
+    required property int id
+    required property string summary
+    property string body
+    property string icon
+    property int urgency
 
     property bool isNew: true
     property double time: 0
@@ -18,8 +23,18 @@ Singleton {
 
     property Timer timer
 
-    function acknowledge() {
+    property var removeFromList
+
+    function acknowledge(expired = false) {
       wrapper.isNew = false;
+
+      if (expired) {
+        wrapper.notificationHandle?.expire();
+      }
+
+      if (wrapper.notificationHandle?.transient && wrapper.removeFromList && typeof wrapper.removeFromList === "function") {
+        wrapper.removeFromList();
+      }
     }
   }
   component NotificationTimer: Timer {
@@ -28,7 +43,7 @@ Singleton {
     interval: 5000
     running: true
     onTriggered: function () {
-      this.notificationObject.acknowledge();
+      this.notificationObject.acknowledge(true);
       this.destroy();
     }
   }
@@ -39,7 +54,7 @@ Singleton {
 
   function destroyNotification(notificationObject: NotificationObject) {
     notificationObject.timer?.stop();
-    notificationObject.notification.dismiss();
+    notificationObject.notificationHandle?.dismiss();
     notificationObject.destroy();
   }
 
@@ -61,9 +76,18 @@ Singleton {
       const realTimeout = notification.urgency === NotificationUrgency.Critical ? ~(1 << 31) : expireTimeout;
 
       const notificationObject = notificationObjectComponent.createObject(notificationsRoot, {
-        notification: notification,
+        notificationHandle: notification,
+        id: notification.id,
+        summary: notification.summary,
+        body: notification.body,
+        icon: notification.image || notification.appIcon,
+        urgency: notification.urgency,
         time: Date.now(),
-        timeout: realTimeout
+        timeout: realTimeout,
+        removeFromList: function () {
+          notificationsRoot.list = notificationsRoot.list.filter(n => n !== notificationObject);
+          notificationsRoot.destroyNotification(notificationObject);
+        }
       });
 
       if (notification.urgency !== NotificationUrgency.Critical) {

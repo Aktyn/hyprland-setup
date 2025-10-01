@@ -23,15 +23,6 @@ Singleton {
       property bool open: false
       property ShellScreen screen: Quickshell.screens[0]
       property var requestFocus
-
-      // property Timer newNotificationAutoHide: Timer {
-      //   running: false
-      //   repeat: false
-
-      //   onTriggered: {
-      //     _notificationsPanel.open = false;
-      //   }
-      // }
     }
   }
 }

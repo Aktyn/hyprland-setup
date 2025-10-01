@@ -2,8 +2,8 @@ import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 
-import qs.common
-import qs.services
+import "../../../common"
+import "../../../services"
 
 Button {
   id: root
@@ -27,6 +27,7 @@ Button {
   property color colRipple: Style.colors.colorOnSurface
   property color colRippleToggled: Style.colors.colorOnPrimaryContainer
   property color borderColor: root.toggled ? Colors.transparentize(Style.colors.primary, 0.5) : "transparent"
+  property int borderWidth: 0
 
   opacity: root.enabled ? 1 : 0.4
   property color buttonColor: root.enabled ? (root.toggled ? (root.hovered ? colBackgroundToggledHover : colBackgroundToggled) : (root.hovered ? colBackgroundHover : colBackground)) : colBackground
@@ -151,7 +152,7 @@ Button {
 
     color: root.buttonColor
     border.color: root.borderColor
-    border.width: root.toggled ? 1 : 0
+    border.width: root.toggled ? (root.borderWidth || 1) : root.borderWidth
     Behavior on color {
       animation: Style.animation.elementMoveFast.colorAnimation.createObject(this)
     }

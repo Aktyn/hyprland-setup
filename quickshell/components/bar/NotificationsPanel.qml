@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import qs.common
-import qs.services
+import "../../common"
+import "../../services"
 import "../widgets/common"
 import "../widgets"
 
@@ -28,13 +28,12 @@ ColumnLayout {
   }
   onIsTemporaryOpenChanged: {
     if (isTemporaryOpen) {
-      closeTimer.start()
+      closeTimer.start();
     } else {
-      closeTimer.stop()
-      root.isTemporaryOpenDelayed = false
+      closeTimer.stop();
+      root.isTemporaryOpenDelayed = false;
     }
   }
-
 
   Text {
     visible: !root.newNotifications.length && !root.acknowledgedNotifications.length
@@ -54,10 +53,11 @@ ColumnLayout {
 
   ActionButton {
     visible: root.newNotifications.length > 0
+    Layout.fillWidth: true
 
     iconName: "clear_all"
     content: root.newNotifications.length > 1 ? "Acknowledge all" : "Acknowledge"
-    Layout.fillWidth: true
+    buttonRadius: Style.rounding.verysmall
     onClicked: {
       for (const notificationObject of Notifications.list) {
         if (notificationObject.isNew) {
@@ -91,10 +91,11 @@ ColumnLayout {
 
   ActionButton {
     visible: root.acknowledgedNotifications.length > 0 && !root.isTemporaryOpenDelayed
+    Layout.fillWidth: true
 
     iconName: "delete_sweep"
     content: "Clear all notifications"
-    Layout.fillWidth: true
+    buttonRadius: Style.rounding.verysmall
     onClicked: {
       Notifications.clearAll();
       GlobalState.bar.notificationsPanel.open = false;

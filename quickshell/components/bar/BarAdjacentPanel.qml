@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 
-import qs.common
+import "../../common"
 import "../widgets/common"
 
 Scope {
@@ -89,18 +89,22 @@ Scope {
       anchors.fill: parent
       spacing: 0
 
-      property int cornersY: root.show ? 0 : -root.cornerSize
-      property int cornerSlideDuration: root.slideDuration
+      property real cornerScale: root.show ? 1 : 0
+      Behavior on cornerScale {
+        NumberAnimation {
+          duration: root.slideDuration
+          easing.type: root.show ? Easing.InCubic : Easing.OutCubic
+        }
+      }
 
       ReversedRoundedCorner {
         Layout.alignment: Qt.AlignTop
 
-        Layout.topMargin: rowLayout.cornersY
-        Behavior on Layout.topMargin {
-          NumberAnimation {
-            duration: rowLayout.cornerSlideDuration
-            easing.type: root.show ? Easing.InCubic : Easing.OutCubic
-          }
+        transform: Scale {
+          origin.x: root.cornerSize
+          origin.y: 0
+          xScale: rowLayout.cornerScale
+          yScale: rowLayout.cornerScale
         }
 
         implicitSize: root.cornerSize
@@ -185,12 +189,11 @@ Scope {
       ReversedRoundedCorner {
         Layout.alignment: Qt.AlignTop
 
-        Layout.topMargin: rowLayout.cornersY
-        Behavior on Layout.topMargin {
-          NumberAnimation {
-            duration: rowLayout.cornerSlideDuration
-            easing.type: root.show ? Easing.InCubic : Easing.OutCubic
-          }
+        transform: Scale {
+          origin.x: 0
+          origin.y: 0
+          xScale: rowLayout.cornerScale
+          yScale: rowLayout.cornerScale
         }
 
         implicitSize: root.cornerSize
