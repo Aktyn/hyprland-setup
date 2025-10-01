@@ -7,7 +7,7 @@ import Quickshell.Services.SystemTray
 import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
-import "../../common"
+import qs.common
 
 MouseArea {
   id: root

@@ -18,7 +18,6 @@ Singleton {
 
     property Timer timer
 
-    //TODO: execute on button click to force new notifications acknowledgement
     function acknowledge() {
       wrapper.isNew = false;
     }

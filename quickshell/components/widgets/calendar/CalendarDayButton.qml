@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 
+import qs.common
 import "../common"
-import "../../../common"
 
 StyledButton {
   id: button

@@ -1,6 +1,6 @@
 import QtQuick
 
-import "../../../common"
+import qs.common
 
 Text {
   renderType: Text.NativeRendering

@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../../services"
-import "../../common"
+import qs.common
+import qs.services
 import "../widgets/common"
 import "../widgets"
 

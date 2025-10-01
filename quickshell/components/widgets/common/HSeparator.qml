@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 
-import "../../../common"
+import qs.common
 
 Rectangle {
   Layout.fillWidth: true

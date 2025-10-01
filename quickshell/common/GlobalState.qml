@@ -3,7 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-import "../services"
+import qs.services
 
 Singleton {
   property QtObject bar: QtObject {

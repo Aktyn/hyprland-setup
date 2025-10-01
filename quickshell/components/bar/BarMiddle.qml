@@ -4,7 +4,7 @@ import Quickshell
 
 import "../widgets"
 import "../widgets/common"
-import "../../common"
+import qs.common
 
 Item {
   id: section

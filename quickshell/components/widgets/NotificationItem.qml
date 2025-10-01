@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 
-import "../../services"
-import "../../common"
+import qs.common
+import qs.services
 import "./common"
 
 Rectangle {

@@ -4,8 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import "."
-import "../services"
+import qs.services
+import qs.common
 
 Singleton {
   id: root

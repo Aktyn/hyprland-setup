@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Shapes
 
-import "../../../common"
+import qs.common
 
 Item {
   id: root

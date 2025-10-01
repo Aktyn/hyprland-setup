@@ -7,8 +7,8 @@ import Quickshell.Services.Notifications
 import "."
 import "../widgets"
 import "../widgets/common"
-import "../../common"
-import "../../services"
+import qs.common
+import qs.services
 
 BarSection {
   id: section
@@ -66,7 +66,8 @@ BarSection {
     }
 
     function showNewNotification(notificationObject: Notifications.NotificationObject) {
-      console.log("New notification");
+      //TODO: style notification item according to various notification parameters
+      console.log("New notification:", JSON.stringify(notificationObject.notification, null, 2));
     }
 
     LazyLoader {

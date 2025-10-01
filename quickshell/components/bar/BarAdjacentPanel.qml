@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 
-import "../../common"
+import qs.common
 import "../widgets/common"
 
 Scope {

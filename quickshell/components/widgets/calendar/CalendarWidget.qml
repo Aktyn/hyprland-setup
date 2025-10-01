@@ -2,7 +2,7 @@ import "./calendar_layout.js" as CalendarLayout
 import QtQuick
 import QtQuick.Layouts
 
-import "../../../common"
+import qs.common
 import "../common"
 import "."
 

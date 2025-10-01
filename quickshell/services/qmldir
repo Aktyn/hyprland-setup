@@ -1,0 +1,5 @@
+module services
+
+singleton Colors Colors.qml
+singleton Notifications Notifications.qml
+singleton Time Time.qml

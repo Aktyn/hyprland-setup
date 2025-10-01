@@ -2,8 +2,8 @@ import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 
-import "../../../common"
-import "../../../services"
+import qs.common
+import qs.services
 
 Button {
   id: root

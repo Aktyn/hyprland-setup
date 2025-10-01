@@ -3,7 +3,7 @@ import QtQuick.Layouts
 
 import "../widgets"
 import "../widgets/common"
-import "../../common"
+import qs.common
 
 BarSection {
   stretch: true

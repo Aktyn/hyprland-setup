@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-import "../../common"
+import qs.common
 import "./common"
 
 Item {

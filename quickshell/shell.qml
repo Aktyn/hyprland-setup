@@ -15,7 +15,7 @@ ShellRoot {
   Component.onCompleted: {
     //TODO: initialize some services
 
-    Quickshell.execDetached("killall kded6 || true");
+    Quickshell.execDetached("sleep 1 && killall kded6 || true");
 
     console.info("Aktyn quickshell started");
     // Cliphist.refresh()

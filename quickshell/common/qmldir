@@ -1,0 +1,8 @@
+module common
+
+singleton Config Config.qml
+singleton Consts Consts.qml
+singleton GlobalState GlobalState.qml
+singleton HyprlandInfo HyprlandInfo.qml
+singleton ScriptRunner ScriptRunner.qml
+singleton Style Style.qml

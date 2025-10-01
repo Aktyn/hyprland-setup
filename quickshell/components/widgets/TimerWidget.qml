@@ -5,7 +5,7 @@ import QtQuick.Layouts
 import QtQuick.Window
 import Quickshell
 
-import "../../common"
+import qs.common
 import "./common"
 
 ColumnLayout {

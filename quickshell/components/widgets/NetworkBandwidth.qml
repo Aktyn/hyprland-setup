@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 
-import "../../common"
+import qs.common
 import "./common"
 
 Item {

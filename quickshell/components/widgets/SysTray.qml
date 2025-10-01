@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.SystemTray
 
-import "../../common"
+import qs.common
 import "./common"
 
 RowLayout {
