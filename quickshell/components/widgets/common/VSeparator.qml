@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import "../../../common"
 
 Rectangle {
-  Layout.fillWidth: true
-  implicitHeight: 1
+  Layout.fillHeight: true
+  implicitWidth: 1
   color: Style.colors.outlineVariant
 }

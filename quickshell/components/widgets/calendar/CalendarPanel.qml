@@ -1,10 +1,10 @@
 import QtQuick
 import QtQuick.Layouts
 
-import "../widgets/calendar"
-import "../widgets/common"
-import "../widgets"
-import qs.common
+import "."
+import ".."
+import "../common"
+import "../../../common"
 
 ColumnLayout {
   spacing: Style.sizes.spacingLarge

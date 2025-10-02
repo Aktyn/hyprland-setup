@@ -80,7 +80,9 @@ Scope {
     }
 
     property var onRequestFocus: function () {
-      grab.active = true;
+      if (!grab.active) {
+        grab.active = true;
+      }
     }
 
     RowLayout {

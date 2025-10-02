@@ -4,6 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Notifications
 
+import "../common"
+
 Singleton {
   id: notificationsRoot
 
@@ -19,7 +21,7 @@ Singleton {
 
     property bool isNew: true
     property double time: 0
-    property int timeout: 5000
+    property int timeout: Config.notifications.defaultTimeout
 
     property Timer timer
 
@@ -40,7 +42,7 @@ Singleton {
   component NotificationTimer: Timer {
     required property NotificationObject notificationObject
 
-    interval: 5000
+    interval: Config.notifications.defaultTimeout
     running: true
     onTriggered: function () {
       this.notificationObject.acknowledge(true);
@@ -72,7 +74,7 @@ Singleton {
     onNotification: function (notification) {
       notification.tracked = true;
 
-      const expireTimeout = notification.expireTimeout <= 0 ? 5000 : notification.expireTimeout;
+      const expireTimeout = notification.expireTimeout <= 0 ? Config.notifications.defaultTimeout : notification.expireTimeout;
       const realTimeout = notification.urgency === NotificationUrgency.Critical ? ~(1 << 31) : expireTimeout;
 
       const notificationObject = notificationObjectComponent.createObject(notificationsRoot, {

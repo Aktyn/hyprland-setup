@@ -105,8 +105,14 @@ BarSection {
     Layout.fillWidth: true
   }
 
-  Text {
-    text: "RIGHT"
-    color: "#fff"
+  BarIconButton {
+    iconName: "sticky_note_2"
+
+    toggled: GlobalState.bar.notesPanel.open
+
+    onPressed: {
+      GlobalState.bar.notesPanel.open = !GlobalState.bar.notesPanel.open;
+      GlobalState.bar.notesPanel.screen = section.screen;
+    }
   }
 }

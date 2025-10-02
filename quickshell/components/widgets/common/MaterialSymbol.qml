@@ -1,6 +1,6 @@
 import QtQuick
 
-import qs.common
+import "../../../common"
 
 Text {
   id: root

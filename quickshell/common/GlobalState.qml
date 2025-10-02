@@ -3,8 +3,6 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-import qs.services
-
 Singleton {
   property QtObject bar: QtObject {
     property QtObject calendarPanel: QtObject {
@@ -15,6 +13,12 @@ Singleton {
       property QtObject timer: QtObject {
         property bool running: false
       }
+    }
+
+    property QtObject notesPanel: QtObject {
+      property bool open: false
+      property ShellScreen screen: Quickshell.screens[0]
+      property var requestFocus
     }
 
     property QtObject notificationsPanel: QtObject {

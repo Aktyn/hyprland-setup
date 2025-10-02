@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -13,7 +15,6 @@ Button {
   property real buttonRadius: Style.rounding.small
   property real buttonRadiusPressed: buttonRadius
   property real buttonEffectiveRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
-  readonly property int rippleDuration: 600
   property bool rippleEnabled: true
   property var downAction // When left clicking (down)
   property var releaseAction // When left clicking (release)
@@ -47,7 +48,7 @@ Button {
   }
 
   component RippleAnim: NumberAnimation {
-    duration: rippleDuration
+    duration: 600
     easing.type: Easing.InQuad
     // easing.type: Style.animation.elementMoveEnter.type
     // easing.bezierCurve: Style.animationCurves.standardDecel
@@ -107,7 +108,7 @@ Button {
 
   RippleAnim {
     id: rippleFadeAnim
-    duration: root.rippleDuration * 2
+    duration: 600 * 2
     target: ripple
     property: "opacity"
     to: 0

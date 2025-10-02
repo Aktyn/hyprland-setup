@@ -4,8 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import qs.services
-import qs.common
+import "../services"
+import "."
 
 Singleton {
   id: root
@@ -13,6 +13,7 @@ Singleton {
 
   property alias bar: configJsonAdapter.bar
   property alias wallpaper: configJsonAdapter.wallpaper
+  property alias notifications: configJsonAdapter.notifications
 
   FileView {
     path: Consts.path.configFile
@@ -52,6 +53,10 @@ Singleton {
             ScriptRunner.generateMaterialYouColors(this.path);
           }
         }
+      }
+
+      property JsonObject notifications: JsonObject {
+        property int defaultTimeout: 8000
       }
     }
   }

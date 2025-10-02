@@ -1,21 +1,19 @@
 import QtQuick
 import QtQuick.Layouts
 
-import qs.common
-import qs.services
+import "../../common"
+import "../../services"
 
 import "./common"
 
 RowLayout {
-  spacing: Style.sizes.spacingMedium
-
   property alias color: clockText.color
 
   CustomIcon {
     visible: GlobalState.bar.calendarPanel.timer.running
 
-    height: Style.sizes.iconMedium
-    width: height
+    Layout.preferredHeight: Style.sizes.iconMedium
+    Layout.preferredWidth: this.Layout.preferredHeight
 
     source: "timer-sand"
     colorize: true

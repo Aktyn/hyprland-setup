@@ -4,7 +4,7 @@ import Quickshell
 
 import "../widgets"
 import "../widgets/common"
-import qs.common
+import "../../common"
 
 Item {
   id: section
@@ -16,12 +16,18 @@ Item {
   RowLayout {
     id: middleContent
     anchors.centerIn: parent
-    spacing: Style.sizes.spacingMedium
+    spacing: Style.sizes.spacingLarge
+
+    VSeparator {
+      Layout.leftMargin: Style.sizes.spacingLarge
+    }
 
     StyledButton {
       id: clockWidgetButton
 
       Layout.alignment: Qt.AlignVCenter
+      Layout.leftMargin: -Style.sizes.spacingMedium
+      Layout.rightMargin: -Style.sizes.spacingMedium
       implicitWidth: clockWidget.width + Style.sizes.spacingMedium * 2
       implicitHeight: clockWidget.height + Style.sizes.spacingExtraSmall * 2
 
@@ -40,25 +46,8 @@ Item {
       }
     }
 
-    LazyLoader {
-      active: true
-
-      BarAdjacentPanel {
-        id: calendarPanelContainer
-
-        screen: GlobalState.bar.calendarPanel.screen
-        show: GlobalState.bar.calendarPanel.open
-
-        onBackgroundClick: function () {
-          GlobalState.bar.calendarPanel.open = false;
-        }
-
-        Component.onCompleted: {
-          GlobalState.bar.calendarPanel.requestFocus = calendarPanelContainer.onRequestFocus;
-        }
-
-        CalendarPanel {}
-      }
+    VSeparator {
+      Layout.rightMargin: Style.sizes.spacingLarge
     }
   }
 }

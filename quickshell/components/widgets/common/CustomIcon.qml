@@ -5,6 +5,8 @@ import Quickshell
 import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
+import "../../../common"
+
 Item {
   id: root
 
@@ -12,8 +14,8 @@ Item {
   property color color
   property string source: ""
   property string iconFolder: Qt.resolvedUrl(Quickshell.shellPath("assets/icons"))  // The folder to check first
-  width: 30
-  height: 30
+  width: Style.sizes.iconMedium
+  height: root.width
 
   IconImage {
     id: iconImage

@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 
+import "../../common"
+
 Item {
   id: root
   height: parent.height
@@ -11,9 +13,9 @@ Item {
 
   RowLayout {
     id: rowLayout
-    spacing: 8
+    spacing: Style.sizes.spacingMedium
 
-    LayoutMirroring.enabled: mirror
+    LayoutMirroring.enabled: root.mirror
 
     anchors {
       top: parent.top

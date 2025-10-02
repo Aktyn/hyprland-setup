@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Io
 
 import "../services"
+import "."
 
 Singleton {
   id: root
@@ -24,6 +25,7 @@ Singleton {
       property string reading: "Readex Pro"
       property string expressive: "Space Grotesk"
     }
+    //TODO: refactor this names and get rid of unused ones
     property QtObject pixelSize: QtObject {
       property int smallest: 10
       property int smaller: 12
@@ -62,26 +64,6 @@ Singleton {
     property int iconLarge: 24
     property int iconExtraLarge: 32
   }
-
-  //TODO: clean up
-  // property QtObject animationCurves: QtObject {
-  //   readonly property list<real> expressiveFastSpatial: [0.42, 1.67, 0.21, 0.90, 1, 1] // Default, 350ms
-  //   readonly property list<real> expressiveDefaultSpatial: [0.38, 1.21, 0.22, 1.00, 1, 1] // Default, 500ms
-  //   readonly property list<real> expressiveSlowSpatial: [0.39, 1.29, 0.35, 0.98, 1, 1] // Default, 650ms
-  //   readonly property list<real> expressiveEffects: [0.34, 0.80, 0.34, 1.00, 1, 1] // Default, 200ms
-  //   readonly property list<real> emphasized: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
-  //   readonly property list<real> emphasizedFirstHalf: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82]
-  //   readonly property list<real> emphasizedLastHalf: [5 / 24, 0.82, 0.25, 1, 1, 1]
-  //   readonly property list<real> emphasizedAccel: [0.3, 0, 0.8, 0.15, 1, 1]
-  //   readonly property list<real> emphasizedDecel: [0.05, 0.7, 0.1, 1, 1, 1]
-  //   readonly property list<real> standard: [0.2, 0, 0, 1, 1, 1]
-  //   readonly property list<real> standardAccel: [0.3, 0, 1, 1, 1, 1]
-  //   readonly property list<real> standardDecel: [0, 0, 0, 1, 1, 1]
-  //   readonly property real expressiveFastSpatialDuration: 350
-  //   readonly property real expressiveDefaultSpatialDuration: 500
-  //   readonly property real expressiveSlowSpatialDuration: 650
-  //   readonly property real expressiveEffectsDuration: 200
-  // }
 
   property QtObject animation: QtObject {
     property QtObject elementMove: QtObject {
@@ -139,7 +121,9 @@ Singleton {
     path: Consts.path.colorsFile
     watchChanges: true
 
-    onFileChanged: reload()
+    onFileChanged: {
+      reload();
+    }
 
     onAdapterUpdated: writeAdapter()
 
@@ -319,6 +303,17 @@ Singleton {
         property string tertiaryFixedDimLight: "#e8b9d4"
         property string colorOnTertiaryFixedLight: "#2e1125"
         property string colorOnTertiaryFixedVariantLight: "#5f3c52"
+
+        onOutlineChanged: {
+          if (Colors.ready) {
+            ScriptRunner.setHyprlandOption("general:col.active_border", `rgb(${outline.replace("#", "")})`);
+          }
+        }
+        onOutlineVariantChanged: {
+          if (Colors.ready) {
+            ScriptRunner.setHyprlandOption("general:col.inactive_border", `rgb(${outlineVariant.replace("#", "")})`);
+          }
+        }
       }
 
       property bool is_dark: true

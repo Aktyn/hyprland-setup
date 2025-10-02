@@ -8,15 +8,17 @@ import "../widgets/common"
 BarSection {
   stretch: true
 
-  StyledButton {
+  BarIconButton {
     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-    Layout.fillWidth: false
-    Layout.rightMargin: Style.sizes.spacingMedium
-    property real buttonPadding: Style.sizes.spacingExtraSmall
-    implicitWidth: Math.min(64, Config.bar.height - Style.sizes.spacingSmall * 2)
-    implicitHeight: implicitWidth
+    // Layout.rightMargin: Style.sizes.spacingMedium
+    // property real buttonPadding: Style.sizes.spacingExtraSmall
+    // implicitWidth: Math.min(64, Config.bar.height - Style.sizes.spacingSmall * 2)
+    // implicitHeight: implicitWidth
+    // implicitWidth: aktynLogoIcon.width + Style.sizes.spacingExtraSmall * 2
+    // implicitWidth: aktynLogoIcon.width + Style.sizes.spacingExtraSmall * 2
+    // implicitHeight: this.implicitWidth
 
-    buttonRadius: Style.rounding.full
+    // buttonRadius: Style.rounding.full
     toggled: false
 
     //TODO
@@ -26,9 +28,11 @@ BarSection {
     }
 
     CustomIcon {
+      id: aktynLogoIcon
+
       anchors.centerIn: parent
-      height: parent.height - parent.buttonPadding * 2
-      width: height
+      width: Style.sizes.iconMedium
+      height: this.width
 
       source: "aktyn-logo"
       colorize: true
@@ -36,7 +40,9 @@ BarSection {
     }
   }
 
-  ActiveWindowInfo {}
+  ActiveWindowInfo {
+    Layout.alignment: Qt.AlignVCenter
+  }
 
   // Space separator
   Item {

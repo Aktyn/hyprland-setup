@@ -1,11 +1,15 @@
 import QtQuick
-import Quickshell
+import QtQuick.Layouts
 import QtQuick.Effects
+import Quickshell
 
 import "../../common"
 import "../../services"
+
 import "."
 import "../widgets/common"
+import "../widgets/calendar"
+import "../widgets/notes"
 
 LazyLoader {
   id: bar
@@ -91,10 +95,11 @@ LazyLoader {
             Row {
               id: row
               anchors.fill: parent
-              spacing: Style.sizes.spacingLarge
+              spacing: 0
 
               BarLeft {
                 id: leftSection
+                Layout.alignment: Qt.AlignVCenter
                 width: Math.max(0, (contentRoot.width - middleSection.implicitWidth) / 2 - row.spacing)
               }
 
@@ -137,6 +142,52 @@ LazyLoader {
 
             corner: ReversedRoundedCorner.CornerEnum.TopRight
             color: Style.colors.surface
+          }
+        }
+
+        // ------------------------ Dynamic panels ------------------------
+
+        // Calendar panel sheet
+        LazyLoader {
+          active: true
+
+          BarAdjacentPanel {
+            id: calendarPanelContainer
+
+            screen: GlobalState.bar.calendarPanel.screen
+            show: GlobalState.bar.calendarPanel.open
+
+            onBackgroundClick: function () {
+              GlobalState.bar.calendarPanel.open = false;
+            }
+
+            Component.onCompleted: {
+              GlobalState.bar.calendarPanel.requestFocus = calendarPanelContainer.onRequestFocus;
+            }
+
+            CalendarPanel {}
+          }
+        }
+
+        // Notes panel sheet
+        LazyLoader {
+          active: true
+
+          BarAdjacentPanel {
+            id: notesPanelContainer
+
+            screen: GlobalState.bar.notesPanel.screen
+            show: GlobalState.bar.notesPanel.open
+
+            onBackgroundClick: function () {
+              GlobalState.bar.notesPanel.open = false;
+            }
+
+            Component.onCompleted: {
+              GlobalState.bar.notesPanel.requestFocus = notesPanelContainer.onRequestFocus;
+            }
+
+            NotesPanel {}
           }
         }
       }
