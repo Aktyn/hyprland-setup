@@ -111,13 +111,6 @@ ColumnLayout {
               }
             }
 
-            // TextMetrics {
-            //   id: textMetrics
-            //   font: input.font
-            //   text: "00"
-            // }
-            // width: textMetrics.width + 4
-
             onEditingFinished: {
               var value = parseInt(text);
               if (isNaN(value))

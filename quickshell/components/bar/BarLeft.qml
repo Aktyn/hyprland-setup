@@ -10,21 +10,11 @@ BarSection {
 
   BarIconButton {
     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-    // Layout.rightMargin: Style.sizes.spacingMedium
-    // property real buttonPadding: Style.sizes.spacingExtraSmall
-    // implicitWidth: Math.min(64, Config.bar.height - Style.sizes.spacingSmall * 2)
-    // implicitHeight: implicitWidth
-    // implicitWidth: aktynLogoIcon.width + Style.sizes.spacingExtraSmall * 2
-    // implicitWidth: aktynLogoIcon.width + Style.sizes.spacingExtraSmall * 2
-    // implicitHeight: this.implicitWidth
 
-    // buttonRadius: Style.rounding.full
-    toggled: false
+    toggled: GlobalState.leftSidebar.open
 
-    //TODO
-    // GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
     onPressed: {
-      console.log("Left icon button pressed");
+      GlobalState.leftSidebar.open = !GlobalState.leftSidebar.open;
     }
 
     CustomIcon {
@@ -51,7 +41,8 @@ BarSection {
 
   Text {
     Layout.alignment: Qt.AlignRight
-    text: "LEFT"
-    color: "#fff"
+    text: "TODO: workspaces and current workspace apps"
+    color: Style.colors.outlineVariant
+    font.pixelSize: Style.font.pixelSize.smaller
   }
 }

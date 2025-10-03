@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import qs.common
+import "../common"
 
 LazyLoader {
   id: bar

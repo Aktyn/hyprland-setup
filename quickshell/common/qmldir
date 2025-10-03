@@ -1,9 +1,9 @@
 module common
 
-singleton Utils Utils.qml
 singleton Config Config.qml
 singleton Consts Consts.qml
 singleton GlobalState GlobalState.qml
 singleton HyprlandInfo HyprlandInfo.qml
 singleton ScriptRunner ScriptRunner.qml
 singleton Style Style.qml
+singleton Utils Utils.qml

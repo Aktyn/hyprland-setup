@@ -10,8 +10,8 @@ TextArea {
   placeholderTextColor: Style.colors.outline
 
   font {
-    family: Style?.font.family.main ?? "sans-serif"
-    pixelSize: Style?.font.pixelSize.small ?? 15
+    family: Style.font.family.main
+    pixelSize: Style.font.pixelSize.small
     hintingPreference: Font.PreferFullHinting
   }
 }

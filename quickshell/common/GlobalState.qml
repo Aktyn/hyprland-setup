@@ -29,4 +29,14 @@ Singleton {
       property var requestFocus
     }
   }
+
+  property QtObject leftSidebar: QtObject {
+    property bool open: false
+    property ShellScreen screen: Quickshell.screens[0]
+    property var requestFocus
+
+    property QtObject appSearch: QtObject {
+      property int selectedEntryIndex: 0
+    }
+  }
 }

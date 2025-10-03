@@ -60,9 +60,13 @@ Singleton {
     property int spacingLarge: 16
     property int spacingExtraLarge: 24
 
-    property int iconMedium: 20
-    property int iconLarge: 24
-    property int iconExtraLarge: 32
+    property int heightMedium: 20
+    property int heightLarge: 24
+    property int heightExtraLarge: 32
+
+    property int iconMedium: heightMedium
+    property int iconLarge: heightLarge
+    property int iconExtraLarge: heightExtraLarge
   }
 
   property QtObject animation: QtObject {

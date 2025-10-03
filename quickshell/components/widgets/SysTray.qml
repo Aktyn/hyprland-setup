@@ -2,11 +2,12 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.SystemTray
 
-import qs.common
+import "../../common"
 import "./common"
 
 RowLayout {
   id: rowLayout
+  visible: SystemTray.items.values.length > 0
 
   spacing: Style.sizes.spacingMedium
 
@@ -24,6 +25,5 @@ RowLayout {
     font.pixelSize: Style.font.pixelSize.larger
     color: Style.colors.outline
     text: "•"
-    visible: SystemTray.items.values.length > 0
   }
 }

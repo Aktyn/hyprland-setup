@@ -19,8 +19,10 @@ BarSection {
   stretch: true
 
   Text {
-    text: "TODO: settings panel"
-    color: "#fff"
+    Layout.alignment: Qt.AlignRight
+    text: "TODO: status icons and right sidebar toggle"
+    color: Style.colors.outlineVariant
+    font.pixelSize: Style.font.pixelSize.smaller
   }
 
   StyledButton {

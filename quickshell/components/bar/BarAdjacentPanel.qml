@@ -15,6 +15,7 @@ Scope {
     Right = 4
   }
   property int side: BarAdjacentPanel.Side.Middle
+  property bool adhesive: false //Used for Left and Right side panels to remove distance between screen edge
 
   default property alias items: panelContent.children
   required property ShellScreen screen
@@ -23,6 +24,8 @@ Scope {
   readonly property int innerPadding: Style.sizes.spacingLarge
   readonly property int cornerSize: Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
   readonly property int slideDuration: 300
+
+  property int screenEdgeOffset: this.side !== BarAdjacentPanel.Side.Middle && !this.adhesive ? this.cornerSize : 0
 
   property bool closeOnBackgroundClick: true
   property var onBackgroundClick
@@ -59,7 +62,8 @@ Scope {
 
   PanelWindow {
     id: panel
-    implicitWidth: panelContent.width + root.innerPadding * 2 + root.cornerSize * 2
+    property int cornersCount: root.side === BarAdjacentPanel.Side.Middle || !root.adhesive ? 2 : 1
+    implicitWidth: panelContent.width + root.innerPadding * 2 + root.cornerSize * this.cornersCount + 2 // + 2 to accommodate borders
     implicitHeight: panelContent.height + root.innerPadding * 2
     visible: !!root.screen
 
@@ -71,17 +75,25 @@ Scope {
 
     anchors.top: true
     margins.top: Config.bar.height
+    margins.left: root.side === BarAdjacentPanel.Side.Left ? root.screenEdgeOffset : 0
+    margins.right: root.side === BarAdjacentPanel.Side.Right ? root.screenEdgeOffset : 0
     anchors.left: root.side === BarAdjacentPanel.Side.Left
     anchors.right: root.side === BarAdjacentPanel.Side.Right
 
     HyprlandFocusGrab {
       id: grab
       windows: [panel]
+
+      onActiveChanged: {
+        if (!this.active && root.onBackgroundClick && typeof root.onBackgroundClick === "function") {
+          root.onBackgroundClick();
+        }
+      }
     }
 
-    property var onRequestFocus: function () {
-      if (!grab.active) {
-        grab.active = true;
+    property var onRequestFocus: function (focus = true) {
+      if (grab.active !== focus) {
+        grab.active = focus;
       }
     }
 
@@ -99,7 +111,10 @@ Scope {
         }
       }
 
+      // Left corner
       ReversedRoundedCorner {
+        visible: !root.adhesive || root.side !== BarAdjacentPanel.Side.Left
+
         Layout.alignment: Qt.AlignTop
 
         transform: Scale {
@@ -165,9 +180,10 @@ Scope {
           anchors.left: parent.left
           anchors.right: parent.right
           implicitHeight: panel.implicitHeight
+
           color: Style.colors.surface
-          bottomLeftRadius: Style.rounding.hyprland
-          bottomRightRadius: Style.rounding.hyprland
+          bottomLeftRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Left ? 0 : Style.rounding.hyprland
+          bottomRightRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Right ? 0 : Style.rounding.hyprland
         }
 
         Item {
@@ -188,7 +204,10 @@ Scope {
         }
       }
 
+      // Right corner
       ReversedRoundedCorner {
+        visible: !root.adhesive || root.side !== BarAdjacentPanel.Side.Right
+
         Layout.alignment: Qt.AlignTop
 
         transform: Scale {

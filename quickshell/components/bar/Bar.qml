@@ -10,6 +10,7 @@ import "."
 import "../widgets/common"
 import "../widgets/calendar"
 import "../widgets/notes"
+import "../sidebar"
 
 LazyLoader {
   id: bar
@@ -146,6 +147,34 @@ LazyLoader {
         }
 
         // ------------------------ Dynamic panels ------------------------
+
+        // Left sidebar
+        LazyLoader {
+          active: true
+
+          BarAdjacentPanel {
+            id: leftSidebarContainer
+
+            side: BarAdjacentPanel.Side.Left
+            adhesive: true
+
+            screen: GlobalState.leftSidebar.screen
+            show: GlobalState.leftSidebar.open
+
+            closeOnBackgroundClick: GlobalState.leftSidebar.open
+            onBackgroundClick: function () {
+              GlobalState.leftSidebar.open = false;
+            }
+
+            Component.onCompleted: {
+              GlobalState.leftSidebar.requestFocus = leftSidebarContainer.onRequestFocus;
+            }
+
+            LeftSidebar {
+              Layout.minimumWidth: 384
+            }
+          }
+        }
 
         // Calendar panel sheet
         LazyLoader {
