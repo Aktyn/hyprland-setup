@@ -14,6 +14,7 @@ StyledButton {
 
   onClicked: {
     entry.execute();
+    Utils.updateRecentApps(entry.name);
     GlobalState.leftSidebar.open = false;
   }
 

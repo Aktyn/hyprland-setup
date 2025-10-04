@@ -14,7 +14,15 @@ ColumnLayout {
   property bool active: GlobalState.leftSidebar.open
   property real scoreThreshold: 0.2
 
-  readonly property list<DesktopEntry> allApps: Array.from(DesktopEntries.applications.values).filter(entry => !entry.noDisplay).sort((a, b) => a.name.localeCompare(b.name))
+  readonly property list<DesktopEntry> allApps: Array.from(DesktopEntries.applications.values).filter(entry => !entry.noDisplay).sort((a, b) => {
+    const aIndex = Utils.recentApps.indexOf(a.name);
+    const bIndex = Utils.recentApps.indexOf(b.name);
+    if (aIndex === -1 && bIndex === -1) {
+      return a.name.localeCompare(b.name);
+    }
+
+    return bIndex - aIndex;
+  })
 
   readonly property list<DesktopEntry> appsList: {
     if (appSearch.searchText.length < 1) {
@@ -44,13 +52,6 @@ ColumnLayout {
     } else if (event.key === Qt.Key_Down) {
       GlobalState.leftSidebar.appSearch.selectedEntryIndex = Math.min(this.appsList.length - 1, GlobalState.leftSidebar.appSearch.selectedEntryIndex + 1);
       event.accepted = true;
-    } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-      if (GlobalState.leftSidebar.appSearch.selectedEntryIndex < this.appsList.length) {
-        const app = this.appsList[GlobalState.leftSidebar.appSearch.selectedEntryIndex];
-        app.launch();
-        GlobalState.leftSidebar.open = false;
-      }
-      event.accepted = true;
     }
   }
 
@@ -72,11 +73,15 @@ ColumnLayout {
     id: appSearch
 
     Layout.fillWidth: true
-    placeholder: "Multi purpose input. Run commands with !"
+    placeholder: "Search or calculate. \"!\" to run commands"
 
     onEnter: function () {
       if (GlobalState.leftSidebar.appSearch.selectedEntryIndex < root.appsList.length) {
-        root.appsList[GlobalState.leftSidebar.appSearch.selectedEntryIndex]?.execute();
+        const app = root.appsList[GlobalState.leftSidebar.appSearch.selectedEntryIndex];
+        if (app) {
+          app.execute();
+          Utils.updateRecentApps(app.name);
+        }
         GlobalState.leftSidebar.open = false;
         GlobalState.leftSidebar.requestFocus(false);
       }
@@ -135,7 +140,6 @@ ColumnLayout {
     color: Style.colors.primary
   }
 
-  //TODO: transform this into custom command executor
   Text {
     visible: root.noAppResults && !root.calcResult
 

@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import Quickshell.Io
 
 Singleton {
   /**
@@ -44,5 +45,34 @@ Singleton {
       return false;
     }
     return true;
+  }
+
+  property alias recentApps: recentAppsJsonAdapter.apps
+  FileView {
+    path: Consts.path.recentAppsFile
+    watchChanges: true
+
+    onFileChanged: {
+      reload();
+    }
+
+    onAdapterUpdated: writeAdapter()
+    onLoadFailed: error => {
+      if (error === FileViewError.FileNotFound) {
+        writeAdapter();
+        reload();
+      }
+    }
+
+    JsonAdapter {
+      id: recentAppsJsonAdapter
+
+      property list<string> apps: []
+    }
+  }
+
+  readonly property int recentAppsHistorySize: 128
+  function updateRecentApps(appName: string) {
+    this.recentApps = [...this.recentApps.filter(app => app !== appName), appName].slice(-this.recentAppsHistorySize);
   }
 }
