@@ -13,6 +13,11 @@ Singleton {
     return str.startsWith("file://") ? str.slice(7) : str;
   }
 
+  /**
+    * @param {string} needle
+    * @param {string} haystack
+    * @returns {boolean}
+    */
   function fuzzysearch(needle, haystack) {
     if (needle === "") {
       return true;

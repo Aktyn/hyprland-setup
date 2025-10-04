@@ -1,29 +1,37 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import Quickshell
+import Quickshell.Io
+
+import "../../scripts/levendist.js" as Levendist
 
 import "../../common"
-
 import "../widgets/common"
-import "../../common"
 
 ColumnLayout {
   id: root
 
   property bool active: GlobalState.leftSidebar.open
+  property real scoreThreshold: 0.2
 
-  //TODO: sort primarily according to cached list of recent apps
   readonly property list<DesktopEntry> allApps: Array.from(DesktopEntries.applications.values).filter(entry => !entry.noDisplay).sort((a, b) => a.name.localeCompare(b.name))
 
   readonly property list<DesktopEntry> appsList: {
-    if (appSearch.searchText.length < 2) {
+    if (appSearch.searchText.length < 1) {
       return allApps;
     }
 
     const search = appSearch.searchText.toLowerCase();
-    return allApps.filter(app => Utils.fuzzysearch(search, app.name.toLowerCase()));
+
+    const results = allApps.map(obj => ({
+          entry: obj,
+          score: Levendist.computeScore(obj.name.toLowerCase(), search)
+        })).filter(item => item.score > root.scoreThreshold).sort((a, b) => b.score - a.score);
+
+    return results.map(item => item.entry);
   }
+  property bool noAppResults: !!appSearch.searchText && !root.appsList.length
+  property string calcResult: ""
 
   onAppsListChanged: {
     GlobalState.leftSidebar.appSearch.selectedEntryIndex = 0;
@@ -64,54 +72,76 @@ ColumnLayout {
     id: appSearch
 
     Layout.fillWidth: true
-    placeholder: "Search applications"
+    placeholder: "Multi purpose input. Run commands with !"
 
     onEnter: function () {
       if (GlobalState.leftSidebar.appSearch.selectedEntryIndex < root.appsList.length) {
-        root.appsList[GlobalState.leftSidebar.appSearch.selectedEntryIndex].execute();
+        root.appsList[GlobalState.leftSidebar.appSearch.selectedEntryIndex]?.execute();
         GlobalState.leftSidebar.open = false;
         GlobalState.leftSidebar.requestFocus(false);
       }
     }
   }
 
+  ActionButton {
+    visible: appSearch.searchText.startsWith("!") && appSearch.searchText.length > 1
+    Layout.fillWidth: true
+    iconName: "terminal"
+    content: "Run command"
+    borderWidth: 1
+    borderColor: Style.colors.outline
+
+    onClicked: {
+      Quickshell.execDetached(["bash", "-c", appSearch.searchText.substr(1)]);
+      GlobalState.leftSidebar.open = false;
+    }
+  }
+
+  AppsList {
+    visible: root.appsList.length > 0
+    Layout.fillWidth: true
+    Layout.maximumHeight: 640
+
+    apps: root.appsList
+  }
+
+  Process {
+    id: mathProcess
+    running: false
+    command: ["qalc", "-t", appSearch.searchText]
+
+    onCommandChanged: {
+      if (root.noAppResults) {
+        mathProcess.running = true;
+      } else {
+        root.calcResult = "";
+      }
+    }
+
+    stdout: StdioCollector {
+      onStreamFinished: {
+        root.calcResult = this.text;
+      }
+    }
+  }
+
   Text {
-    visible: root.appsList.length === 0
+    visible: root.noAppResults && !!root.calcResult
+
+    Layout.fillWidth: true
+    text: root.calcResult.includes("=") ? root.calcResult : `= ${root.calcResult}`
+    font.bold: true
+    font.pixelSize: Style.font.pixelSize.large
+    color: Style.colors.primary
+  }
+
+  //TODO: transform this into custom command executor
+  Text {
+    visible: root.noAppResults && !root.calcResult
 
     Layout.fillWidth: true
     horizontalAlignment: Text.AlignHCenter
-    text: "No search results"
+    text: "No results..."
     color: Style.colors.outlineVariant
-  }
-
-  ScrollView {
-    visible: root.appsList.length > 0
-
-    Layout.fillWidth: true
-    Layout.maximumHeight: 640
-    clip: true
-
-    ListView {
-      id: listView
-
-      Layout.fillWidth: true
-      spacing: Style.sizes.spacingSmall
-      model: root.appsList
-      currentIndex: GlobalState.leftSidebar.appSearch.selectedEntryIndex
-
-      onCurrentIndexChanged: {
-        if (GlobalState.leftSidebar.appSearch.selectedEntryIndex !== currentIndex) {
-          GlobalState.leftSidebar.appSearch.selectedEntryIndex = currentIndex;
-        }
-      }
-
-      delegate: EntryItem {
-        anchors.left: parent?.left
-        anchors.right: parent?.right
-
-        entry: modelData
-        toggled: GlobalState.leftSidebar.appSearch.selectedEntryIndex === index
-      }
-    }
   }
 }
