@@ -7,10 +7,14 @@ import Quickshell
 
 import "components"
 import "components/bar"
+import "components/osd"
 
 ShellRoot {
   Bar {}
   Wallpaper {}
+
+  // --- OSDs ---
+  VolumeChangeIndicator {}
 
   Component.onCompleted: {
     //TODO: initialize some services

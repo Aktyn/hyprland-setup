@@ -23,7 +23,7 @@ Scope {
 
   readonly property int innerPadding: Style.sizes.spacingLarge
   readonly property int cornerSize: Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
-  readonly property int slideDuration: 300
+  readonly property int slideDuration: 400
 
   property int screenEdgeOffset: this.side !== BarAdjacentPanel.Side.Middle && !this.adhesive ? this.cornerSize : 0
 
@@ -107,7 +107,7 @@ Scope {
       Behavior on cornerScale {
         NumberAnimation {
           duration: root.slideDuration
-          easing.type: root.show ? Easing.InCubic : Easing.OutCubic
+          easing.type: Easing.InQuad
         }
       }
 
@@ -135,6 +135,22 @@ Scope {
         Layout.fillWidth: true
         Layout.topMargin: 0
 
+        implicitHeight: panel.implicitHeight
+        Behavior on implicitHeight {
+          animation: Style.animation.elementMove.numberAnimation.createObject(this)
+          // animation: SequentialAnimation {
+          //   PauseAnimation {
+          //     duration: 1000
+          //   } // Delay in milliseconds
+          //   NumberAnimation {
+          //     duration: Style.animation.elementMove.duration
+          //     easing.type: Style.animation.elementMove.type
+          //   }
+          // }
+        }
+
+        clip: true
+
         state: root.show ? "visible" : "hidden"
 
         states: [
@@ -161,7 +177,7 @@ Scope {
             NumberAnimation {
               properties: "Layout.topMargin"
               duration: root.slideDuration
-              easing.type: Easing.OutCubic
+              easing.type: Easing.InQuad
             }
           },
           Transition {
@@ -170,16 +186,13 @@ Scope {
             NumberAnimation {
               properties: "Layout.topMargin"
               duration: root.slideDuration
-              easing.type: Easing.InCubic
+              easing.type: Easing.OutQuad
             }
           }
         ]
 
         Rectangle {
-          anchors.top: parent.top
-          anchors.left: parent.left
-          anchors.right: parent.right
-          implicitHeight: panel.implicitHeight
+          anchors.fill: parent
 
           color: Style.colors.surface
           bottomLeftRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Left ? 0 : Style.rounding.hyprland
@@ -189,17 +202,10 @@ Scope {
         Item {
           anchors.fill: parent
           anchors.margins: root.innerPadding
+          clip: true
 
           ColumnLayout {
             id: panelContent
-            clip: true
-            opacity: root.show ? 1 : 0
-            Behavior on opacity {
-              animation: Style.animation.elementMove.numberAnimation.createObject(this)
-            }
-            Behavior on implicitHeight {
-              animation: Style.animation.elementMove.numberAnimation.createObject(this)
-            }
           }
         }
       }

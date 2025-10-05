@@ -31,6 +31,10 @@ Singleton {
     }
   }
 
+  property QtObject osd: QtObject {
+    property bool volumeOpen: false
+  }
+
   property QtObject leftSidebar: QtObject {
     id: leftSidebar
 

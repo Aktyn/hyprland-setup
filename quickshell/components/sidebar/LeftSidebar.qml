@@ -62,8 +62,19 @@ ColumnLayout {
       }
 
       GlobalState.leftSidebar?.requestFocus();
+      clearTimeout.running = false;
     } else if (typeof appSearch.clear === "function") {
-      appSearch.clear(); //TODO: add some delay to wait for panel to fully hide
+      clearTimeout.restart();
+    }
+  }
+
+  Timer {
+    id: clearTimeout
+    interval: 400 //Same as in BarAdjacentPanel
+    repeat: false
+    running: false
+    onTriggered: {
+      appSearch.clear();
     }
   }
 
