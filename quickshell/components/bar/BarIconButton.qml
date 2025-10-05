@@ -15,6 +15,8 @@ StyledButton {
 
   buttonRadius: Style.rounding.full
 
+  property alias color: content.color
+
   contentItem: MaterialSymbol {
     id: content
 

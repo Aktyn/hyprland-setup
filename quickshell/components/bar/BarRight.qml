@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Services.Notifications
 
 import "../../common"
@@ -8,6 +9,7 @@ import "../../services"
 import "."
 import "../widgets"
 import "../widgets/common"
+import "../widgets/audio"
 
 BarSection {
   id: section
@@ -16,12 +18,36 @@ BarSection {
   mirror: true
   stretch: true
 
-  Text {
-    Layout.alignment: Qt.AlignRight
-    text: "TODO: status icons and right sidebar toggle"
-    color: Style.colors.outlineVariant
-    font.pixelSize: Style.font.pixelSize.smaller
+  //TODO: right sidebar toggle
+  BarIconButton {
+    toggled: false
+    iconName: "menu"
+    color: Style.colors.outlineVariant //TODO: remove
+    onClicked:
+    //TODO: open right sidebar
+    {}
   }
+
+  BarIconButton {
+    id: nightLightButton
+    property bool enabled: Hyprsunset.active
+    toggled: enabled
+    iconName: "bedtime"
+    onClicked: {
+      Hyprsunset.toggle();
+    }
+
+    Component.onCompleted: {
+      Hyprsunset.fetchState();
+    }
+
+    StyledTooltip {
+      content: "Night Light"
+      side: StyledTooltip.TooltipSide.Left
+    }
+  }
+
+  BluetoothToggle {}
 
   StyledButton {
     id: notificationsButton
@@ -150,6 +176,18 @@ BarSection {
           GlobalState.bar.notesPanel.screen = section.screen;
         }
       }
+    }
+
+    VSeparator {}
+
+    VolumeWidget {}
+
+    VSeparator {}
+
+    Text {
+      text: "TODO - media widget"
+      color: Style.colors.outlineVariant
+      font.pixelSize: Style.font.pixelSize.smaller
     }
   }
 }

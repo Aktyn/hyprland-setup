@@ -2,6 +2,9 @@ module services
 
 singleton Colors Colors.qml
 singleton Notifications Notifications.qml
+singleton Audio Audio.qml
+singleton Bluetooth Bluetooth.qml
 singleton Time Time.qml
 singleton Notes Notes.qml
 singleton ResourceUsage ResourceUsage.qml
+singleton Hyprsunset Hyprsunset.qml

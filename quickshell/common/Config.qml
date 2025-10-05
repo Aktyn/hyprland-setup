@@ -14,6 +14,7 @@ Singleton {
   property alias bar: configJsonAdapter.bar
   property alias wallpaper: configJsonAdapter.wallpaper
   property alias notifications: configJsonAdapter.notifications
+  property alias apps: configJsonAdapter.apps
 
   FileView {
     path: Consts.path.configFile
@@ -57,6 +58,10 @@ Singleton {
 
       property JsonObject notifications: JsonObject {
         property int defaultTimeout: 8000
+      }
+
+      property JsonObject apps: JsonObject {
+        property string bluetooth: "blueman-manager"
       }
     }
   }

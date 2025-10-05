@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import qs.common
+import "../../../common"
 
 ToolTip {
   id: root
@@ -31,8 +31,23 @@ ToolTip {
     animation: Style.animation.elementMoveFast.numberAnimation.createObject(this)
   }
 
-  // x: Math.round((parent.width - width) / 2) // - parent.width / 2 - contentItemBackground.width / 2
-  // y: Math.round((parent.height - height) / 2)
+  x: switch (root.side) {
+  case StyledTooltip.TooltipSide.Left:
+    return -width;
+  case StyledTooltip.TooltipSide.Right:
+    return width;
+  default:
+    return Math.round((parent.width - width) / 2);
+  }
+
+  y: switch (root.side) {
+  case StyledTooltip.TooltipSide.Top:
+    return -parent.height;
+  case StyledTooltip.TooltipSide.Bottom:
+    return parent.height;
+  default:
+    return Math.round((parent.height - height) / 2);
+  }
 
   background: null
 
@@ -44,20 +59,8 @@ ToolTip {
     Rectangle {
       id: backgroundRectangle
 
-      anchors.horizontalCenter: switch (root.side) {
-      case StyledTooltip.TooltipSide.Top:
-      case StyledTooltip.TooltipSide.Bottom:
-        return contentItemBackground.horizontalCenter;
-      default:
-        return undefined;
-      }
-      anchors.verticalCenter: switch (root.side) {
-      case StyledTooltip.TooltipSide.Left:
-      case StyledTooltip.TooltipSide.Right:
-        return contentItemBackground.verticalCenter;
-      default:
-        return undefined;
-      }
+      anchors.horizontalCenter: contentItemBackground.horizontalCenter
+      anchors.verticalCenter: contentItemBackground.verticalCenter
 
       anchors.top: switch (root.side) {
       case StyledTooltip.TooltipSide.Bottom:

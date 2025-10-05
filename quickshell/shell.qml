@@ -19,8 +19,6 @@ ShellRoot {
 
     console.info("Aktyn quickshell started");
     // Cliphist.refresh()
-    // FirstRunExperience.load()
-    // Hyprsunset.load()
     // MaterialThemeLoader.reapplyTheme()
   }
 }

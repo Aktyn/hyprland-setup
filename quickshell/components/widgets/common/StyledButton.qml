@@ -50,8 +50,6 @@ Button {
   component RippleAnim: NumberAnimation {
     duration: 600
     easing.type: Easing.InQuad
-    // easing.type: Style.animation.elementMoveEnter.type
-    // easing.bezierCurve: Style.animationCurves.standardDecel
   }
 
   MouseArea {
@@ -60,17 +58,17 @@ Button {
     acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
     onPressed: event => {
       if (event.button === Qt.RightButton) {
-        if (root.altAction)
+        if (root.altAction && typeof root.altAction === 'function')
           root.altAction();
         return;
       }
       if (event.button === Qt.MiddleButton) {
-        if (root.middleClickAction)
+        if (root.middleClickAction && typeof root.middleClickAction === 'function')
           root.middleClickAction();
         return;
       }
       root.down = true;
-      if (root.downAction) {
+      if (root.downAction && typeof root.downAction === 'function') {
         root.downAction();
       }
       if (!root.rippleEnabled) {

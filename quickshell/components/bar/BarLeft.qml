@@ -8,6 +8,7 @@ import "../widgets/common"
 BarSection {
   stretch: true
 
+  //TODO: use "apps" icon instead and move aktyn logo to right sidebar
   BarIconButton {
     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
