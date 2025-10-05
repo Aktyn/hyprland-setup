@@ -15,6 +15,18 @@ Singleton {
   }
 
   /**
+    * Escapes single quotes in shell commands
+    * @param { string } str
+    * @returns { string }
+    */
+  function shellSingleQuoteEscape(str) {
+    //  escape single quotes
+    return String(str)
+    // .replace(/\\/g, '\\\\')
+    .replace(/'/g, "'\\''");
+  }
+
+  /**
     * @param {string} needle
     * @param {string} haystack
     * @returns {boolean}

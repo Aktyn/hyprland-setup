@@ -13,8 +13,6 @@ BarSection {
   id: section
   required property ShellScreen screen
 
-  height: parent.height
-
   mirror: true
   stretch: true
 
@@ -107,14 +105,51 @@ BarSection {
     Layout.fillWidth: true
   }
 
-  BarIconButton {
-    iconName: "sticky_note_2"
+  RowLayout {
+    spacing: Style.sizes.spacingLarge
+    Layout.alignment: Qt.AlignVCenter
+    Layout.fillHeight: false
 
-    toggled: GlobalState.bar.notesPanel.open
+    RowLayout {
+      spacing: Style.sizes.spacingMedium
 
-    onPressed: {
-      GlobalState.bar.notesPanel.open = !GlobalState.bar.notesPanel.open;
-      GlobalState.bar.notesPanel.screen = section.screen;
+      //TODO: updates should open adjacent panel with basic info like list of outdated packages and simple options to update them
+      // Updates {}
+
+      Resources {}
+
+      //TODO
+      // Media {
+      //   visible: root.useShortenedForm < 2
+      //   Layout.fillWidth: true
+      // }
+    }
+
+    VSeparator {}
+
+    RowLayout {
+      spacing: Style.sizes.spacingSmall
+
+      BarIconButton {
+        iconName: "screenshot_region"
+        onClicked: Quickshell.execDetached("hyprshot --freeze --clipboard-only --mode region --silent".split(" "))
+      }
+
+      BarIconButton {
+        iconName: "colorize"
+        onClicked: Quickshell.execDetached(["hyprpicker", "-a"])
+      }
+
+      BarIconButton {
+        iconName: "sticky_note_2"
+
+        toggled: GlobalState.bar.notesPanel.open
+
+        onClicked: {
+          GlobalState.bar.notesPanel.open = !GlobalState.bar.notesPanel.open;
+          GlobalState.bar.notesPanel.screen = section.screen;
+        }
+      }
     }
   }
 }

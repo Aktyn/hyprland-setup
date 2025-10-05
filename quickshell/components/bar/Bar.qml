@@ -93,15 +93,15 @@ LazyLoader {
             anchors.rightMargin: Style.rounding.hyprland
             color: "transparent"
 
-            Row {
+            RowLayout {
               id: row
               anchors.fill: parent
               spacing: 0
 
               BarLeft {
                 id: leftSection
-                Layout.alignment: Qt.AlignVCenter
-                width: Math.max(0, (contentRoot.width - middleSection.implicitWidth) / 2 - row.spacing)
+                Layout.fillHeight: true
+                implicitWidth: Math.max(0, (contentRoot.width - middleSection.implicitWidth) / 2 - row.spacing)
               }
 
               BarMiddle {
@@ -110,7 +110,8 @@ LazyLoader {
               }
 
               BarRight {
-                width: leftSection.width
+                Layout.fillHeight: true
+                implicitWidth: leftSection.width
                 screen: barPanel.screen
               }
             }

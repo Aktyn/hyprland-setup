@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 
 Singleton {
   property QtObject bar: QtObject {
@@ -31,12 +32,46 @@ Singleton {
   }
 
   property QtObject leftSidebar: QtObject {
+    id: leftSidebar
+
     property bool open: false
     property ShellScreen screen: Quickshell.screens[0]
     property var requestFocus
 
     property QtObject appSearch: QtObject {
       property int selectedEntryIndex: 0
+    }
+
+    property bool superReleaseHelper: false
+  }
+
+  // --------------------------------------------------------------------------------
+
+  GlobalShortcut {
+    name: "overviewToggleRelease" //TODO: adjust name after migration
+    description: "Toggles left sidebar"
+
+    onPressed: {
+      leftSidebar.superReleaseHelper = true;
+    }
+
+    onReleased: {
+      if (!leftSidebar.superReleaseHelper) {
+        leftSidebar.superReleaseHelper = true;
+        return;
+      }
+      leftSidebar.open = !leftSidebar.open;
+      if (!leftSidebar.open && typeof leftSidebar.requestFocus === 'function') {
+        leftSidebar.requestFocus(false);
+      }
+    }
+  }
+  GlobalShortcut {
+    name: "overviewToggleReleaseInterrupt"
+    description: "Interrupts super release whenever shortcut consisting of super key has been pressed"
+
+    onPressed: {
+      leftSidebar.superReleaseHelper = false;
     }
   }
 }

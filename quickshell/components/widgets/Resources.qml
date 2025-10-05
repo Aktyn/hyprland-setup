@@ -1,0 +1,43 @@
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+
+import "../../common"
+import "../../services"
+import "./common"
+
+StyledButton {
+  Layout.alignment: Qt.AlignVCenter
+  Layout.leftMargin: -Style.sizes.spacingMedium
+  Layout.rightMargin: -Style.sizes.spacingMedium
+  implicitWidth: rowLayout.width + Style.sizes.spacingMedium * 2
+  implicitHeight: rowLayout.height + Style.sizes.spacingExtraSmall * 2
+
+  RowLayout {
+    id: rowLayout
+
+    anchors.centerIn: parent
+    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+    spacing: Style.sizes.spacingMedium
+
+    Resource {
+      iconName: "speed"
+      percentage: ResourceUsage.cpuUsage
+      shown: true
+    }
+
+    Resource {
+      iconName: "memory"
+      percentage: ResourceUsage.memoryUsedPercentage
+    }
+
+    Resource {
+      iconName: "swap_horiz"
+      percentage: ResourceUsage.swapUsedPercentage
+      shown: percentage > 0
+    }
+  }
+
+  onClicked: Quickshell.execDetached(["sh", "-c", "hyprctl dispatch exec '[float]' gnome-system-monitor"])
+}

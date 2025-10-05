@@ -5,7 +5,6 @@ import "../../common"
 
 Item {
   id: root
-  height: parent.height
 
   default property alias items: rowLayout.children
   property bool mirror: false

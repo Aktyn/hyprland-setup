@@ -9,7 +9,7 @@ StyledButton {
 
   property string iconName // Required unless contentItem is custom set
 
-  Layout.alignment: Qt.AlignVCenter
+  Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
   implicitWidth: Style.sizes.iconLarge + Style.sizes.spacingExtraSmall * 2
   implicitHeight: root.implicitWidth
 
@@ -20,6 +20,7 @@ StyledButton {
 
     anchors.centerIn: parent
     horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
     width: Style.sizes.iconLarge
     height: Style.sizes.iconLarge
 

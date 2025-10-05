@@ -36,7 +36,7 @@ Item {
       ClockWidget {
         id: clockWidget
         anchors.centerIn: parent
-        Layout.alignment: Qt.AlignHCenter
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         color: Style.colors.colorOnSurface
       }
 
