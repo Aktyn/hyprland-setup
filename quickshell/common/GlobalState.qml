@@ -29,6 +29,12 @@ Singleton {
       property ShellScreen screen: Quickshell.screens[0]
       property var requestFocus
     }
+
+    property QtObject mediaControls: QtObject {
+      property bool open: false
+      property ShellScreen screen: Quickshell.screens[0]
+      property var requestFocus
+    }
   }
 
   property QtObject osd: QtObject {

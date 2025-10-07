@@ -10,6 +10,7 @@ import "."
 import "../widgets/common"
 import "../widgets/calendar"
 import "../widgets/notes"
+import "../widgets/audio"
 import "../sidebar"
 
 LazyLoader {
@@ -218,6 +219,29 @@ LazyLoader {
             }
 
             NotesPanel {}
+          }
+        }
+
+        // Media controls panel sheet
+        LazyLoader {
+          active: true
+
+          BarAdjacentPanel {
+            id: mediaControlsPanelContainer
+
+            screen: GlobalState.bar.mediaControls.screen
+            show: GlobalState.bar.mediaControls.open
+            innerPadding: 0
+
+            onBackgroundClick: function () {
+              GlobalState.bar.mediaControls.open = false;
+            }
+
+            Component.onCompleted: {
+              GlobalState.bar.mediaControls.requestFocus = mediaControlsPanelContainer.onRequestFocus;
+            }
+
+            MediaControls {}
           }
         }
       }

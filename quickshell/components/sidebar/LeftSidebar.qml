@@ -70,7 +70,7 @@ ColumnLayout {
 
   Timer {
     id: clearTimeout
-    interval: 400 //Same as in BarAdjacentPanel
+    interval: Config.bar.panelSlideDuration
     repeat: false
     running: false
     onTriggered: {

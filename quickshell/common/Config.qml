@@ -44,6 +44,7 @@ Singleton {
         property int height: 36
         property real shadowOpacity: 0.5
         property real desaturateTrayIcons: 0.5 // 1.0 means fully grayscale
+        property int panelSlideDuration: 350 //ms
       }
 
       property JsonObject wallpaper: JsonObject {

@@ -2,9 +2,11 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 
+import "../../common"
+import "../../services"
+
 import "../widgets"
 import "../widgets/common"
-import "../../common"
 
 Item {
   id: section
@@ -37,7 +39,7 @@ Item {
         id: clockWidget
         anchors.centerIn: parent
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: Style.colors.colorOnSurface
+        color: Time.time.startsWith("13:37") ? Style.colors.primary : Style.colors.colorOnSurface
       }
 
       onPressed: {

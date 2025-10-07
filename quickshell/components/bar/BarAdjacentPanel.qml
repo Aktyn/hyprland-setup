@@ -21,9 +21,9 @@ Scope {
   required property ShellScreen screen
   property bool show: false
 
-  readonly property int innerPadding: Style.sizes.spacingLarge
+  property int innerPadding: Style.sizes.spacingLarge
   readonly property int cornerSize: Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
-  readonly property int slideDuration: 400
+  readonly property int slideDuration: Config.bar.panelSlideDuration
 
   property int screenEdgeOffset: this.side !== BarAdjacentPanel.Side.Middle && !this.adhesive ? this.cornerSize : 0
 
@@ -107,7 +107,7 @@ Scope {
       Behavior on cornerScale {
         NumberAnimation {
           duration: root.slideDuration
-          easing.type: Easing.InQuad
+          easing.type: root.show ? Easing.OutQuad : Easing.InQuad
         }
       }
 

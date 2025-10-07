@@ -114,7 +114,10 @@ Rectangle {
 
         GridLayout {
           id: grid
-          visible: root.notificationObject.isNew && !!root.notificationObject.notificationHandle?.actions?.length
+
+          property list<NotificationAction> actions: root.notificationObject.notificationHandle?.actions?.filter(action => !!action.text) ?? []
+
+          visible: root.notificationObject.isNew && !!this.actions.length
           columns: 2
           columnSpacing: Style.sizes.spacingMedium
           rowSpacing: Style.sizes.spacingMedium
@@ -122,10 +125,12 @@ Rectangle {
           Layout.fillWidth: true
 
           Repeater {
-            model: root.notificationObject.notificationHandle?.actions || []
+            model: grid.actions
 
             delegate: ActionButton {
               required property NotificationAction modelData
+
+              visible: !!modelData.text
 
               Layout.fillWidth: true
 

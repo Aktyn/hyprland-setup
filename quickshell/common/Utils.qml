@@ -87,4 +87,35 @@ Singleton {
   function updateRecentApps(appName: string) {
     this.recentApps = [...this.recentApps.filter(app => app !== appName), appName].slice(-this.recentAppsHistorySize);
   }
+
+  function cleanMusicTitle(title: string): string {
+    if (!title) {
+      return "";
+    }
+
+    // Brackets
+    title = title.replace(/^ *\([^)]*\) */g, " ");
+    title = title.replace(/^ *\[[^\]]*\] */g, " ");
+    title = title.replace(/^ *\{[^\}]*\} */g, " ");
+    title = title.replace(/^ *【[^】]*】/, "");
+    title = title.replace(/^ *《[^》]*》/, "");
+    title = title.replace(/^ *「[^」]*」/, "");
+    title = title.replace(/^ *『[^』]*』/, "");
+
+    return title.trim();
+  }
+
+  function friendlyTimeForSeconds(seconds: int): string {
+    if (isNaN(seconds) || seconds < 0)
+      return "0:00";
+    seconds = Math.floor(seconds);
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    if (h > 0) {
+      return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    } else {
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+  }
 }

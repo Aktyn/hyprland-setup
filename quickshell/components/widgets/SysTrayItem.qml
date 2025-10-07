@@ -1,13 +1,12 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
-import qs.common
+import "../../common"
 
 MouseArea {
   id: root
@@ -39,7 +38,7 @@ MouseArea {
 
     menu: root.item.menu
     anchor.window: root.bar
-    anchor.rect.x: root.mapToGlobal(root.x, root.y).x
+    anchor.rect.x: root.bar.width - 256 //root.mapToGlobal(root.x, root.y).x
     anchor.rect.height: Config.bar.height
     anchor.edges: Edges.Bottom
   }

@@ -136,20 +136,7 @@ BarSection {
     Layout.alignment: Qt.AlignVCenter
     Layout.fillHeight: false
 
-    RowLayout {
-      spacing: Style.sizes.spacingMedium
-
-      //TODO: updates should open adjacent panel with basic info like list of outdated packages and simple options to update them
-      // Updates {}
-
-      Resources {}
-
-      //TODO
-      // Media {
-      //   visible: root.useShortenedForm < 2
-      //   Layout.fillWidth: true
-      // }
-    }
+    Resources {}
 
     VSeparator {}
 
@@ -184,10 +171,32 @@ BarSection {
 
     VSeparator {}
 
-    Text {
-      text: "TODO - media widget"
-      color: Style.colors.outlineVariant
-      font.pixelSize: Style.font.pixelSize.smaller
+    StyledButton {
+      id: clockWidgetButton
+
+      Layout.alignment: Qt.AlignVCenter
+      implicitWidth: mediaWidget.width
+      implicitHeight: mediaWidget.height
+
+      toggled: GlobalState.bar.mediaControls.open
+      padding: 0
+      buttonRadius: Style.rounding.full
+
+      MediaWidget {
+        id: mediaWidget
+        Layout.alignment: Qt.AlignVCenter
+      }
+
+      onPressed: {
+        GlobalState.bar.mediaControls.open = !GlobalState.bar.mediaControls.open;
+        GlobalState.bar.mediaControls.screen = section.screen;
+      }
+      altAction: () => {
+        mediaWidget.activePlayer.next();
+      }
+      middleClickAction: () => {
+        mediaWidget.activePlayer.togglePlaying();
+      }
     }
   }
 }

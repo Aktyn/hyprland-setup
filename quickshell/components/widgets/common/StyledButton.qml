@@ -147,6 +147,10 @@ Button {
   background: Rectangle {
     id: buttonBackground
     radius: root.buttonEffectiveRadius
+    Behavior on radius {
+      animation: Style.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+
     implicitHeight: 50
 
     color: root.buttonColor
@@ -161,7 +165,7 @@ Button {
       maskSource: Rectangle {
         width: buttonBackground.width
         height: buttonBackground.height
-        radius: root.buttonEffectiveRadius
+        radius: buttonBackground.radius
       }
     }
 

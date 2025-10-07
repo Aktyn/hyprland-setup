@@ -9,7 +9,7 @@ RowLayout {
   id: rowLayout
   visible: SystemTray.items.values.length > 0
 
-  spacing: Style.sizes.spacingMedium
+  spacing: Style.sizes.spacingLarge
 
   Repeater {
     model: SystemTray.items

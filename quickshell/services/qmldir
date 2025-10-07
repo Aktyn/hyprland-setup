@@ -3,6 +3,7 @@ module services
 singleton Colors Colors.qml
 singleton Notifications Notifications.qml
 singleton Audio Audio.qml
+singleton MprisController MprisController.qml
 singleton Bluetooth Bluetooth.qml
 singleton Time Time.qml
 singleton Notes Notes.qml

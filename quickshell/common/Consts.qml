@@ -4,6 +4,8 @@ import QtQuick
 import Quickshell
 import Qt.labs.platform
 
+import "."
+
 Singleton {
   readonly property QtObject path: QtObject {
     property string config: StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0]
@@ -13,5 +15,10 @@ Singleton {
     property string colorsFile: this.cache + "/aktyn-quickshell/colors.json"
     property string dynamicHyprlandConfig: this.config + "/hypr/hyprland/dynamic.conf"
     property string recentAppsFile: this.cache + "/aktyn-quickshell/recent.json"
+  }
+
+  readonly property QtObject sizes: QtObject {
+    property int playerControlWidth: 418 + Style.sizes.spacingExtraLarge * 2
+    property int playerControlHeight: 160 + Style.sizes.spacingExtraLarge * 2
   }
 }
