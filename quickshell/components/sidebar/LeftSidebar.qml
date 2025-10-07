@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Io
 
 import "../../scripts/levendist.js" as Levendist
+import "../../scripts/md5.js" as MD5
 
 import "../../common"
 import "../widgets/common"
@@ -42,17 +43,29 @@ ColumnLayout {
   property string calcResult: ""
 
   onAppsListChanged: {
-    GlobalState.leftSidebar.appSearch.selectedEntryIndex = 0;
+    const combinedNames = root.appsList.reduce((acc, app) => acc + app.name, "");
+    this.appResultsHash = MD5.md5(combinedNames);
+  }
+
+  property string appResultsHash: ""
+  onAppResultsHashChanged: function () {
+    if (appSearch.searchText.startsWith("!") && appSearch.searchText.length > 1) {
+      GlobalState.leftSidebar.appSearch.selectedEntryIndex = -1;
+    } else {
+      GlobalState.leftSidebar.appSearch.selectedEntryIndex = 0;
+    }
   }
 
   Keys.onPressed: event => {
     if (event.key === Qt.Key_Up) {
-      GlobalState.leftSidebar.appSearch.selectedEntryIndex = Math.max(0, GlobalState.leftSidebar.appSearch.selectedEntryIndex - 1);
+      GlobalState.leftSidebar.appSearch.selectedEntryIndex--;
       event.accepted = true;
     } else if (event.key === Qt.Key_Down) {
-      GlobalState.leftSidebar.appSearch.selectedEntryIndex = Math.min(this.appsList.length - 1, GlobalState.leftSidebar.appSearch.selectedEntryIndex + 1);
+      GlobalState.leftSidebar.appSearch.selectedEntryIndex++;
       event.accepted = true;
     }
+
+    GlobalState.leftSidebar.appSearch.selectedEntryIndex = Utils.clamp(GlobalState.leftSidebar.appSearch.selectedEntryIndex, 0, this.appsList.length - 1);
   }
 
   onActiveChanged: {
@@ -87,6 +100,11 @@ ColumnLayout {
     placeholder: "Search or calculate. \"!\" to run commands"
 
     onEnter: function () {
+      if (appSearch.searchText.startsWith("!") && appSearch.searchText.length > 1) {
+        Quickshell.execDetached(["bash", "-c", appSearch.searchText.substr(1)]);
+        return;
+      }
+
       if (GlobalState.leftSidebar.appSearch.selectedEntryIndex < root.appsList.length) {
         const app = root.appsList[GlobalState.leftSidebar.appSearch.selectedEntryIndex];
         if (app) {
@@ -103,13 +121,14 @@ ColumnLayout {
     visible: appSearch.searchText.startsWith("!") && appSearch.searchText.length > 1
     Layout.fillWidth: true
     iconName: "terminal"
-    content: "Run command"
+    content: "Run command (enter)"
     borderWidth: 1
     borderColor: Style.colors.outline
 
     onClicked: {
       Quickshell.execDetached(["bash", "-c", appSearch.searchText.substr(1)]);
       GlobalState.leftSidebar.open = false;
+      GlobalState.leftSidebar.requestFocus(false);
     }
   }
 

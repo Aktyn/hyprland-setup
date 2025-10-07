@@ -18,11 +18,11 @@ ScrollView {
     model: root.apps
     currentIndex: GlobalState.leftSidebar.appSearch.selectedEntryIndex
 
-    onCurrentIndexChanged: {
-      if (GlobalState.leftSidebar.appSearch.selectedEntryIndex !== currentIndex) {
-        GlobalState.leftSidebar.appSearch.selectedEntryIndex = currentIndex;
-      }
-    }
+    // onCurrentIndexChanged: {
+    //   if (GlobalState.leftSidebar.appSearch.selectedEntryIndex !== currentIndex) {
+    //     GlobalState.leftSidebar.appSearch.selectedEntryIndex = currentIndex;
+    //   }
+    // }
 
     delegate: EntryItem {
       anchors.left: parent?.left

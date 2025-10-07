@@ -60,10 +60,6 @@ Item {
   Loader {
     id: playerControlsLoader
 
-    onActiveChanged: {
-      console.log("active", this.active);
-    }
-
     sourceComponent: ColumnLayout {
       id: playerColumnLayout
 
@@ -83,56 +79,4 @@ Item {
       }
     }
   }
-
-  // Loader {
-  //   id: mediaControlsLoader
-  //   active: GlobalState.bar.mediaControls.open
-  //   onActiveChanged: {
-  //     if (!mediaControlsLoader.active && Mpris.players.values.filter(player => isRealPlayer(player)).length === 0) {
-  //       GlobalState.bar.mediaControls.open = false;
-  //     }
-  //   }
-
-  //   sourceComponent: PanelWindow {
-  //     id: mediaControlsRoot
-  //     visible: true
-
-  //     exclusiveZone: 0
-  //     implicitWidth: ((mediaControlsRoot.screen.width / 2) // Middle of screen
-  //       - (osdWidth / 2)                 // Dodge OSD
-  //       - (widgetWidth / 2)              // Account for widget width
-  //     ) * 2
-  //     implicitHeight: playerColumnLayout.implicitHeight
-  //     color: "transparent"
-  //     WlrLayershell.namespace: "quickshell:mediaControls"
-
-  //     anchors {
-  //       top: true //!Config.options.bar.bottom
-  //       // bottom: Config.options.bar.bottom
-  //       left: true
-  //     }
-
-  //     // Close when clicking outside the player area
-  //     MouseArea {
-  //       id: outsideCloser
-  //       anchors.fill: parent
-  //       hoverEnabled: false
-  //       onPressed: function (mouse) {
-  //         var p = playerColumnLayout.mapFromItem(outsideCloser, mouse.x, mouse.y);
-  //         var inside = p.x >= 0 && p.y >= 0 && p.x <= playerColumnLayout.width && p.y <= playerColumnLayout.height;
-  //         if (inside)
-  //           mouse.accepted = false;
-  //       }
-  //       onClicked: function (mouse) {
-  //         var p = playerColumnLayout.mapFromItem(outsideCloser, mouse.x, mouse.y);
-  //         var inside = p.x >= 0 && p.y >= 0 && p.x <= playerColumnLayout.width && p.y <= playerColumnLayout.height;
-  //         if (!inside) {
-  //           GlobalState.bar.mediaControls.open = false;
-  //         }
-  //       }
-  //     }
-
-  //   }
-  // }
-
 }

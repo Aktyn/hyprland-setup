@@ -118,4 +118,8 @@ Singleton {
       return `${m}:${s.toString().padStart(2, '0')}`;
     }
   }
+
+  function clamp(value: real, min: real, max: real): real {
+    return Math.max(min, Math.min(max, value));
+  }
 }

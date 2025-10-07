@@ -14,6 +14,7 @@ Rectangle {
   property int horizontalPadding: Style.sizes.spacingMedium
   property alias searchText: searchInput.text
 
+  property var onNonEnterInput
   property var onEnter
 
   implicitHeight: searchInput.implicitHeight
@@ -66,7 +67,11 @@ Rectangle {
           this.text = this.text.replace(/\n/, "");
           this.select(this.text.length, this.text.length);
 
-          root.onEnter();
+          if (root.onEnter && typeof root.onEnter === 'function') {
+            root.onEnter();
+          }
+        } else if (root.onNonEnterInput && typeof root.onNonEnterInput === 'function') {
+          root.onNonEnterInput();
         }
       }
     }
