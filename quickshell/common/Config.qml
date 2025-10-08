@@ -15,6 +15,7 @@ Singleton {
   property alias wallpaper: configJsonAdapter.wallpaper
   property alias notifications: configJsonAdapter.notifications
   property alias apps: configJsonAdapter.apps
+  property alias workspaces: configJsonAdapter.workspaces
 
   FileView {
     path: Consts.path.configFile
@@ -63,6 +64,10 @@ Singleton {
 
       property JsonObject apps: JsonObject {
         property string bluetooth: "blueman-manager"
+      }
+
+      property JsonObject workspaces: JsonObject {
+        property int count: 6
       }
     }
   }

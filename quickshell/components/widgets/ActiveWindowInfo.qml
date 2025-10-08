@@ -12,10 +12,6 @@ Item {
   readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
   readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
-  property string activeWindowAddress: `0x${activeWindow?.HyprlandToplevel?.address}`
-  property bool focusingThisMonitor: HyprlandInfo.activeWorkspace?.monitor === monitor?.name
-  property var biggestWindow: HyprlandInfo.biggestWindowForWorkspace(HyprlandInfo.monitors[root.monitor?.id]?.activeWorkspace.id)
-
   implicitWidth: Math.min(colLayout.implicitWidth, 384)
 
   Behavior on implicitWidth {
@@ -35,7 +31,7 @@ Item {
       id: activeWindowClass
       Layout.fillWidth: true
 
-      property string content: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? root.activeWindow?.appId : (root.biggestWindow?.class) ?? "Desktop"
+      property string content: root.activeWindow?.appId ?? "Desktop"
 
       visible: this.content.length > 0
       font.pixelSize: Style.font.pixelSize.smaller
@@ -50,7 +46,7 @@ Item {
       font.pixelSize: Style.font.pixelSize.small
       color: Style.colors.colorOnSurface
       elide: Text.ElideRight
-      text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? root.activeWindow?.title : (root.biggestWindow?.title) ?? `Workspace ${monitor?.activeWorkspace?.id ?? 1}`
+      text: root.activeWindow?.title ?? `Workspace ${root.monitor?.activeWorkspace?.id ?? 1}`
     }
   }
 }

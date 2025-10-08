@@ -35,9 +35,11 @@ Item {
   }
 
   property bool loaded: GlobalState.bar.mediaControls.open
+  property bool delayedLoaded: GlobalState.bar.mediaControls.open
   onLoadedChanged: {
     if (this.loaded) {
       playerControlsLoader.active = true;
+      root.delayedLoaded = true;
       unloadTimeout.running = false;
     } else {
       unloadTimeout.restart();
@@ -46,16 +48,20 @@ Item {
 
   Timer {
     id: unloadTimeout
-    interval: Config.bar.panelSlideDuration
+    interval: Config.bar.panelSlideDuration - 100
     repeat: false
     running: false
     onTriggered: {
       playerControlsLoader.active = false;
+      root.delayedLoaded = false;
     }
   }
 
   implicitWidth: Consts.sizes.playerControlWidth
   implicitHeight: Consts.sizes.playerControlHeight * MprisController.meaningfulPlayers.length + Style.sizes.spacingMedium * Math.max(0, MprisController.meaningfulPlayers.length - 1)
+
+  visible: root.delayedLoaded
+  clip: true
 
   Loader {
     id: playerControlsLoader

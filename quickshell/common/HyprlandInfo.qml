@@ -14,19 +14,12 @@ Singleton {
   property var addresses: []
   property var windowByAddress: ({})
   property var monitors: []
-  property var workspaces: []
-  property var workspaceIds: []
-  property var workspaceById: ({})
-  property var activeWorkspace: null
   property var layers: ({})
 
   function update() {
     getClients.running = true;
     getMonitors.running = true;
     getLayers.running = true;
-
-    getWorkspaces.running = true;
-    getActiveWorkspace.running = true;
   }
 
   Component.onCompleted: {
@@ -38,7 +31,7 @@ Singleton {
 
     function onRawEvent(event) {
       // console.info("Hyprland raw event name:", event.name);
-      update();
+      hyprlandSingleton.update();
     }
   }
 
@@ -84,35 +77,6 @@ Singleton {
   }
 
   Process {
-    id: getWorkspaces
-    command: ["hyprctl", "workspaces", "-j"]
-    stdout: StdioCollector {
-      id: workspacesCollector
-      onStreamFinished: {
-        hyprlandSingleton.workspaces = JSON.parse(workspacesCollector.text);
-        let tempWorkspaceById = {};
-        for (var i = 0; i < hyprlandSingleton.workspaces.length; ++i) {
-          var ws = hyprlandSingleton.workspaces[i];
-          tempWorkspaceById[ws.id] = ws;
-        }
-        hyprlandSingleton.workspaceById = tempWorkspaceById;
-        hyprlandSingleton.workspaceIds = hyprlandSingleton.workspaces.map(ws => ws.id);
-      }
-    }
-  }
-
-  Process {
-    id: getActiveWorkspace
-    command: "hyprctl activeworkspace -j".split(" ")
-    stdout: StdioCollector {
-      id: activeWorkspaceCollector
-      onStreamFinished: {
-        hyprlandSingleton.activeWorkspace = JSON.parse(activeWorkspaceCollector.text);
-      }
-    }
-  }
-
-  Process {
     id: getLayers
     command: ["hyprctl", "layers", "-j"]
     stdout: StdioCollector {
@@ -121,15 +85,6 @@ Singleton {
         hyprlandSingleton.layers = JSON.parse(layersCollector.text);
       }
     }
-  }
-
-  function biggestWindowForWorkspace(workspaceId) {
-    const windowsInThisWorkspace = hyprlandSingleton.windowList.filter(w => w.workspace.id == workspaceId);
-    return windowsInThisWorkspace.reduce((maxWin, win) => {
-      const maxArea = (maxWin?.size?.[0] ?? 0) * (maxWin?.size?.[1] ?? 0);
-      const winArea = (win?.size?.[0] ?? 0) * (win?.size?.[1] ?? 0);
-      return winArea > maxArea ? win : maxWin;
-    }, null);
   }
 
   Process {

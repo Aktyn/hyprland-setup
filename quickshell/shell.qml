@@ -4,6 +4,7 @@
 
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 
 import "components"
 import "components/bar"
@@ -18,8 +19,7 @@ ShellRoot {
 
   Component.onCompleted: {
     //TODO: initialize some services
-
-    Quickshell.execDetached("sleep 1 && killall kded6 || true");
+    Hyprland.dispatch("exec killall kded6");
 
     console.info("Aktyn quickshell started");
     // Cliphist.refresh()

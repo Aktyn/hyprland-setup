@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.Mpris
-import Quickshell.Hyprland
 
 import "../../../services"
 import "../../../common"

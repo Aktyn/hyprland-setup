@@ -9,7 +9,7 @@ RowLayout {
   id: rowLayout
   visible: SystemTray.items.values.length > 0
 
-  spacing: Style.sizes.spacingLarge
+  spacing: Style.sizes.spacingMedium
 
   Repeater {
     model: SystemTray.items
@@ -22,6 +22,7 @@ RowLayout {
 
   StyledText {
     Layout.alignment: Qt.AlignVCenter
+    Layout.leftMargin: Style.sizes.spacingSmall
     font.pixelSize: Style.font.pixelSize.larger
     color: Style.colors.outline
     text: "•"

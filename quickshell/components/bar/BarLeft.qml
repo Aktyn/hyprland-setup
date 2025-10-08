@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import "../../common"
 import "../widgets"
 import "../widgets/common"
+import "../widgets/workspaces"
 
 BarSection {
   stretch: true
@@ -35,15 +36,10 @@ BarSection {
     Layout.alignment: Qt.AlignVCenter
   }
 
-  // Space separator
-  Item {
+  WorkspacesWidget {
+    Layout.fillHeight: true
     Layout.fillWidth: true
-  }
-
-  Text {
+    Layout.leftMargin: Style.sizes.spacingMedium
     Layout.alignment: Qt.AlignRight
-    text: "TODO: workspaces and current workspace apps"
-    color: Style.colors.outlineVariant
-    font.pixelSize: Style.font.pixelSize.smaller
   }
 }
