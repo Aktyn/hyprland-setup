@@ -20,11 +20,12 @@ Singleton {
    * Transparentize a color by a given percentage
    * @param {string} color
    * @param {number} alpha
+   * @param {boolean} set
    * @returns {Qt.rgba}
    */
-  function transparentize(color, alpha = 1) {
+  function transparentize(color, alpha = 1, set = false) {
     var c = Qt.color(color);
-    return Qt.rgba(c.r, c.g, c.b, c.a * alpha);
+    return Qt.rgba(c.r, c.g, c.b, set ? alpha : c.a * alpha);
   }
 
   /**

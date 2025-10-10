@@ -88,7 +88,7 @@ Singleton {
     }
 
     property QtObject elementMoveFast: QtObject {
-      property int duration: 200
+      property int duration: 250
       property int type: Easing.InOutQuad
       property int velocity: 850
       property Component colorAnimation: Component {

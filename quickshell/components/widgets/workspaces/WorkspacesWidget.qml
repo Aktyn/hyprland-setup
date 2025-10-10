@@ -19,18 +19,6 @@ Item {
     ScrollBar.horizontal.interactive: true
     ScrollBar.vertical.interactive: false
 
-    Timer {
-      running: true
-      repeat: false
-      interval: 16
-
-      onTriggered: {
-        for (const workspace of Hyprland.workspaces.values) {
-          console.log("workspaces:", workspace.id, workspace.name, workspace.active, workspace.focused, workspace.urgent);
-        }
-      }
-    }
-
     //Has to be here for some reason
     Rectangle {
       anchors.fill: parent
@@ -43,13 +31,16 @@ Item {
 
     RowLayout {
       anchors.right: parent.right
-      anchors.verticalCenter: parent.verticalCenter
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      // anchors.verticalCenter: parent.verticalCenter
 
       spacing: Style.sizes.spacingMedium
 
       Text {
-
-        text: "Current workspace windows"
+        //TODO: different approach - expand currently focused workspace by showing all opened window icons and allow scrolling focus within that workspace
+        //TODO: list of pinned apps
+        text: "TODO: pinned apps"
         color: Style.colors.outlineVariant
         font.pixelSize: Style.font.pixelSize.smaller
       }
@@ -62,49 +53,54 @@ Item {
         text: "•"
       }
 
-      RowLayout {
+      MouseArea {
+        id: mouseArea
+
         Layout.fillHeight: true
+        Layout.preferredHeight: parent.height
+        implicitWidth: itemsLayout.implicitWidth
 
-        spacing: Style.sizes.spacingSmall
+        propagateComposedEvents: true
+        cursorShape: Qt.PointingHandCursor
 
-        Repeater {
-          model: Config.workspaces.count ?? 1
+        onWheel: event => {
+          if (stagger.running) {
+            return;
+          }
+          stagger.restart();
 
-          delegate: WorkspaceItem {
-            required property int index
-            workspace: Hyprland.workspaces.values.find(workspace => workspace.id === this.index + 1) ?? null
-            workspaceIndex: index + 1
+          if (event.angleDelta.y > 0) {
+            if (Hyprland.focusedWorkspace?.id > 1) {
+              Hyprland.dispatch(`workspace m-1`);
+            }
+          } else if (event.angleDelta.y < 0) {
+            if (Hyprland.focusedWorkspace?.id < Config.workspaces.count - 1) {
+              Hyprland.dispatch(`workspace m+1`);
+            }
           }
         }
 
-        MouseArea {
-          id: mouseArea
+        RowLayout {
+          id: itemsLayout
 
           anchors.fill: parent
-          propagateComposedEvents: true
-          cursorShape: Qt.PointingHandCursor
 
-          onWheel: event => {
-            if (stagger.running) {
-              return;
-            }
-            stagger.restart();
+          spacing: Style.sizes.spacingSmall
 
-            if (event.angleDelta.y > 0) {
-              if (Hyprland.focusedWorkspace?.id > 1) {
-                Hyprland.dispatch(`workspace m-1`);
-              }
-            } else if (event.angleDelta.y < 0) {
-              if (Hyprland.focusedWorkspace?.id < Config.workspaces.count - 1) {
-                Hyprland.dispatch(`workspace m+1`);
-              }
+          Repeater {
+            model: Config.workspaces.count ?? 1
+
+            delegate: WorkspaceItem {
+              required property int index
+              workspace: Hyprland.workspaces.values.find(workspace => workspace.id === this.index + 1) ?? null
+              workspaceIndex: index + 1
             }
           }
-        }
 
-        Timer {
-          id: stagger
-          interval: 200
+          Timer {
+            id: stagger
+            interval: 200
+          }
         }
       }
     }

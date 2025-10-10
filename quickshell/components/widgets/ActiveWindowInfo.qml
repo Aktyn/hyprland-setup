@@ -12,7 +12,7 @@ Item {
   readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
   readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
-  implicitWidth: Math.min(colLayout.implicitWidth, 384)
+  implicitWidth: Math.min(colLayout.implicitWidth, 320)
 
   Behavior on implicitWidth {
     animation: Style.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -25,7 +25,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
     anchors.right: parent.right
-    spacing: -4
+    spacing: -Style.sizes.spacingExtraSmall
 
     StyledText {
       id: activeWindowClass
@@ -34,8 +34,8 @@ Item {
       property string content: root.activeWindow?.appId ?? "Desktop"
 
       visible: this.content.length > 0
-      font.pixelSize: Style.font.pixelSize.smaller
-      color: Style.colors.outline
+      font.pixelSize: Style.font.pixelSize.smallest
+      color: Style.colors.outlineVariant
       elide: Text.ElideRight
       text: this.content
     }
@@ -43,8 +43,8 @@ Item {
     StyledText {
       id: activeWindowTitle
       Layout.fillWidth: true
-      font.pixelSize: Style.font.pixelSize.small
-      color: Style.colors.colorOnSurface
+      font.pixelSize: Style.font.pixelSize.smaller
+      color: Style.colors.outline
       elide: Text.ElideRight
       text: root.activeWindow?.title ?? `Workspace ${root.monitor?.activeWorkspace?.id ?? 1}`
     }

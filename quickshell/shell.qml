@@ -18,7 +18,6 @@ ShellRoot {
   VolumeChangeIndicator {}
 
   Component.onCompleted: {
-    //TODO: initialize some services
     Hyprland.dispatch("exec killall kded6");
 
     console.info("Aktyn quickshell started");

@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 
 import "../../common"
+import "../../services"
 import "../widgets/common"
 
 StyledButton {
@@ -23,7 +24,7 @@ StyledButton {
     Layout.fillWidth: true
 
     Image {
-      source: Quickshell.iconPath(root.entry.icon, true)
+      source: Quickshell.iconPath(AppSearch.guessIcon(root.entry.icon), "image-missing")
       visible: !!this.source
 
       Layout.preferredWidth: Style.sizes.iconExtraLarge
