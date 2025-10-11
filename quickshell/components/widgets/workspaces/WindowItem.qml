@@ -1,12 +1,11 @@
 import QtQuick
 import Qt5Compat.GraphicalEffects
 import Quickshell.Hyprland
+import Quickshell.Widgets
 import Quickshell
 
 import "../../../common"
 import "../../../services"
-
-//TODO: right click to pin to quick launcher
 
 Item {
   id: root
@@ -26,13 +25,22 @@ Item {
     acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
     onClicked: event => {
       if (event.button === Qt.LeftButton) {
-        console.log("left");
+        if (root.topLevel.wayland) {
+          const windowOccupyingScreen = root.topLevel.workspace.toplevels.values.find(topLevel => (topLevel.wayland?.maximized || topLevel.wayland?.fullscreen) && topLevel.address !== root.topLevel.address);
+
+          if (windowOccupyingScreen) {
+            root.topLevel.wayland.maximized = !!windowOccupyingScreen.wayland?.maximized;
+            root.topLevel.wayland.fullscreen = !!windowOccupyingScreen.wayland?.fullscreen;
+          }
+        }
       }
+
       if (event.button === Qt.RightButton) {
-        console.log("right");
+        Config.bar.quickLauncher.pinnedApps = [...Config.bar.quickLauncher.pinnedApps.filter(app => app !== root.topLevel.wayland.appId), root.topLevel.wayland.appId];
       }
+
       if (event.button === Qt.MiddleButton) {
-        console.log("middle");
+        root.topLevel.wayland?.close();
       }
     }
 
@@ -50,13 +58,16 @@ Item {
     }
   }
 
-  Image {
+  IconImage {
     id: image
 
-    anchors.fill: parent
+    // anchors.fill: parent
+    implicitSize: parent.height
 
-    cache: false
+    // cache: false
+    asynchronous: true
     smooth: true
+    mipmap: true
 
     source: Quickshell.iconPath(AppSearch.guessIcon(root.topLevel.wayland.appId), "image-missing")
     visible: !!this.source
@@ -66,17 +77,11 @@ Item {
 
       anchors.fill: image
       source: image
-      desaturation: root.open && root.topLevel.activated ? 0 : 0.75
+      desaturation: root.topLevel.activated ? 0 : 0.75
 
       Behavior on desaturation {
         animation: Style.animation.elementMove.numberAnimation.createObject(this)
       }
     }
-
-    // ColorOverlay {
-    //   anchors.fill: desaturatedIcon
-    //   source: desaturatedIcon
-    //   color: Colors.transparentize(Style.colors.surfaceContainer, 0.4)
-    // }
   }
 }

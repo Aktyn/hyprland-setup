@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell.Widgets
 import Quickshell
 
 import "../../common"
@@ -17,15 +18,18 @@ StyledButton {
     entry.execute();
     Utils.updateRecentApps(entry.name);
     GlobalState.leftSidebar.open = false;
+    GlobalState.leftSidebar.requestFocus(false);
   }
 
   contentItem: RowLayout {
     spacing: Style.sizes.spacingMedium
     Layout.fillWidth: true
 
-    Image {
+    IconImage {
       source: Quickshell.iconPath(AppSearch.guessIcon(root.entry.icon), "image-missing")
       visible: !!this.source
+      asynchronous: true
+      mipmap: true
 
       Layout.preferredWidth: Style.sizes.iconExtraLarge
       Layout.preferredHeight: Layout.preferredWidth

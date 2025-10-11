@@ -2,10 +2,12 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Hyprland
+import Quickshell
 
 import "../../../common"
 import "../common"
 import "."
+import ".."
 
 Item {
   clip: true
@@ -19,7 +21,7 @@ Item {
     ScrollBar.horizontal.interactive: true
     ScrollBar.vertical.interactive: false
 
-    //Has to be here for some reason
+    //Has to be here for an unknown reason
     Rectangle {
       anchors.fill: parent
       color: "transparent"
@@ -33,19 +35,51 @@ Item {
       anchors.right: parent.right
       anchors.top: parent.top
       anchors.bottom: parent.bottom
-      // anchors.verticalCenter: parent.verticalCenter
 
       spacing: Style.sizes.spacingMedium
 
-      Text {
-        //TODO: different approach - expand currently focused workspace by showing all opened window icons and allow scrolling focus within that workspace
-        //TODO: list of pinned apps
-        text: "TODO: pinned apps"
-        color: Style.colors.outlineVariant
-        font.pixelSize: Style.font.pixelSize.smaller
+      Loader {
+        id: pinnedAppsLoader
+
+        active: false
+        asynchronous: true
+
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        Layout.fillHeight: true
+
+        sourceComponent: RowLayout {
+          id: pinnedAppsLayout
+
+          anchors.fill: parent
+
+          spacing: Style.sizes.spacingMedium
+
+          Repeater {
+            model: Config.bar.quickLauncher.pinnedApps ?? []
+
+            delegate: PinnedApp {
+              required property string modelData
+              entry: DesktopEntries.byId(this.modelData)
+
+              //TODO: mark already running apps
+              //TODO: allow reordering with drag&drop feature
+            }
+          }
+        }
+      }
+
+      Timer {
+        running: Config.ready && DesktopEntries.applications.values.length > 0
+        interval: 0
+
+        onTriggered: {
+          pinnedAppsLoader.active = true;
+        }
       }
 
       StyledText {
+        visible: !!Config.bar.quickLauncher.pinnedApps?.length
+
         Layout.alignment: Qt.AlignVCenter
 
         font.pixelSize: Style.font.pixelSize.larger
