@@ -54,12 +54,17 @@ Item {
 
           spacing: Style.sizes.spacingMedium
 
+          Component.onCompleted: {
+            console.log("Running apps:", this.runningApps);
+          }
+
           Repeater {
             model: Config.bar.quickLauncher.pinnedApps ?? []
 
             delegate: PinnedApp {
               required property string modelData
               entry: DesktopEntries.byId(this.modelData)
+              isRunning: HyprlandInfo.runningApps.includes(this.modelData.toLowerCase())
 
               //TODO: mark already running apps
               //TODO: allow reordering with drag&drop feature

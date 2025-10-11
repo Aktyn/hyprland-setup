@@ -11,6 +11,7 @@ Item {
   id: root
 
   required property DesktopEntry entry
+  required property bool isRunning
   visible: !!this.entry
 
   implicitHeight: Style.sizes.iconLarge + 2
@@ -54,6 +55,21 @@ Item {
         animation: Style.animation.elementMoveFast.colorAnimation.createObject(this)
       }
     }
+  }
+
+  Rectangle {
+    visible: root.isRunning
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+    height: 2
+    radius: 2
+    anchors.bottomMargin: -5
+
+    color: Colors.transparentize(Style.colors.primary, 0.5)
   }
 
   IconImage {

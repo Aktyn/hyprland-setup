@@ -10,6 +10,8 @@ import "."
 Singleton {
   id: hyprlandSingleton
 
+  property list<string> runningApps: Hyprland.toplevels.values.filter(app => app.wayland?.appId).map(app => app.wayland.appId.toLowerCase())
+
   property var windowList: []
   property var addresses: []
   property var windowByAddress: ({})
