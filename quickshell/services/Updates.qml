@@ -55,8 +55,7 @@ Singleton {
 
   Process {
     id: updateProcess
-    //TODO: second update pass (sudo yay -Syu --noconfirm), only if yay is available
-    command: ["bash", "-c", "sudo pacman -Syu --noconfirm"]
+    command: ["bash", "-c", `pkexec sudo pacman -Syu --noconfirm${root.hasYay ? " && pkexec yay -Syu --noconfirm" : ""}`]
     running: false
 
     stdout: StdioCollector {

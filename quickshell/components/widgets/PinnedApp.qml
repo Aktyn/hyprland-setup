@@ -81,7 +81,7 @@ Item {
     smooth: true
     mipmap: true
 
-    source: Quickshell.iconPath(AppSearch.guessIcon(root.entry.icon), "image-missing")
+    source: root.entry ? Quickshell.iconPath(AppSearch.guessIcon(root.entry.icon), "image-missing") : null
     visible: !!this.source
 
     opacity: mouseArea.containsMouse ? 1 : 0.3

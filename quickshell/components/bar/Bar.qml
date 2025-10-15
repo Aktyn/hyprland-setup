@@ -159,8 +159,10 @@ LazyLoader {
             id: leftSidebarContainer
 
             side: BarAdjacentPanel.Side.Left
-            adhesive: true && !Hyprland.focusedWorkspace.hasFullscreen
-            detached: Hyprland.focusedWorkspace.hasFullscreen
+
+            property bool hasFullScreen: !!Hyprland.monitorFor(this.screen).activeWorkspace?.toplevels.values.some(top => top.wayland?.fullscreen)
+            adhesive: !hasFullScreen
+            detached: hasFullScreen
 
             screen: GlobalState.leftSidebar.screen
             show: GlobalState.leftSidebar.open

@@ -144,7 +144,8 @@ BarSection {
         id: notificationsPanelContainer
 
         side: BarAdjacentPanel.Side.Right
-        detached: Hyprland.focusedWorkspace.hasFullscreen
+        property bool hasFullScreen: !!Hyprland.monitorFor(this.screen).activeWorkspace?.toplevels.values.some(top => top.wayland?.fullscreen)
+        detached: hasFullScreen
 
         screen: GlobalState.bar.notificationsPanel.screen
         show: GlobalState.bar.notificationsPanel.open && Notifications.list.length > 0 || notificationsPanel.newNotifications.length > 0

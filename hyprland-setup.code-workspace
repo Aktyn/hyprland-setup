@@ -13,7 +13,6 @@
 			"bluetoothctl",
 			"cava",
 			"checkupdates",
-			"xclip",
 			"dbus",
 			"Demi",
 			"desaturate",
@@ -48,6 +47,7 @@
 			"noconfirm",
 			"pacman",
 			"Pipewire",
+			"pkexec",
 			"pkill",
 			"qalc",
 			"qmlls",
@@ -61,7 +61,8 @@
 			"theqtcompany",
 			"Toplevel",
 			"toplevels",
-			"upower"
+			"upower",
+			"xclip"
 		],
 		"cmake.cacheInit": "quickshell/qmlls.cmake",
 		"cmake.sourceDirectory": "${workspaceFolder}/quickshell",
