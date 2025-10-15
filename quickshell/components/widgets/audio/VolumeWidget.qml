@@ -9,7 +9,6 @@ RowLayout {
   id: root
 
   MaterialSymbol {
-    fill: 1
     text: (Audio.sink && Audio.sink.audio && Audio.sink.audio.muted) ? "volume_off" : "volume_up"
     iconSize: Style.font.pixelSize.normal
     color: Style.colors.colorOnSecondaryContainer

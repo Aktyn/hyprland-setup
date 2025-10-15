@@ -160,14 +160,34 @@ ColumnLayout {
     }
   }
 
-  Text {
+  ColumnLayout {
     visible: root.noAppResults && !!root.calcResult
 
     Layout.fillWidth: true
-    text: root.calcResult.includes("=") ? root.calcResult : `= ${root.calcResult}`
-    font.bold: true
-    font.pixelSize: Style.font.pixelSize.large
-    color: Style.colors.primary
+    spacing: 0
+
+    Text {
+      text: root.calcResult.includes("=") ? root.calcResult : `= ${root.calcResult}`
+      font.bold: true
+      font.pixelSize: Style.font.pixelSize.large
+      color: Style.colors.primary
+    }
+
+    ActionButton {
+      Layout.fillWidth: true
+      iconName: "content_copy"
+      content: "Copy to clipboard"
+      borderWidth: 1
+      borderColor: Style.colors.outline
+
+      onClicked: {
+        const result = root.calcResult.replace(/"/g, '\\"').replace(/\n$/, "");
+        ScriptRunner.copyToClipboard(result);
+
+        GlobalState.leftSidebar.open = false;
+        GlobalState.leftSidebar.requestFocus(false);
+      }
+    }
   }
 
   Text {

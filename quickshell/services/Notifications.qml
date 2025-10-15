@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.Notifications
 
 import "../common"
@@ -69,42 +70,57 @@ Singleton {
 
   signal notify(notification: NotificationObject)
 
-  //NOTE: make sure there is no notification service running (e.g.: swaync) that blocks org.freedesktop.Notifications dbus
-  NotificationServer {
-    onNotification: function (notification) {
-      notification.tracked = true;
+  Process {
+    running: true
+    command: ["pkill", "-f", "swaync"]
+    onExited: function (exitCode) {
+      if (exitCode === 0) {
+        console.log("swaync was killed");
+      }
+      notificationServerLoader.active = true;
+    }
+  }
 
-      const expireTimeout = notification.expireTimeout <= 0 ? Config.notifications.defaultTimeout : notification.expireTimeout;
-      const realTimeout = notification.urgency === NotificationUrgency.Critical ? ~(1 << 31) : expireTimeout;
+  Loader {
+    id: notificationServerLoader
+    active: false
 
-      const notificationObject = notificationObjectComponent.createObject(notificationsRoot, {
-        notificationHandle: notification,
-        id: notification.id,
-        summary: notification.summary,
-        body: notification.body,
-        icon: notification.image || notification.appIcon,
-        urgency: notification.urgency,
-        time: Date.now(),
-        timeout: realTimeout,
-        removeFromList: function () {
-          notificationsRoot.list = notificationsRoot.list.filter(n => n !== notificationObject);
-          notificationsRoot.destroyNotification(notificationObject);
-        }
-      });
+    sourceComponent: NotificationServer {
+      onNotification: function (notification) {
+        notification.tracked = true;
 
-      if (notification.urgency !== NotificationUrgency.Critical) {
-        notificationObject.timer = notificationTimerComponent.createObject(notificationsRoot, {
-          notificationObject: notificationObject,
-          interval: expireTimeout
+        const expireTimeout = notification.expireTimeout <= 0 ? Config.notifications.defaultTimeout : notification.expireTimeout;
+        const realTimeout = notification.urgency === NotificationUrgency.Critical ? ~(1 << 31) : expireTimeout;
+
+        const notificationObject = notificationObjectComponent.createObject(notificationsRoot, {
+          notificationHandle: notification,
+          id: notification.id,
+          summary: notification.summary,
+          body: notification.body,
+          icon: notification.image || notification.appIcon,
+          urgency: notification.urgency,
+          time: Date.now(),
+          timeout: realTimeout,
+          removeFromList: function () {
+            notificationsRoot.list = notificationsRoot.list.filter(n => n !== notificationObject);
+            notificationsRoot.destroyNotification(notificationObject);
+          }
         });
-      }
 
-      notificationsRoot.list = [notificationObject, ...notificationsRoot.list];
-      while (notificationsRoot.list.length > notificationsRoot.notificationsHistoryLimit) {
-        const notificationToRemove = notificationsRoot.list.pop();
-        notificationsRoot.destroyNotification(notificationToRemove);
+        if (notification.urgency !== NotificationUrgency.Critical) {
+          notificationObject.timer = notificationTimerComponent.createObject(notificationsRoot, {
+            notificationObject: notificationObject,
+            interval: expireTimeout
+          });
+        }
+
+        notificationsRoot.list = [notificationObject, ...notificationsRoot.list];
+        while (notificationsRoot.list.length > notificationsRoot.notificationsHistoryLimit) {
+          const notificationToRemove = notificationsRoot.list.pop();
+          notificationsRoot.destroyNotification(notificationToRemove);
+        }
+        notificationsRoot.notify(notificationObject);
       }
-      notificationsRoot.notify(notificationObject);
     }
   }
 

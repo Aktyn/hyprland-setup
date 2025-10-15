@@ -9,6 +9,7 @@ ScrollView {
   id: root
 
   required property list<DesktopEntry> apps
+  clip: true
 
   ListView {
     id: listView

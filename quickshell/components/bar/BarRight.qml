@@ -18,14 +18,57 @@ BarSection {
   mirror: true
   stretch: true
 
-  //TODO: right sidebar toggle
   BarIconButton {
+    id: rightSidebarButton
+
     toggled: false
-    iconName: "menu"
-    color: Style.colors.outlineVariant //TODO: remove
-    onClicked:
-    //TODO: open right sidebar
-    {}
+    implicitWidth: Style.sizes.iconLarge * (Updates.hasUpdates ? 2 : 1) + Style.sizes.spacingExtraSmall * 2
+    implicitHeight: Style.sizes.iconLarge + Style.sizes.spacingExtraSmall * 2
+    onPressed: {
+      GlobalState.rightSidebar.open = !GlobalState.rightSidebar.open;
+    }
+
+    property real iconRotation: GlobalState.rightSidebar.open ? 90 : 0
+    // contentItem.rotation: iconRotation
+    Behavior on iconRotation {
+      animation: Style.animation.elementMove.numberAnimation.createObject(this)
+    }
+
+    contentItem: RowLayout {
+      anchors.fill: parent
+
+      spacing: Style.sizes.spacingExtraSmall
+
+      MaterialSymbol {
+        visible: Updates.hasUpdates
+
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        Layout.preferredHeight: Style.sizes.iconLarge
+        Layout.preferredWidth: Style.sizes.iconLarge
+
+        text: "update"
+        iconSize: Style.font.pixelSize.large
+        color: Style.colors.primary
+      }
+
+      MaterialSymbol {
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+        rotation: rightSidebarButton.iconRotation
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        Layout.preferredHeight: Style.sizes.iconLarge
+        Layout.preferredWidth: Style.sizes.iconLarge
+
+        text: "more_vert"
+        iconSize: Style.font.pixelSize.large
+        color: rightSidebarButton.toggled ? Style.colors.primary : Style.colors.colorOnSurface
+      }
+    }
   }
 
   BarIconButton {
@@ -91,7 +134,7 @@ BarSection {
     }
 
     function showNewNotification(notificationObject: Notifications.NotificationObject) {
-      console.log("New notification:", JSON.stringify(notificationObject.notificationHandle, null, 2));
+      console.info("New notification:", JSON.stringify(notificationObject.notificationHandle, null, 2));
     }
 
     LazyLoader {
@@ -101,6 +144,7 @@ BarSection {
         id: notificationsPanelContainer
 
         side: BarAdjacentPanel.Side.Right
+        detached: Hyprland.focusedWorkspace.hasFullscreen
 
         screen: GlobalState.bar.notificationsPanel.screen
         show: GlobalState.bar.notificationsPanel.open && Notifications.list.length > 0 || notificationsPanel.newNotifications.length > 0
@@ -172,8 +216,6 @@ BarSection {
     VSeparator {}
 
     StyledButton {
-      id: clockWidgetButton
-
       Layout.alignment: Qt.AlignVCenter
       implicitWidth: mediaWidget.width
       implicitHeight: mediaWidget.height

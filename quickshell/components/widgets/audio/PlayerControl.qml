@@ -76,7 +76,7 @@ Item { // Player instance
 
     contentItem: MaterialSymbol {
       iconSize: Style.font.pixelSize.huge
-      fill: 1
+
       horizontalAlignment: Text.AlignHCenter
       color: playerController.foregroundColor
       text: trackChangeButton.iconName
@@ -345,7 +345,7 @@ Item { // Player instance
 
             contentItem: MaterialSymbol {
               iconSize: Style.font.pixelSize.huge
-              fill: 1
+
               horizontalAlignment: Text.AlignHCenter
               color: playerController.foregroundColor
               text: playerController.player?.isPlaying ? "pause" : "play_arrow"

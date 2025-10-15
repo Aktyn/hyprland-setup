@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
 import Quickshell
+import Quickshell.Hyprland
 
 import "../../common"
 import "../../services"
@@ -158,7 +159,8 @@ LazyLoader {
             id: leftSidebarContainer
 
             side: BarAdjacentPanel.Side.Left
-            adhesive: true
+            adhesive: true && !Hyprland.focusedWorkspace.hasFullscreen
+            detached: Hyprland.focusedWorkspace.hasFullscreen
 
             screen: GlobalState.leftSidebar.screen
             show: GlobalState.leftSidebar.open
@@ -173,6 +175,34 @@ LazyLoader {
             }
 
             LeftSidebar {
+              Layout.minimumWidth: 384
+            }
+          }
+        }
+
+        //Right sidebar
+        LazyLoader {
+          active: true
+
+          BarAdjacentPanel {
+            id: rightSidebarContainer
+
+            side: BarAdjacentPanel.Side.Right
+            adhesive: true
+
+            screen: GlobalState.rightSidebar.screen
+            show: GlobalState.rightSidebar.open
+
+            closeOnBackgroundClick: GlobalState.rightSidebar.open
+            onBackgroundClick: function () {
+              GlobalState.rightSidebar.open = false;
+            }
+
+            Component.onCompleted: {
+              GlobalState.rightSidebar.requestFocus = rightSidebarContainer.onRequestFocus;
+            }
+
+            RightSidebar {
               Layout.minimumWidth: 384
             }
           }

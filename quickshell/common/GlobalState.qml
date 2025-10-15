@@ -55,6 +55,14 @@ Singleton {
     property bool superReleaseHelper: false
   }
 
+  property QtObject rightSidebar: QtObject {
+    id: rightSidebar
+
+    property bool open: true //TODO: false
+    property ShellScreen screen: Quickshell.screens[0]
+    property var requestFocus
+  }
+
   // --------------------------------------------------------------------------------
 
   GlobalShortcut {

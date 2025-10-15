@@ -1,9 +1,11 @@
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Hyprland
 
 import "../../common"
+import "../../services"
 import "../widgets/common"
 
 Scope {
@@ -16,6 +18,7 @@ Scope {
   }
   property int side: BarAdjacentPanel.Side.Middle
   property bool adhesive: false //Used for Left and Right side panels to remove distance between screen edge
+  property bool detached: false //Should not be combined with adhesive
 
   default property alias items: panelContent.children
   required property ShellScreen screen
@@ -63,7 +66,7 @@ Scope {
   PanelWindow {
     id: panel
     property int cornersCount: root.side === BarAdjacentPanel.Side.Middle || !root.adhesive ? 2 : 1
-    implicitWidth: panelContent.width + root.innerPadding * 2 + root.cornerSize * this.cornersCount + 2 // + 2 to accommodate borders
+    implicitWidth: panelContent.width + root.innerPadding * 2 + (root.detached ? 0 : root.cornerSize * this.cornersCount) + 2 // + 2 to accommodate borders
     implicitHeight: panelContent.height + root.innerPadding * 2
     visible: !!root.screen
 
@@ -74,7 +77,7 @@ Scope {
     color: "transparent"
 
     anchors.top: true
-    margins.top: Config.bar.height
+    margins.top: root.detached ? Config.bar.height + HyprlandInfo.general.gapsIn[0] : Config.bar.height
     margins.left: root.side === BarAdjacentPanel.Side.Left ? root.screenEdgeOffset : 0
     margins.right: root.side === BarAdjacentPanel.Side.Right ? root.screenEdgeOffset : 0
     anchors.left: root.side === BarAdjacentPanel.Side.Left
@@ -113,7 +116,7 @@ Scope {
 
       // Left corner
       ReversedRoundedCorner {
-        visible: !root.adhesive || root.side !== BarAdjacentPanel.Side.Left
+        visible: !root.detached && (!root.adhesive || root.side !== BarAdjacentPanel.Side.Left)
 
         Layout.alignment: Qt.AlignTop
 
@@ -195,8 +198,64 @@ Scope {
           anchors.fill: parent
 
           color: Style.colors.surface
+          topLeftRadius: root.detached ? (root.adhesive && root.side === BarAdjacentPanel.Side.Left ? 0 : Style.rounding.hyprland) : 0
+          topRightRadius: root.detached ? (root.adhesive && root.side === BarAdjacentPanel.Side.Right ? 0 : Style.rounding.hyprland) : 0
           bottomLeftRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Left ? 0 : Style.rounding.hyprland
           bottomRightRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Right ? 0 : Style.rounding.hyprland
+
+          Rectangle {
+            id: containerBorder
+            anchors.fill: parent
+
+            gradient: Gradient {
+              id: borderGradient
+
+              orientation: Gradient.Vertical
+              property color colorBase: Colors.transparentize(Qt.lighter(Style.colors.surface, 2.5), root.show ? 1 : 0)
+              Behavior on colorBase {
+                animation: Style.animation.elementMove.colorAnimation.createObject(this)
+              }
+
+              stops: [
+                GradientStop {
+                  position: root.cornerSize / containerBorder.height
+                  color: Colors.transparentize(borderGradient.colorBase, 0, true)
+                },
+                GradientStop {
+                  position: 1
+                  color: borderGradient.colorBase
+                }
+              ]
+            }
+            opacity: 0.15
+            visible: true
+
+            bottomLeftRadius: parent.bottomLeftRadius
+            bottomRightRadius: parent.bottomRightRadius
+          }
+
+          Rectangle {
+            id: mask
+            anchors.fill: parent
+            // anchors.margins: -1
+
+            bottomLeftRadius: parent.bottomLeftRadius
+            bottomRightRadius: parent.bottomRightRadius
+            border.width: 1 //root.borderWidth
+            color: 'transparent'
+            visible: false   // otherwise a thin border might be seen.
+
+          }
+
+          OpacityMask {
+            id: opM
+            anchors.fill: parent
+            anchors.leftMargin: root.adhesive && root.side === BarAdjacentPanel.Side.Left ? -1 : 0
+            anchors.rightMargin: root.adhesive && root.side === BarAdjacentPanel.Side.Right ? -1 : 0
+
+            source: containerBorder
+            maskSource: mask
+          }
         }
 
         Item {
@@ -212,7 +271,7 @@ Scope {
 
       // Right corner
       ReversedRoundedCorner {
-        visible: !root.adhesive || root.side !== BarAdjacentPanel.Side.Right
+        visible: !root.detached && (!root.adhesive || root.side !== BarAdjacentPanel.Side.Right)
 
         Layout.alignment: Qt.AlignTop
 

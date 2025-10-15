@@ -3,32 +3,25 @@ import QtQuick.Layouts
 
 import "../../common"
 import "../widgets"
-import "../widgets/common"
 import "../widgets/workspaces"
 
 BarSection {
   stretch: true
 
-  //TODO: use "apps" icon instead and move aktyn logo to right sidebar
   BarIconButton {
-    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
     toggled: GlobalState.leftSidebar.open
+    iconName: "browse"
 
     onPressed: {
       GlobalState.leftSidebar.open = !GlobalState.leftSidebar.open;
     }
 
-    CustomIcon {
-      id: aktynLogoIcon
-
-      anchors.centerIn: parent
-      width: Style.sizes.iconMedium
-      height: this.width
-
-      source: "aktyn-logo"
-      colorize: true
-      color: Style.colors.colorOnSurface
+    property real iconRotation: GlobalState.leftSidebar.open ? 90 : 0
+    contentItem.rotation: iconRotation
+    Behavior on iconRotation {
+      animation: Style.animation.elementMove.numberAnimation.createObject(this)
     }
   }
 

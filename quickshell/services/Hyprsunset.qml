@@ -22,7 +22,7 @@ Singleton {
   function disable() {
     root.active = false;
     console.log("Disabling hyprsunset");
-    Quickshell.execDetached(["bash", "-c", `pkill hyprsunset`]);
+    Quickshell.execDetached(["bash", "-c", "pkill hyprsunset"]);
   }
 
   function fetchState() {

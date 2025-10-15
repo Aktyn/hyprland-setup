@@ -10,3 +10,4 @@ singleton Notes Notes.qml
 singleton ResourceUsage ResourceUsage.qml
 singleton Hyprsunset Hyprsunset.qml
 singleton AppSearch AppSearch.qml
+singleton Updates Updates.qml

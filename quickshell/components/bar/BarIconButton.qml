@@ -26,7 +26,6 @@ StyledButton {
     width: Style.sizes.iconLarge
     height: Style.sizes.iconLarge
 
-    fill: 0
     text: root.iconName
     iconSize: Style.font.pixelSize.large
     color: root.toggled ? Style.colors.primary : Style.colors.colorOnSurface

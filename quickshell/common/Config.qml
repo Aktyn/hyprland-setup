@@ -11,6 +11,7 @@ Singleton {
   id: root
   property bool ready: false
 
+  property alias general: configJsonAdapter.general
   property alias bar: configJsonAdapter.bar
   property alias wallpaper: configJsonAdapter.wallpaper
   property alias notifications: configJsonAdapter.notifications
@@ -39,6 +40,11 @@ Singleton {
 
     JsonAdapter {
       id: configJsonAdapter
+
+      property JsonObject general: JsonObject {
+        property bool hideAuthorLink: false
+        property int updatesCheckInterval: 60 * 60 * 1000 // 1 hour
+      }
 
       property JsonObject bar: JsonObject {
         property list<string> screenList: []

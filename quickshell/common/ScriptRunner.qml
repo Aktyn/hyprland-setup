@@ -34,4 +34,8 @@ Singleton {
     Quickshell.execDetached(["python", Quickshell.shellPath("scripts/set-hyprland-option.py"), dynamicConfigFile, option, value]);
     Quickshell.execDetached(["hyprctl", "reload"]);
   }
+
+  function copyToClipboard(text: string) {
+    Quickshell.execDetached([Quickshell.shellPath("scripts/clip.sh"), text]);
+  }
 }

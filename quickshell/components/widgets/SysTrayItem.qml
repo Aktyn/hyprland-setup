@@ -38,7 +38,7 @@ MouseArea {
 
     menu: root.item.menu
     anchor.window: root.bar
-    anchor.rect.x: root.bar.width - 256 //root.mapToGlobal(root.x, root.y).x
+    anchor.rect.x: (root.bar?.width ?? 256) - 256 //root.mapToGlobal(root.x, root.y).x
     anchor.rect.height: Config.bar.height
     anchor.edges: Edges.Bottom
   }

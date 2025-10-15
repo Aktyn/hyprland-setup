@@ -53,7 +53,6 @@ Rectangle {
       Layout.alignment: Qt.AlignHCenter
 
       MaterialSymbol {
-        fill: 0
         text: "sticky_note_2"
         iconSize: Style.font.pixelSize.huge
         color: Style.colors.colorOnBackground
@@ -71,7 +70,6 @@ Rectangle {
       MaterialSymbol {
         id: addIcon
         text: "add"
-        fill: 0
         iconSize: Style.font.pixelSize.huge
         color: Style.colors.colorOnBackground
         MouseArea {
@@ -136,7 +134,6 @@ Rectangle {
                 }
                 MaterialSymbol {
                   text: "close"
-                  fill: 0
                   iconSize: Style.font.pixelSize.large
                   color: Style.colors.colorOnSurface
                   MouseArea {

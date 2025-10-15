@@ -31,7 +31,7 @@ Item {
 
       MaterialSymbol {
         anchors.centerIn: parent
-        fill: 1
+
         text: root.iconName
         iconSize: Style.font.pixelSize.normal
         color: Style.colors.colorOnSecondaryContainer

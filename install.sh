@@ -31,7 +31,7 @@ install_aur_package() {
 check_battery_level() {
     local devices=$(upower --enumerate | grep battery)
     local lowest_percentage=100
-
+    
     for device in $devices; do
         local percentage=$(upower -i $device | grep percentage | awk '{print $2}' | sed 's/%//g')
         if [ -n "$percentage" ]; then
@@ -40,7 +40,7 @@ check_battery_level() {
             fi
         fi
     done
-
+    
     echo "$lowest_percentage"
 }
 
@@ -78,6 +78,7 @@ install_package git
 install_package base-devel
 install_package kate
 install_package blueman # bluetooth gui
+install_package xclip
 
 if ! which yay > /dev/null 2>&1; then
     echo "Installing yay"
@@ -91,7 +92,7 @@ if ! which yay > /dev/null 2>&1; then
 fi
 
 if ! which yay > /dev/null 2>&1; then
-  install_aur_package warp-terminal-bin
+    install_aur_package warp-terminal-bin
 fi
 
 # Quickshell setup

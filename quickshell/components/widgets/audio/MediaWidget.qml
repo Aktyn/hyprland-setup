@@ -37,7 +37,7 @@ Item {
 
       MaterialSymbol {
         anchors.centerIn: parent
-        fill: 1
+
         text: root.activePlayer?.isPlaying ? "music_note" : "pause"
         iconSize: Style.font.pixelSize.normal
         color: Style.colors.colorOnSurface
