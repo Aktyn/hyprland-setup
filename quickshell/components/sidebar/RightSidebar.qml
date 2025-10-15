@@ -66,7 +66,13 @@ ColumnLayout {
   }
 
   Text {
-    text: "TODO: basic configuration, wallpapers manager, session buttons, etc"
+    text: "TODO: basic configuration, wallpapers manager, etc"
     color: Style.colors.outlineVariant
+  }
+
+  HSeparator {}
+
+  SessionPanel {
+    Layout.fillWidth: true
   }
 }

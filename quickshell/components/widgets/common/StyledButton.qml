@@ -11,7 +11,7 @@ Button {
   id: root
 
   property bool toggled
-  property string buttonText
+  property string buttonText //required unless contentItem is explicitly set
   property real buttonRadius: Style.rounding.small
   property real buttonRadiusPressed: buttonRadius
   property real buttonEffectiveRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
