@@ -58,7 +58,7 @@ Singleton {
   property QtObject rightSidebar: QtObject {
     id: rightSidebar
 
-    property bool open: true //TODO: false
+    property bool open: false
     property ShellScreen screen: Quickshell.screens[0]
     property var requestFocus
   }

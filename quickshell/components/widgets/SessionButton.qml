@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import "../../common"
+import "../../services"
 
 import "./common"
 
@@ -15,6 +16,14 @@ StyledButton {
 
   implicitWidth: layout.implicitWidth + this.innerPadding * 2
   implicitHeight: layout.implicitHeight + this.innerPadding * 2
+
+  colBackground: Colors.transparentize(Style.colors.primaryContainer, 0)
+  colBackgroundHover: Style.colors.primaryContainer
+
+  property color colorBase: this.hovered ? Style.colors.colorOnPrimaryContainer : Style.colors.outline
+  Behavior on colorBase {
+    animation: Style.animation.elementMoveFast.colorAnimation.createObject(this)
+  }
 
   contentItem: ColumnLayout {
     id: layout
@@ -31,7 +40,7 @@ StyledButton {
       text: root.iconName
       iconSize: Style.sizes.iconExtraLarge
 
-      color: Style.colors.colorOnSurface
+      color: root.colorBase
     }
 
     StyledText {
@@ -39,10 +48,11 @@ StyledButton {
       Layout.bottomMargin: Style.sizes.spacingSmall
 
       text: root.buttonText
-      color: Style.colors.colorOnSurface
       font.pixelSize: Style.font.pixelSize.large
       font.weight: Font.DemiBold
       horizontalAlignment: Text.AlignHCenter
+
+      color: root.colorBase
     }
   }
 }

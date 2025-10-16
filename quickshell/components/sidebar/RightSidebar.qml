@@ -65,9 +65,16 @@ ColumnLayout {
     visible: Updates.hasUpdates
   }
 
-  Text {
-    text: "TODO: basic configuration, wallpapers manager, etc"
-    color: Style.colors.outlineVariant
+  ActionButton {
+    Layout.fillWidth: true
+
+    iconName: "data_object"
+    content: "Open config file"
+    onClicked: {
+      Quickshell.execDetached(["xdg-open", Consts.path.configFile]);
+      GlobalState.rightSidebar.open = false;
+      GlobalState.rightSidebar.requestFocus?.(false);
+    }
   }
 
   HSeparator {}

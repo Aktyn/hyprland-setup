@@ -19,7 +19,7 @@ Rectangle {
 
   readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
 
-  property int windowsCount: (this.workspace?.toplevels.values ?? []).length
+  property int windowsCount: (this.workspace?.toplevels.values.filter(v => !!v.wayland) ?? []).length
   opacity: !this.windowsCount ? 0.5 : 1
   property bool isOpened: !!workspace?.active && root.monitor === workspace?.monitor && this.windowsCount > 0
 

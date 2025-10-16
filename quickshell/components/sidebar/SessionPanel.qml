@@ -19,7 +19,7 @@ GridLayout {
 
   function closeAllWindows() {
     for (const topLevel of Hyprland.toplevels.values) {
-      topLevel.close();
+      topLevel.wayland?.close();
     }
   }
 
@@ -53,6 +53,8 @@ GridLayout {
 
     onClicked: {
       Quickshell.execDetached(["loginctl", "lock-session"]);
+      GlobalState.rightSidebar.open = false;
+      GlobalState.rightSidebar.requestFocus?.(false);
     }
   }
 }
