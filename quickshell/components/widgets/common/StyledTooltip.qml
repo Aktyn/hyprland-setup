@@ -19,7 +19,7 @@ ToolTip {
   property bool extraVisibleCondition: true
   property bool alternativeVisibleCondition: false
   property bool internalVisibleCondition: {
-    const ans = (extraVisibleCondition && (parent.hovered === undefined || parent?.hovered)) || alternativeVisibleCondition;
+    const ans = (extraVisibleCondition && (parent?.hovered === undefined || parent?.hovered)) || alternativeVisibleCondition;
     return ans;
   }
   verticalPadding: Style.sizes.spacingSmall
@@ -37,14 +37,14 @@ ToolTip {
   case StyledTooltip.TooltipSide.Right:
     return width;
   default:
-    return Math.round((parent.width - width) / 2);
+    return Math.round(((parent?.width ?? width) - width) / 2);
   }
 
   y: switch (root.side) {
   case StyledTooltip.TooltipSide.Top:
     return -parent.height;
   case StyledTooltip.TooltipSide.Bottom:
-    return parent.height;
+    return parent?.height ?? 0;
   default:
     return Math.round((parent.height - height) / 2);
   }

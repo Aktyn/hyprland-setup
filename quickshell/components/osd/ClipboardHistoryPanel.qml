@@ -158,8 +158,7 @@ Scope {
                     return ClipboardHistory.fuzzyQuery(clipboardSearch.searchText).filter(Boolean).map(entry => {
                       return clipboardEntryComponent.createObject(root, {
                         rawString: entry,
-                        name: entry.replace(/^\s*\S+\s+/, ""),
-                        type: `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`
+                        name: entry.replace(/^\s*\S+\s+/, "")
                       });
                     });
                   }
