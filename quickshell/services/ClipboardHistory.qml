@@ -11,7 +11,7 @@ import "../common"
 
 Singleton {
   id: root
-  property bool sloppySearch: true
+  // property bool sloppySearch: true
   property real scoreThreshold: 0.2
   property list<string> entries: []
   readonly property var preparedEntries: entries.map(a => ({
@@ -19,7 +19,8 @@ Singleton {
         entry: a
       }))
   function fuzzyQuery(search: string): var {
-    if (root.sloppySearch) {
+    // if (root.sloppySearch) {
+    if (search.length > 5) {
       const results = entries.slice(0, 100).map(str => ({
             entry: str,
             score: Levendist.computeTextMatchScore(str.toLowerCase(), search.toLowerCase())

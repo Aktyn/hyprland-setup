@@ -11,7 +11,7 @@ StyledButton {
 
   //TODO: allow entire component (check with typeof whether to render as StyledText or provided component)
   property string iconName
-  required property string content
+  property string content
   property int size: Style.font.pixelSize.normal
   padding: Style.sizes.spacingMedium
   property color color: Style.colors.colorOnSurface
@@ -32,6 +32,7 @@ StyledButton {
       color: root.color
     }
     StyledText {
+      visible: !!root.content
       Layout.alignment: Qt.AlignVCenter
 
       text: root.content

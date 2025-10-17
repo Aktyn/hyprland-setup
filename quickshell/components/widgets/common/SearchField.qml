@@ -17,6 +17,7 @@ Rectangle {
 
   property var onNonEnterInput
   property var onEnter
+  property var onPressed
 
   implicitHeight: searchInput.implicitHeight
   implicitWidth: searchInput.implicitWidth + horizontalPadding * 2
@@ -75,6 +76,12 @@ Rectangle {
           }
         } else if (root.onNonEnterInput && typeof root.onNonEnterInput === 'function') {
           root.onNonEnterInput();
+        }
+      }
+
+      onPressed: {
+        if (root.onPressed && typeof root.onPressed === 'function') {
+          root.onPressed();
         }
       }
     }

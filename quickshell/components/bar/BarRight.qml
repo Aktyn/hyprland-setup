@@ -85,7 +85,7 @@ BarSection {
     }
 
     StyledTooltip {
-      content: "Night Light"
+      content: "Night light"
       side: StyledTooltip.TooltipSide.Left
     }
   }
@@ -191,21 +191,49 @@ BarSection {
       BarIconButton {
         iconName: "screenshot_region"
         onClicked: Quickshell.execDetached("hyprshot --freeze --clipboard-only --mode region --silent".split(" "))
+
+        StyledTooltip {
+          content: "Screenshot region"
+          side: StyledTooltip.TooltipSide.Left
+        }
       }
 
       BarIconButton {
         iconName: "colorize"
         onClicked: Quickshell.execDetached(["hyprpicker", "-a"])
+
+        StyledTooltip {
+          content: "Pick color"
+          side: StyledTooltip.TooltipSide.Left
+        }
       }
 
       BarIconButton {
         iconName: "sticky_note_2"
 
         toggled: GlobalState.bar.notesPanel.open
-
         onClicked: {
           GlobalState.bar.notesPanel.open = !GlobalState.bar.notesPanel.open;
           GlobalState.bar.notesPanel.screen = section.screen;
+        }
+
+        StyledTooltip {
+          content: "Notes"
+          side: StyledTooltip.TooltipSide.Left
+        }
+      }
+
+      BarIconButton {
+        iconName: "pending_actions"
+
+        toggled: GlobalState.osd.clipboardPanelOpen
+        onClicked: {
+          GlobalState.osd.clipboardPanelOpen = !GlobalState.osd.clipboardPanelOpen;
+        }
+
+        StyledTooltip {
+          content: "Clipboard history"
+          side: StyledTooltip.TooltipSide.Left
         }
       }
     }

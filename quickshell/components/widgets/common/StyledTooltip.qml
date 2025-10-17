@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
 import "../../../common"
 
@@ -11,7 +10,8 @@ ToolTip {
     Left = 1,
     Right = 2,
     Top = 3,
-    Bottom = 4
+    Bottom = 4,
+    Center = 5
   }
   property int side: StyledTooltip.TooltipSide.Bottom
 

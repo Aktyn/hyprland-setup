@@ -11,6 +11,7 @@ import "../../common"
 import "../../services"
 
 import "../widgets/common"
+import "../widgets"
 
 Scope {
   id: root
@@ -120,9 +121,21 @@ Scope {
                   }
                 }
 
-                onHasFocusChanged: function () {
-                  grab.active = this.hasFocus;
+                property var grabFocus: function () {
+                  grab.active = true;
                 }
+
+                onHasFocusChanged: {
+                  if (this.focus) {
+                    this.grabFocus();
+                  }
+                }
+                onActiveFocusChanged: {
+                  if (this.focus) {
+                    this.grabFocus();
+                  }
+                }
+                onPressed: this.grabFocus()
               }
 
               ScrollView {
@@ -151,17 +164,9 @@ Scope {
                     });
                   }
 
-                  delegate: Text {
-                    required property ClipboardEntryObject modelData
-                    text: modelData.name
+                  delegate: ClipboardItem {
+                    radius: osdValuesWrapper.radius - osdValuesWrapper.padding
                   }
-                  // delegate: EntryItem {
-                  //   anchors.left: parent?.left
-                  //   anchors.right: parent?.right
-
-                  //   entry: modelData
-                  //   toggled: GlobalState.leftSidebar.appSearch.selectedEntryIndex === index
-                  // }
                 }
               }
             }
@@ -171,24 +176,9 @@ Scope {
     }
   }
 
-  component ClipboardEntryObject: QtObject {
-    id: wrapper
-
-    required property string rawString
-    required property string name
-    required property string type
-
-    function copy() {
-      ClipboardHistory.copy(this.rawString);
-    }
-    function remove() {
-      ClipboardHistory.deleteEntry(this.rawString);
-    }
-  }
-
   Component {
     id: clipboardEntryComponent
-    ClipboardEntryObject {}
+    ClipboardItem.ClipboardEntryObject {}
   }
 
   GlobalShortcut {

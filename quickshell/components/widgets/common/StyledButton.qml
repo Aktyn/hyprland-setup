@@ -210,5 +210,6 @@ Button {
 
   contentItem: StyledText {
     text: root.buttonText
+    elide: Text.ElideRight
   }
 }
