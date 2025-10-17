@@ -55,7 +55,7 @@ Singleton {
 
   Process {
     id: updateProcess
-    command: ["bash", "-c", `pkexec sudo pacman -Syu --noconfirm${root.hasYay ? " && pkexec yay -Syu --noconfirm" : ""}`]
+    command: ["pkexec", "bash", "-c", `pacman -Syu --noconfirm${root.hasYay ? " && yay -Syu --noconfirm" : ""}`]
     running: false
 
     stdout: StdioCollector {

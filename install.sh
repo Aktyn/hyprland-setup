@@ -3,6 +3,7 @@
 set -e
 
 #TODO: check repo version and ask user if they want to update if there is a newer version
+#TODO: allow option to setup only of of: quickshell/hyprland/sddm
 
 is_installed() {
     local package="$1"
@@ -79,6 +80,7 @@ install_package base-devel
 install_package kate
 install_package blueman # bluetooth gui
 install_package xclip
+install_package cliphist
 
 if ! which yay > /dev/null 2>&1; then
     echo "Installing yay"

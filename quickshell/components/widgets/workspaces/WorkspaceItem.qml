@@ -34,11 +34,9 @@ Rectangle {
   color: root.baseBackground
   border {
     width: 1
-    color: root.baseForeground // Colors.transparentize(root.baseForeground, 1, true)
+    color: root.baseForeground
   }
   radius: Style.rounding.unsharpenmore
-
-  // property real monitorRatio: root.workspace ? (root.workspace.monitor.width ?? 1.618) / (root.workspace.monitor.height ?? 1) : 1.618
 
   implicitHeight: this.isOpened ? Math.min(Style.sizes.iconExtraLarge, parent.height) : Style.sizes.iconLarge
 

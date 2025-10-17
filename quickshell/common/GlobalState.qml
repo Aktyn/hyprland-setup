@@ -39,6 +39,7 @@ Singleton {
 
   property QtObject osd: QtObject {
     property bool volumeOpen: false
+    property bool clipboardPanelOpen: false
   }
 
   property QtObject leftSidebar: QtObject {

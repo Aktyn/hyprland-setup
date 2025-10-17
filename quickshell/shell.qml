@@ -17,6 +17,7 @@ ShellRoot {
 
   // --- OSDs ---
   VolumeChangeIndicator {}
+  ClipboardHistoryPanel {}
 
   Component.onCompleted: {
     Hyprland.dispatch("exec killall kded6");

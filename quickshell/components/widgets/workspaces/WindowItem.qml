@@ -1,7 +1,6 @@
 import QtQuick
 import Qt5Compat.GraphicalEffects
 import Quickshell.Hyprland
-import Quickshell.Widgets
 import Quickshell
 
 import "../../../common"
@@ -58,16 +57,16 @@ Item {
     }
   }
 
-  IconImage {
+  Image {
     id: image
 
-    // anchors.fill: parent
-    implicitSize: parent.height
+    width: parent.height
+    height: parent.height
 
-    // cache: false
     asynchronous: true
     smooth: true
     mipmap: true
+    cache: true
 
     source: Quickshell.iconPath(AppSearch.guessIcon(root.topLevel.wayland.appId), "image-missing")
     visible: !!this.source

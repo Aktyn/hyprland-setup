@@ -13,6 +13,7 @@ Rectangle {
   property string placeholder: "Search..."
   property int horizontalPadding: Style.sizes.spacingMedium
   property alias searchText: searchInput.text
+  property alias hasFocus: searchInput.focus
 
   property var onNonEnterInput
   property var onEnter
@@ -30,6 +31,8 @@ Rectangle {
   }
 
   RowLayout {
+    id: layout
+
     spacing: 0
 
     anchors.fill: parent
