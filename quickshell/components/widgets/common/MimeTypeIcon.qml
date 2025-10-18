@@ -22,6 +22,8 @@ MaterialSymbol {
       return "folder_zip";
     } else if (mimeType.startsWith("text/")) {
       return "description";
+    } else if (mimeType.startsWith("inode/directory")) {
+      return "folder_copy";
     } else {
       return "draft";
     }

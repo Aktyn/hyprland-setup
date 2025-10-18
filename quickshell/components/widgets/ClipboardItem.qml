@@ -43,13 +43,17 @@ Item {
 
         //Show only name for non-file entries
         RowLayout {
+          id: nonFileLayout
+
           anchors.fill: parent
           spacing: Style.sizes.spacingMedium
+
+          readonly property bool isColor: root.modelData.name.match(/^["'`]?#([\dABCDEF]{3,4}|[\dABCDEF]{6}|[\dABCDEF]{8})["'`]?$/i)
 
           StyledText {
             visible: !root.isFile
             Layout.fillHeight: true
-            Layout.fillWidth: false
+            Layout.fillWidth: !nonFileLayout.isColor
 
             text: root.modelData.name
             elide: Text.ElideRight
@@ -58,7 +62,7 @@ Item {
           }
 
           Rectangle {
-            visible: root.modelData.name.match(/^["'`]?#([\dABCDEF]{3,4}|[\dABCDEF]{6}|[\dABCDEF]{8})["'`]?$/i)
+            visible: nonFileLayout.isColor
             color: root.modelData.name.replace(/[^#\dABCDEF]/gi, "")
             Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             Layout.fillHeight: true
@@ -67,7 +71,7 @@ Item {
           }
         }
 
-        //File entry
+        //File or directory entry
         ColumnLayout {
           id: fileLayout
 
@@ -132,8 +136,9 @@ Item {
               Layout.alignment: Qt.AlignVCenter
               Layout.fillWidth: true
               Layout.fillHeight: true
-              text: unescape(fileLayout.decodedPath.replace(/.*\/([^/]+)$/i, "$1"))
-              elide: Text.ElideRight
+              // text: unescape(fileLayout.decodedPath.replace(/.*\/([^/]+)$/i, "$1"))
+              text: unescape(Utils.trimFileProtocol(fileLayout.decodedPath))
+              elide: Text.ElideLeft
               font.bold: root.isFirst
               color: parent.colorBase
             }
