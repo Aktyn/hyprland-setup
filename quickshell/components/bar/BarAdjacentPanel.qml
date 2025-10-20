@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Wayland
 
 import "../../common"
 import "../../services"
@@ -18,17 +19,38 @@ Scope {
   }
   property int side: BarAdjacentPanel.Side.Middle
   property bool adhesive: false //Used for Left and Right side panels to remove distance between screen edge
-  property bool detached: false //Should not be combined with adhesive
+  property bool detached: GlobalState.transparencyEnabled //Should not be combined with adhesive
 
   default property alias items: panelContent.children
+  property Component sourceComponent
   required property ShellScreen screen
   property bool show: false
 
+  onShowChanged: {
+    if (this.show) {
+      panelContentLoader.active = true;
+      panelContentDelayedUnload.running = false;
+    } else {
+      panelContentDelayedUnload.running = true;
+    }
+  }
+
+  Timer {
+    id: panelContentDelayedUnload
+    interval: root.slideDuration
+    running: false
+
+    onTriggered: {
+      panelContentLoader.active = false;
+    }
+  }
+
   property int innerPadding: Style.sizes.spacingLarge
-  readonly property int cornerSize: Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
+  readonly property int radius: Style.rounding.hyprland + (this.detached && root.side !== BarAdjacentPanel.Side.Middle ? HyprlandInfo.general.gapsOut[0] : 0)
+  readonly property int cornerSize: this.radius + HyprlandInfo.general.gapsOut[0]
   readonly property int slideDuration: Config.bar.panelSlideDuration
 
-  property int screenEdgeOffset: this.side !== BarAdjacentPanel.Side.Middle && !this.adhesive ? this.cornerSize : 0
+  property int screenEdgeOffset: this.side !== BarAdjacentPanel.Side.Middle && !this.adhesive ? HyprlandInfo.general.gapsIn[0] : 0
 
   property bool closeOnBackgroundClick: true
   property var onBackgroundClick
@@ -66,11 +88,17 @@ Scope {
   PanelWindow {
     id: panel
     property int cornersCount: root.side === BarAdjacentPanel.Side.Middle || !root.adhesive ? 2 : 1
-    implicitWidth: panelContent.width + root.innerPadding * 2 + (root.detached ? 0 : root.cornerSize * this.cornersCount) + 2 // + 2 to accommodate borders
+    implicitWidth: panelContent.width + root.innerPadding * 2 - 2 + (root.detached ? 0 : root.cornerSize * this.cornersCount) + 2 // + 2 to accommodate borders
     implicitHeight: panelContent.height + root.innerPadding * 2
     visible: !!root.screen
 
     screen: root.screen
+
+    Component.onCompleted: {
+      if (this.WlrLayershell && GlobalState.transparencyEnabled) {
+        this.WlrLayershell.namespace = "quickshell:panel";
+      }
+    }
 
     exclusionMode: ExclusionMode.Ignore
     aboveWindows: contentWrapper.Layout.topMargin > -panel.implicitHeight + HyprlandInfo.general.gapsOut[0]
@@ -129,7 +157,7 @@ Scope {
 
         implicitSize: root.cornerSize
         corner: ReversedRoundedCorner.CornerEnum.TopRight
-        color: Style.colors.surface
+        color: GlobalState.backgroundColor
       }
 
       Item {
@@ -197,11 +225,11 @@ Scope {
         Rectangle {
           anchors.fill: parent
 
-          color: Style.colors.surface
-          topLeftRadius: root.detached ? (root.adhesive && root.side === BarAdjacentPanel.Side.Left ? 0 : Style.rounding.hyprland) : 0
-          topRightRadius: root.detached ? (root.adhesive && root.side === BarAdjacentPanel.Side.Right ? 0 : Style.rounding.hyprland) : 0
-          bottomLeftRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Left ? 0 : Style.rounding.hyprland
-          bottomRightRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Right ? 0 : Style.rounding.hyprland
+          color: GlobalState.backgroundColor
+          topLeftRadius: root.detached ? (root.adhesive && root.side === BarAdjacentPanel.Side.Left ? 0 : root.radius) : 0
+          topRightRadius: root.detached ? (root.adhesive && root.side === BarAdjacentPanel.Side.Right ? 0 : root.radius) : 0
+          bottomLeftRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Left ? 0 : root.radius
+          bottomRightRadius: root.adhesive && root.side === BarAdjacentPanel.Side.Right ? 0 : root.radius
 
           Rectangle {
             id: containerBorder
@@ -211,12 +239,26 @@ Scope {
               id: borderGradient
 
               orientation: Gradient.Vertical
-              property color colorBase: Colors.transparentize(Qt.lighter(Style.colors.surface, 2.5), root.show ? 1 : 0)
+              property color colorBase: Colors.transparentize(Qt.lighter(Style.colors.surface, 2.5), root.show ? 1 : 0, true)
               Behavior on colorBase {
                 animation: Style.animation.elementMove.colorAnimation.createObject(this)
               }
 
-              stops: [
+              property list<GradientStop> detachedGradientStops: [
+                GradientStop {
+                  position: 0
+                  color: borderGradient.colorBase
+                },
+                GradientStop {
+                  position: 0.5
+                  color: Colors.transparentize(borderGradient.colorBase, 0, true)
+                },
+                GradientStop {
+                  position: 1
+                  color: borderGradient.colorBase
+                }
+              ]
+              property list<GradientStop> gradientStops: [
                 GradientStop {
                   position: root.cornerSize / containerBorder.height
                   color: Colors.transparentize(borderGradient.colorBase, 0, true)
@@ -226,12 +268,15 @@ Scope {
                   color: borderGradient.colorBase
                 }
               ]
+
+              stops: root.detached ? detachedGradientStops : gradientStops
             }
             opacity: 0.15
-            visible: true
 
             bottomLeftRadius: parent.bottomLeftRadius
             bottomRightRadius: parent.bottomRightRadius
+            topLeftRadius: parent.topLeftRadius
+            topRightRadius: parent.topRightRadius
           }
 
           Rectangle {
@@ -241,6 +286,8 @@ Scope {
 
             bottomLeftRadius: parent.bottomLeftRadius
             bottomRightRadius: parent.bottomRightRadius
+            topLeftRadius: parent.topLeftRadius
+            topRightRadius: parent.topRightRadius
             border.width: 1 //root.borderWidth
             color: 'transparent'
             visible: false   // otherwise a thin border might be seen.
@@ -265,6 +312,13 @@ Scope {
 
           ColumnLayout {
             id: panelContent
+
+            Loader {
+              id: panelContentLoader
+
+              active: false
+              sourceComponent: root.sourceComponent
+            }
           }
         }
       }
@@ -284,7 +338,7 @@ Scope {
 
         implicitSize: root.cornerSize
         corner: ReversedRoundedCorner.CornerEnum.TopLeft
-        color: Style.colors.surface
+        color: GlobalState.backgroundColor
       }
     }
   }

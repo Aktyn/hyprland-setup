@@ -27,6 +27,7 @@ ColumnLayout {
     return time < 10 ? "0" + String(time) : String(time);
   }
 
+  //TODO: move entire timer to global state due to lazy loading of CalendarPanel
   Timer {
     id: countdown
     interval: 1000

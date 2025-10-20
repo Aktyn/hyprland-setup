@@ -23,6 +23,7 @@ ColumnLayout {
   ActionButton {
     visible: !Updates.isUpdating
 
+    Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
 
     iconName: "update"

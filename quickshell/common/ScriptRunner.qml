@@ -9,8 +9,10 @@ import "."
 Singleton {
   id: root
 
+  property alias selectWallpaperProcess: selectWallpaperProcess
+
   Process {
-    id: proc
+    id: generateColorsProcess
     command: []
     running: false
     stdout: StdioCollector {
@@ -20,11 +22,30 @@ Singleton {
     }
   }
 
-  //TODO: also customize application styles according to the generated colors
+  Process {
+    id: selectWallpaperProcess
+    command: ["bash", "-c", "kdialog --getopenfilename ~/Pictures \"Images (*.png *.jpg *.jpeg *.gif *.bmp *.webp *.tif *.tiff *.svg);;All files (*)\""]
+    running: false
+
+    stdout: StdioCollector {
+      onStreamFinished: {
+        const path = this.text.trim();
+        if (!path) {
+          return;
+        }
+
+        console.info("New wallpaper selected:", path);
+        Config.wallpaper.path = path;
+      }
+    }
+  }
+
   function generateMaterialYouColors(imagePath) {
+    //TODO: also customize application styles according to the generated colors
+
     console.info("Generating json with material you colors based on: " + imagePath);
-    proc.command = ["python", Quickshell.shellPath("scripts/generate-material-you-colors.py"), imagePath, Utils.trimFileProtocol(Consts.path.colorsFile)];
-    proc.running = true;
+    generateColorsProcess.command = ["python", Quickshell.shellPath("scripts/generate-material-you-colors.py"), imagePath, Utils.trimFileProtocol(Consts.path.colorsFile)];
+    generateColorsProcess.running = true;
   }
 
   function setHyprlandOption(option: string, value: string) {

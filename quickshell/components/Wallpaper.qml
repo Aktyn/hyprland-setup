@@ -25,7 +25,7 @@ LazyLoader {
         aboveWindows: false
         color: Style.colors.background
 
-        property int topMargin: Config.bar.screenList.length === 0 || Config.bar.screenList.includes(screen.name) ? Config.bar.height : 0
+        property int topMargin: !GlobalState.transparencyEnabled && (Config.bar.screenList.length === 0 || Config.bar.screenList.includes(screen.name)) ? Config.bar.height : 0
 
         property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
         property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated

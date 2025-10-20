@@ -44,6 +44,7 @@ Singleton {
       property JsonObject general: JsonObject {
         property bool hideAuthorLink: false
         property int updatesCheckInterval: 60 * 60 * 1000 // 1 hour
+        property real panelsTransparency: 0.5 // causes bar and panels to be semi transparent with blurred background; set to 1 to disable transparency effect; requires shell restart if changed from disabled (== 1) to enabled (< 1)
       }
 
       property JsonObject bar: JsonObject {

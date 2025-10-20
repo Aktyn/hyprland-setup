@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Hyprland
 
 import "../../common"
 import "../../services"
@@ -39,5 +40,5 @@ StyledButton {
     }
   }
 
-  onClicked: Quickshell.execDetached(["sh", "-c", "hyprctl dispatch exec '[float]' gnome-system-monitor"])
+  onClicked: Hyprland.dispatch("exec [float] gnome-system-monitor")
 }

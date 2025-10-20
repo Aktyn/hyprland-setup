@@ -81,6 +81,8 @@ install_package kate
 install_package blueman # bluetooth gui
 install_package xclip
 install_package cliphist
+install_package kdialog
+install_package gnome-system-monitor
 
 if ! which yay > /dev/null 2>&1; then
     echo "Installing yay"

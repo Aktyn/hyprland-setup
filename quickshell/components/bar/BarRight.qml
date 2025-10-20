@@ -159,7 +159,7 @@ BarSection {
           GlobalState.bar.notificationsPanel.requestFocus = notificationsPanelContainer.onRequestFocus;
         }
 
-        NotificationsPanel {
+        items: NotificationsPanel {
           id: notificationsPanel
           Layout.minimumWidth: 320
         }

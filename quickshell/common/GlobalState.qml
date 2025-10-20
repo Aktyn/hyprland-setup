@@ -4,7 +4,13 @@ import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 
+import "."
+import "../services"
+
 Singleton {
+  property bool transparencyEnabled: Config.general.panelsTransparency < 1
+  property color backgroundColor: this.transparencyEnabled ? Colors.transparentize(Style.colors.surface, Config.general.panelsTransparency) : Style.colors.surface
+
   property QtObject bar: QtObject {
     property QtObject calendarPanel: QtObject {
       property bool open: false
@@ -91,6 +97,15 @@ Singleton {
 
     onPressed: {
       leftSidebar.superReleaseHelper = false;
+    }
+  }
+
+  GlobalShortcut {
+    name: "overviewClipboardToggle"
+    description: "Toggle clipboard query on overview widget"
+
+    onPressed: {
+      osd.clipboardPanelOpen = !osd.clipboardPanelOpen;
     }
   }
 }

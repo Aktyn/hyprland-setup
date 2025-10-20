@@ -11,13 +11,20 @@ import "components"
 import "components/bar"
 import "components/osd"
 
+import "common"
+
 ShellRoot {
   Bar {}
   Wallpaper {}
 
   // --- OSDs ---
   VolumeChangeIndicator {}
-  ClipboardHistoryPanel {}
+
+  //TODO: [optimization] create generic component for automatically unloading lazy loaded components
+  LazyLoader {
+    loading: GlobalState.osd.clipboardPanelOpen
+    component: ClipboardHistoryPanel {}
+  }
 
   Component.onCompleted: {
     Hyprland.dispatch("exec killall kded6");

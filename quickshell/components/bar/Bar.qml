@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Wayland
 
 import "../../common"
 import "../../services"
@@ -39,6 +40,12 @@ LazyLoader {
         aboveWindows: false
         color: "transparent"
 
+        Component.onCompleted: {
+          if (this.WlrLayershell && GlobalState.transparencyEnabled) {
+            this.WlrLayershell.namespace = "quickshell:panel";
+          }
+        }
+
         implicitHeight: Config.bar.height + Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
 
         anchors {
@@ -63,6 +70,7 @@ LazyLoader {
 
           // Background shadow
           RectangularShadow {
+            visible: !GlobalState.transparencyEnabled
             anchors.fill: barBackground
             offset.y: 0
             blur: Style.rounding.hyprland + HyprlandInfo.general.gapsOut[0]
@@ -72,17 +80,16 @@ LazyLoader {
 
           // Background
           Rectangle {
-            anchors {
-              fill: parent
-            }
-            color: "#000"
+            id: barContainerBackground
+            visible: !GlobalState.transparencyEnabled
+            anchors.fill: barLayout
+            color: "black"
           }
+
           Rectangle {
             id: barBackground
-            anchors {
-              fill: parent
-            }
-            color: Style.colors.surface
+            anchors.fill: parent
+            color: GlobalState.backgroundColor
 
             topLeftRadius: Style.rounding.hyprland
             topRightRadius: Style.rounding.hyprland
@@ -135,7 +142,7 @@ LazyLoader {
             }
 
             corner: ReversedRoundedCorner.CornerEnum.TopLeft
-            color: Style.colors.surface
+            color: GlobalState.backgroundColor
           }
 
           ReversedRoundedCorner {
@@ -145,7 +152,7 @@ LazyLoader {
             }
 
             corner: ReversedRoundedCorner.CornerEnum.TopRight
-            color: Style.colors.surface
+            color: GlobalState.backgroundColor
           }
         }
 
@@ -161,8 +168,8 @@ LazyLoader {
             side: BarAdjacentPanel.Side.Left
 
             property bool hasFullScreen: !!Hyprland.monitorFor(this.screen).activeWorkspace?.toplevels.values.some(top => top.wayland?.fullscreen)
-            adhesive: !hasFullScreen
-            detached: hasFullScreen
+            adhesive: !hasFullScreen && !GlobalState.transparencyEnabled
+            detached: hasFullScreen || GlobalState.transparencyEnabled
 
             screen: GlobalState.leftSidebar.screen
             show: GlobalState.leftSidebar.open
@@ -176,7 +183,7 @@ LazyLoader {
               GlobalState.leftSidebar.requestFocus = leftSidebarContainer.onRequestFocus;
             }
 
-            LeftSidebar {
+            sourceComponent: LeftSidebar {
               Layout.minimumWidth: 384
             }
           }
@@ -190,7 +197,7 @@ LazyLoader {
             id: rightSidebarContainer
 
             side: BarAdjacentPanel.Side.Right
-            adhesive: true
+            adhesive: !GlobalState.transparencyEnabled
 
             screen: GlobalState.rightSidebar.screen
             show: GlobalState.rightSidebar.open
@@ -204,8 +211,8 @@ LazyLoader {
               GlobalState.rightSidebar.requestFocus = rightSidebarContainer.onRequestFocus;
             }
 
-            RightSidebar {
-              Layout.minimumWidth: 384
+            sourceComponent: RightSidebar {
+              width: 384
             }
           }
         }
@@ -228,7 +235,7 @@ LazyLoader {
               GlobalState.bar.calendarPanel.requestFocus = calendarPanelContainer.onRequestFocus;
             }
 
-            CalendarPanel {}
+            sourceComponent: CalendarPanel {}
           }
         }
 
@@ -250,7 +257,7 @@ LazyLoader {
               GlobalState.bar.notesPanel.requestFocus = notesPanelContainer.onRequestFocus;
             }
 
-            NotesPanel {}
+            sourceComponent: NotesPanel {}
           }
         }
 
@@ -273,7 +280,7 @@ LazyLoader {
               GlobalState.bar.mediaControls.requestFocus = mediaControlsPanelContainer.onRequestFocus;
             }
 
-            MediaControls {}
+            sourceComponent: MediaControls {}
           }
         }
       }

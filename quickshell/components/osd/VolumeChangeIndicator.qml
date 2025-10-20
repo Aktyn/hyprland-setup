@@ -60,15 +60,19 @@ Scope {
       }
 
       exclusionMode: ExclusionMode.Normal
-      WlrLayershell.namespace: "quickshell:onScreenDisplay"
-      WlrLayershell.layer: WlrLayer.Overlay
+      // WlrLayershell.namespace: "quickshell:onScreenDisplay"
+      // WlrLayershell.layer: WlrLayer.Overlay
       color: "transparent"
+
+      Component.onCompleted: {
+        if (this.WlrLayershell && GlobalState.transparencyEnabled) {
+          this.WlrLayershell.namespace = "quickshell:panel";
+          this.WlrLayershell.layer = WlrLayer.Top;
+        }
+      }
 
       anchors {
         top: true
-      }
-      mask: Region {
-        item: osdValuesWrapper
       }
 
       implicitWidth: columnLayout.implicitWidth
@@ -78,7 +82,6 @@ Scope {
       ColumnLayout {
         id: columnLayout
 
-        //TODO: enter/exit animations
         Rectangle {
           id: osdValuesWrapper
 
@@ -88,7 +91,7 @@ Scope {
 
           clip: true
 
-          color: Style.colors.surfaceContainer
+          color: GlobalState.backgroundColor
           border.color: Style.colors.outlineVariant
           radius: Style.rounding.small
 

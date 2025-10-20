@@ -36,6 +36,12 @@ Scope {
         aboveWindows: true
         visible: GlobalState.osd.clipboardPanelOpen
 
+        Component.onCompleted: {
+          if (this.WlrLayershell) {
+            this.WlrLayershell.layer = WlrLayer.Bottom;
+          }
+        }
+
         color: "transparent"
 
         MouseArea {
@@ -68,16 +74,20 @@ Scope {
         }
 
         exclusionMode: ExclusionMode.Normal
-        WlrLayershell.namespace: "quickshell:onScreenDisplay"
-        WlrLayershell.layer: WlrLayer.Overlay
+        Component.onCompleted: {
+          if (this.WlrLayershell && GlobalState.transparencyEnabled) {
+            this.WlrLayershell.namespace = "quickshell:panel";
+            this.WlrLayershell.layer = WlrLayer.Top;
+          }
+        }
         color: "transparent"
 
         anchors {
           top: true
         }
-        mask: Region {
-          item: osdValuesWrapper
-        }
+        // mask: Region {
+        //   item: osdValuesWrapper
+        // }
 
         implicitWidth: columnLayout.implicitWidth
         implicitHeight: columnLayout.implicitHeight
@@ -97,7 +107,7 @@ Scope {
 
             clip: true
 
-            color: Style.colors.surfaceContainer
+            color: GlobalState.backgroundColor
             border.color: Style.colors.outlineVariant
             radius: Style.rounding.normal
 
@@ -178,14 +188,5 @@ Scope {
   Component {
     id: clipboardEntryComponent
     ClipboardItem.ClipboardEntryObject {}
-  }
-
-  GlobalShortcut {
-    name: "overviewClipboardToggle"
-    description: "Toggle clipboard query on overview widget"
-
-    onPressed: {
-      GlobalState.osd.clipboardPanelOpen = !GlobalState.osd.clipboardPanelOpen;
-    }
   }
 }
