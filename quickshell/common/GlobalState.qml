@@ -18,7 +18,31 @@ Singleton {
       property var requestFocus
 
       property QtObject timer: QtObject {
+        id: timerRoot
+
         property bool running: false
+        property bool paused: false
+
+        property int remainingSeconds: 0
+
+        property Timer countdownTimer: Timer {
+          interval: 1000
+          repeat: true
+          running: timerRoot.running && !timerRoot.paused
+          onTriggered: {
+            if (timerRoot.remainingSeconds > 0) {
+              timerRoot.remainingSeconds--;
+            } else {
+              this.running = false;
+              timerRoot.running = false;
+              timerRoot.paused = false;
+              timerRoot.remainingSeconds = 0;
+
+              console.info("Timer finished");
+              Quickshell.execDetached(["notify-send", "Timer finished!", "--urgency", "CRITICAL", "--transient", "--icon", Quickshell.shellPath("assets/icons/timer-alert.svg")]);
+            }
+          }
+        }
       }
     }
 

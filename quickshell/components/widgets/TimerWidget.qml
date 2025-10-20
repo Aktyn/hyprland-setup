@@ -16,36 +16,10 @@ ColumnLayout {
   property int m: 0
   property int s: 10
 
-  property int totalSeconds: 0
-  property int remainingSeconds: 0
-  // property bool running: false
-  property bool paused: false
-
   readonly property int fontSize: Math.min(48, implicitWidth / 8)
 
   function formatTime(time) {
     return time < 10 ? "0" + String(time) : String(time);
-  }
-
-  //TODO: move entire timer to global state due to lazy loading of CalendarPanel
-  Timer {
-    id: countdown
-    interval: 1000
-    repeat: true
-    running: GlobalState.bar.calendarPanel.timer.running && !root.paused
-    onTriggered: {
-      if (root.remainingSeconds > 0) {
-        root.remainingSeconds--;
-      } else {
-        this.running = false;
-        GlobalState.bar.calendarPanel.timer.running = false;
-        root.paused = false;
-        root.remainingSeconds = 0;
-
-        console.info("Timer finished");
-        Quickshell.execDetached(["notify-send", "Timer finished!", "--urgency", "CRITICAL", "--transient", "--icon", Quickshell.shellPath("assets/icons/timer-alert.svg")]);
-      }
-    }
   }
 
   StyledText {
@@ -144,12 +118,12 @@ ColumnLayout {
       content: "Start"
 
       onClicked: {
-        root.totalSeconds = root.h * 3600 + root.m * 60 + root.s;
-        if (root.totalSeconds > 0) {
-          root.remainingSeconds = root.totalSeconds;
+        const totalSeconds = root.h * 3600 + root.m * 60 + root.s;
+        if (totalSeconds > 0) {
+          GlobalState.bar.calendarPanel.timer.remainingSeconds = totalSeconds;
           GlobalState.bar.calendarPanel.timer.running = true;
-          root.paused = false;
-          countdown.running = true;
+          GlobalState.bar.calendarPanel.timer.paused = false;
+          GlobalState.bar.calendarPanel.timer.countdownTimer.running = true;
         }
       }
     }
@@ -164,9 +138,9 @@ ColumnLayout {
     StyledText {
       Layout.alignment: Qt.AlignHCenter
 
-      property int currentH: Math.floor(root.remainingSeconds / 3600)
-      property int currentM: Math.floor((root.remainingSeconds % 3600) / 60)
-      property int currentS: root.remainingSeconds % 60
+      property int currentH: Math.floor(GlobalState.bar.calendarPanel.timer.remainingSeconds / 3600)
+      property int currentM: Math.floor((GlobalState.bar.calendarPanel.timer.remainingSeconds % 3600) / 60)
+      property int currentS: GlobalState.bar.calendarPanel.timer.remainingSeconds % 60
 
       text: root.formatTime(currentH) + ":" + root.formatTime(currentM) + ":" + root.formatTime(currentS)
       color: Style.colors.colorOnSurface
@@ -178,12 +152,12 @@ ColumnLayout {
       Layout.alignment: Qt.AlignHCenter
 
       ActionButton {
-        iconName: root.paused ? "play_arrow" : "pause"
-        content: root.paused ? "Resume" : "Pause"
+        iconName: GlobalState.bar.calendarPanel.timer.paused ? "play_arrow" : "pause"
+        content: GlobalState.bar.calendarPanel.timer.paused ? "Resume" : "Pause"
 
         onClicked: {
-          root.paused = !root.paused;
-          countdown.running = !root.paused;
+          GlobalState.bar.calendarPanel.timer.paused = !GlobalState.bar.calendarPanel.timer.paused;
+          GlobalState.bar.calendarPanel.timer.countdownTimer.running = !GlobalState.bar.calendarPanel.timer.paused;
         }
       }
 
@@ -193,9 +167,9 @@ ColumnLayout {
 
         onClicked: {
           GlobalState.bar.calendarPanel.timer.running = false;
-          root.paused = false;
-          root.remainingSeconds = 0;
-          countdown.running = false;
+          GlobalState.bar.calendarPanel.timer.paused = false;
+          GlobalState.bar.calendarPanel.timer.remainingSeconds = 0;
+          GlobalState.bar.calendarPanel.timer.countdownTimer.running = false;
         }
       }
     }

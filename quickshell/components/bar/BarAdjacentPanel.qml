@@ -164,7 +164,7 @@ Scope {
         id: contentWrapper
         Layout.alignment: Qt.AlignTop
         Layout.fillWidth: true
-        Layout.topMargin: 0
+        Layout.topMargin: -panel.implicitHeight
 
         implicitHeight: panel.implicitHeight
         Behavior on implicitHeight {
@@ -184,7 +184,7 @@ Scope {
 
         state: root.show ? "visible" : "hidden"
 
-        states: [
+        property list<State> statesList: [
           State {
             name: "hidden"
             PropertyChanges {
@@ -200,8 +200,25 @@ Scope {
             }
           }
         ]
+        property list<State> detachedStatesList: [
+          State {
+            name: "hidden"
+            PropertyChanges {
+              target: contentWrapper
+              Layout.topMargin: -panel.implicitHeight
+            }
+          },
+          State {
+            name: "visible"
+            PropertyChanges {
+              target: contentWrapper
+              Layout.topMargin: 0
+            }
+          }
+        ]
+        states: root.detached ? detachedStatesList : statesList
 
-        transitions: [
+        property list<Transition> transitionsList: [
           Transition {
             from: "hidden"
             to: "visible"
@@ -221,6 +238,27 @@ Scope {
             }
           }
         ]
+        property list<Transition> detachedTransitionsList: [
+          Transition {
+            from: "hidden"
+            to: "visible"
+            NumberAnimation {
+              properties: "Layout.topMargin"
+              duration: root.slideDuration
+              easing.type: Easing.InQuad
+            }
+          },
+          Transition {
+            from: "visible"
+            to: "hidden"
+            NumberAnimation {
+              properties: "Layout.topMargin"
+              duration: root.slideDuration
+              easing.type: Easing.OutQuad
+            }
+          }
+        ]
+        transitions: root.detached ? detachedTransitionsList : transitionsList
 
         Rectangle {
           anchors.fill: parent
