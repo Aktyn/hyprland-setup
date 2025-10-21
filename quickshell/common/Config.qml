@@ -14,6 +14,7 @@ Singleton {
   property alias general: configJsonAdapter.general
   property alias bar: configJsonAdapter.bar
   property alias wallpaper: configJsonAdapter.wallpaper
+  property alias battery: configJsonAdapter.battery
   property alias notifications: configJsonAdapter.notifications
   property alias apps: configJsonAdapter.apps
   property alias workspaces: configJsonAdapter.workspaces
@@ -67,6 +68,13 @@ Singleton {
             ScriptRunner.generateMaterialYouColors(this.path);
           }
         }
+      }
+
+      property JsonObject battery: JsonObject {
+        property int low: 20
+        property int critical: 5
+        property int suspend: 3
+        property bool automaticSuspend: true
       }
 
       property JsonObject notifications: JsonObject {

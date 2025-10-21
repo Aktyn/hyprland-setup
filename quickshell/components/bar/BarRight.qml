@@ -71,6 +71,8 @@ BarSection {
     }
   }
 
+  BatteryWidget {}
+
   BarIconButton {
     id: nightLightButton
     property bool enabled: Hyprsunset.active
@@ -138,9 +140,9 @@ BarSection {
     }
 
     LazyLoader {
-      active: true
+      activeAsync: true
 
-      BarAdjacentPanel {
+      component: BarAdjacentPanel {
         id: notificationsPanelContainer
 
         side: BarAdjacentPanel.Side.Right

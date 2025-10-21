@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 
 import "../../common"
-import "."
 import "./common"
 
 Item {
