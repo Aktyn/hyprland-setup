@@ -10,6 +10,13 @@ def hex_to_rgba(hex_color, alpha=1.0):
     b = int(hex_color[4:6], 16)
     return f'rgba({r},{g},{b},{alpha})'
 
+def hex_to_rgb_string(hex_color):
+    hex_color = hex_color.lstrip('#')
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+    return f'{r},{g},{b}'
+
 
 def update_gtk_styles(colors):
     gtk3_css_path = f"{os.path.expanduser("~")}/.config/gtk-3.0/gtk.css"
@@ -94,6 +101,75 @@ def update_kitty_styles(colors):
         print(f"Error while updating kitty configuration: {e}")
         sys.exit(1)
 
+
+
+def update_kde_colors(colors):
+    colorscheme_path = f"{os.path.expanduser('~')}/.local/share/color-schemes/MaterialYou.colors"
+    default_colorscheme_path = "defaults/MaterialYou.colors"
+
+    try:
+        with open('templates/kdeglobals-template', 'r') as f:
+            kdeglobals_template_content = f.read()
+    except FileNotFoundError:
+        print("Error: kdeglobals-template not found in the script directory.")
+        sys.exit(1)
+
+    # Prepare replacements from the template
+    replacements = {}
+    current_section = None
+    for line in kdeglobals_template_content.splitlines():
+        line = line.strip()
+        if line.startswith('[') and line.endswith(']'):
+            current_section = line
+        elif '=' in line and current_section:
+            key, value_placeholder = line.split('=', 1)
+            for color_name, hex_color_value in colors.items():
+                placeholder = f"{{{color_name}}}"
+                if placeholder in value_placeholder:
+                    replacements[f'{current_section}{key}'] = f'{key}={hex_to_rgb_string(hex_color_value)}'
+                    break
+
+    try:
+        with open(default_colorscheme_path, 'r') as f:
+            kdeglobals_content = f.readlines()
+    except FileNotFoundError:
+        print(f"Error: {default_colorscheme_path} not found.")
+        sys.exit(1)
+
+    new_kdeglobals_content = []
+    current_section = None
+    for line in kdeglobals_content:
+        stripped_line = line.strip()
+        if stripped_line.startswith('[') and stripped_line.endswith(']'):
+            current_section = stripped_line
+            new_kdeglobals_content.append(line)
+        elif '=' in stripped_line and current_section:
+            key, _ = stripped_line.split('=', 1)
+            replacement_key = f'{current_section}{key}'
+            if replacement_key in replacements:
+                new_kdeglobals_content.append(replacements[replacement_key] + '\n')
+            else:
+                new_kdeglobals_content.append(line)
+        else:
+            new_kdeglobals_content.append(line)
+
+    try:
+        with open(colorscheme_path, 'w') as f:
+            f.writelines(new_kdeglobals_content)
+
+        # Applying color scheme
+        try:
+            print(f"Applying scheme: {os.path.basename(colorscheme_path)}")
+            # TODO: find better solution to reapply already used theme
+            os.system(f"plasma-apply-colorscheme BreezeDark && sleep 1 && plasma-apply-colorscheme MaterialYou")
+        except Exception as e:
+            print(f"Error while applying plasma color scheme: {e}")
+
+        print("KDE colors updated successfully.")
+    except Exception as e:
+        print(f"Error while updating KDE configuration: {e}")
+        sys.exit(1)
+
 def main():
     if len(sys.argv) != 2:
         print("Usage: python adjust-system-colors.py <path_to_colors.json>")
@@ -118,6 +194,7 @@ def main():
 
     update_gtk_styles(colors)
     update_kitty_styles(colors)
+    update_kde_colors(colors)
 
 if __name__ == "__main__":
     main()

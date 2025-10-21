@@ -40,6 +40,7 @@
 			"inotifywait",
 			"Instantiator",
 			"kded",
+			"kdeglobals",
 			"kdialog",
 			"killall",
 			"layerrule",

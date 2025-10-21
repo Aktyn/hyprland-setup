@@ -11,14 +11,17 @@ Singleton {
 
   property alias selectWallpaperProcess: selectWallpaperProcess
 
+  function parseScriptStdout(output: string): string {
+    return output.split("\n").map(line => `\t${line}`).join("\n");
+  }
+
   Process {
     id: generateColorsProcess
     command: []
     running: false
     stdout: StdioCollector {
       onStreamFinished: {
-        console.log("generateColorsProcess output:", this.text);
-        console.log("New primary color:", Style.colors.primary);
+        console.log("generateColorsProcess output:\n", root.parseScriptStdout(this.text));
 
         adjustSystemColorsProcess.running = true;
       }
@@ -32,7 +35,7 @@ Singleton {
     running: false
     stdout: StdioCollector {
       onStreamFinished: {
-        console.log("adjustSystemColorsProcess output:", this.text);
+        console.log("adjustSystemColorsProcess output:\n", root.parseScriptStdout(this.text));
       }
     }
   }
