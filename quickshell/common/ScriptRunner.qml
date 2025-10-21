@@ -17,7 +17,22 @@ Singleton {
     running: false
     stdout: StdioCollector {
       onStreamFinished: {
-        console.log("Generate material you colors output:", this.text);
+        console.log("generateColorsProcess output:", this.text);
+        console.log("New primary color:", Style.colors.primary);
+
+        adjustSystemColorsProcess.running = true;
+      }
+    }
+  }
+
+  Process {
+    id: adjustSystemColorsProcess
+    command: ["python", Quickshell.shellPath("scripts/adjust-system-colors.py"), Utils.trimFileProtocol(Consts.path.colorsFile)]
+    workingDirectory: Quickshell.shellPath("scripts")
+    running: false
+    stdout: StdioCollector {
+      onStreamFinished: {
+        console.log("adjustSystemColorsProcess output:", this.text);
       }
     }
   }
@@ -41,8 +56,6 @@ Singleton {
   }
 
   function generateMaterialYouColors(imagePath) {
-    //TODO: also customize application styles according to the generated colors
-
     console.info("Generating json with material you colors based on: " + imagePath);
     generateColorsProcess.command = ["python", Quickshell.shellPath("scripts/generate-material-you-colors.py"), imagePath, Utils.trimFileProtocol(Consts.path.colorsFile)];
     generateColorsProcess.running = true;

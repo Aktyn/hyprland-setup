@@ -1,0 +1,62 @@
+/* GTK NAMED COLORS ---------------- use responsibly! */
+@define-color destructive_bg_color {error};
+@define-color destructive_fg_color {colorOnError};
+@define-color success_bg_color {tertiary};
+@define-color success_fg_color {colorOnTertiary};
+@define-color warning_bg_color {secondary};
+@define-color warning_fg_color {colorOnSecondary};
+@define-color error_bg_color {error};
+@define-color error_fg_color {colorOnError};
+@define-color accent_color oklab(from @accent_bg_color max(l, 0.85) a b);
+@define-color destructive_color oklab(from @destructive_bg_color max(l, 0.85) a b);
+@define-color success_color oklab(from @success_bg_color max(l, 0.85) a b);
+@define-color warning_color oklab(from @warning_bg_color max(l, 0.85) a b);
+@define-color error_color oklab(from @error_bg_color max(l, 0.85) a b);
+@define-color window_bg_color {background};
+@define-color window_fg_color {colorOnBackground};
+@define-color view_bg_color {surfaceContainer};
+@define-color view_fg_color {colorOnSurface};
+@define-color headerbar_bg_color #252b2b;
+@define-color headerbar_fg_color {colorOnSurface};
+@define-color headerbar_border_color #899392;
+@define-color headerbar_backdrop_color @window_bg_color;
+@define-color headerbar_shade_color #000000;
+@define-color headerbar_darker_shade_color #000000;
+@define-color sidebar_bg_color #252b2b;
+@define-color sidebar_fg_color {colorOnSurface};
+@define-color sidebar_backdrop_color #1a2121;
+@define-color sidebar_shade_color #000000;
+@define-color sidebar_border_color #899392;
+@define-color secondary_sidebar_bg_color #1a2121;
+@define-color secondary_sidebar_fg_color {colorOnSurface};
+@define-color secondary_sidebar_backdrop_color #161d1d;
+@define-color secondary_sidebar_shade_color #000000;
+@define-color secondary_sidebar_border_color #899392;
+@define-color card_bg_color #2f3636;
+@define-color card_fg_color {colorOnSurface};
+@define-color card_shade_color #000000;
+@define-color dialog_bg_color #2f3636;
+@define-color dialog_fg_color {colorOnSurface};
+@define-color popover_bg_color #2f3636;
+@define-color popover_fg_color {colorOnSurface};
+@define-color popover_shade_color #000000;
+@define-color thumbnail_bg_color #252b2b;
+@define-color thumbnail_fg_color {colorOnSurface};
+@define-color shade_color {shadow};
+@define-color scrollbar_outline_color {outline};
+
+:root {
+    --standalone-color-oklab: max(l, 0.85) a b;
+    --accent-color: oklab(from var(--accent-bg-color) var(--standalone-color-oklab));
+    --destructive-color: oklab(from var(--destructive-bg-color) var(--standalone-color-oklab));
+    --success-color: oklab(from var(--success-bg-color) var(--standalone-color-oklab));
+    --warning-color: oklab(from var(--warning-bg-color) var(--standalone-color-oklab));
+    --error-color: oklab(from var(--error-bg-color) var(--standalone-color-oklab));
+    --active-toggle-bg-color: {primary};
+    --active-toggle-fg-color: {colorOnPrimary};
+    --overview-bg-color: {surfaceContainer};
+    --overview-fg-color: {colorOnSurface};
+}
+
+@import 'libadwaita.css';
+@import 'libadwaita-tweaks.css';
