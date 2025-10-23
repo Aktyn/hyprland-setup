@@ -97,13 +97,34 @@ Item { // Player instance
     }
   }
 
+  Process {
+    id: ensureArtDir
+    property string targetDir: Utils.trimFileProtocol(playerController.artDownloadLocation)
+    command: ["bash", "-c", "mkdir -p '" + ensureArtDir.targetDir + "'"]
+    onExited: function(exitCode, exitStatus) {
+    }
+  }
+
   onArtUrlChanged: {
     if (playerController.artUrl.length == 0) {
       playerController.artDominantColor = Style.colors.secondaryContainer;
       return;
     }
     playerController.downloaded = false;
-    coverArtDownloader.running = true;
+  ensureArtDir.targetDir = Utils.trimFileProtocol(playerController.artDownloadLocation);
+  ensureArtDir.running = true;
+  Qt.callLater(function() { coverArtDownloader.running = true; });
+  }
+
+
+  Component.onCompleted: {
+    ensureArtDir.targetDir = Utils.trimFileProtocol(playerController.artDownloadLocation);
+    ensureArtDir.running = true;
+  }
+
+  onArtDownloadLocationChanged: {
+    ensureArtDir.targetDir = Utils.trimFileProtocol(playerController.artDownloadLocation);
+    ensureArtDir.running = true;
   }
 
   Process { // Cover art downloader

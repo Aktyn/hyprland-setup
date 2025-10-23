@@ -244,7 +244,9 @@ BarSection {
 
     VolumeWidget {}
 
-    VSeparator {}
+    VSeparator {
+      visible: !!MprisController.activePlayer
+    }
 
     StyledButton {
       Layout.alignment: Qt.AlignVCenter

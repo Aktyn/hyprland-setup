@@ -88,10 +88,12 @@ if ! which yay > /dev/null 2>&1; then
     echo "Installing yay"
     mkdir -p "$temp_dir"
     cd "$temp_dir"
+    rm -rf ./yay
     git clone https://aur.archlinux.org/yay.git
-    cd "$temp_dir/yay"
+    cd ./yay
     pwd
     makepkg -si
+    cd "$curr"
     rm -rf "$curr/temp"
 fi
 
@@ -110,7 +112,15 @@ install_package qt5-svg
 install_package qt6-svg
 install_package qt5-declarative
 install_package qt5-graphicaleffects
+
+install_package hyprsunset
+install_package cava
+install_package gwenview
+install_aur_package imagemagick
+
 install_aur_package quickshell
+install_aur_package ttf-material-icons
+install_aur_package ttf-material-symbols-variable
 
 cd $curr
 #TODO: clone repository if required files are not found locally

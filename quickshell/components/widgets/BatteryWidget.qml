@@ -10,7 +10,7 @@ Button {
   id: root
 
   visible: Battery.available
-  property real percentage: Battery.percentage / 100
+  property real percentage: Battery.percentage
   property bool isFull: this.percentage >= 0.995
 
   implicitWidth: layout.implicitWidth
