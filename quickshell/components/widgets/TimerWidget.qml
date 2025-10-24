@@ -60,7 +60,7 @@ ColumnLayout {
           required property var modelData
           required property int index
 
-          Layout.alignment: Qt.AlignVCenter
+          Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
           spacing: Style.sizes.spacingExtraSmall
 
           StyledTextInput {
@@ -100,14 +100,19 @@ ColumnLayout {
               }
             }
           }
-          StyledText {
-            Layout.alignment: Qt.AlignVCenter
-            verticalAlignment: Text.AlignVCenter
-
-            text: timerLayout.index < 2 ? "：" : ""
-            color: Style.colors.outline
-            font.pixelSize: root.fontSize * 0.618
+          // StyledText {
+          MaterialSymbol {
             visible: timerLayout.index < 2
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            Layout.maximumWidth: Style.sizes.iconMedium
+            clip: true
+
+            text: "go_to_line"
+            color: Style.colors.outline
+            font.pixelSize: root.fontSize //* 0.618
           }
         }
       }

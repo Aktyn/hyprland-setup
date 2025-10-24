@@ -28,7 +28,7 @@ def update_gtk_styles(colors):
             gtk3_template = f.read()
     except FileNotFoundError:
         print("Error: gtk-3.0-template.css not found in the script directory.")
-        sys.exit(1)
+        return
 
     # Read GTK-4.0 template
     try:
@@ -36,7 +36,7 @@ def update_gtk_styles(colors):
             gtk4_template = f.read()
     except FileNotFoundError:
         print("Error: gtk-4.0-template.css not found in the script directory.")
-        sys.exit(1)
+        return
 
     # Replace placeholders
     gtk3_css = gtk3_template
@@ -57,7 +57,7 @@ def update_gtk_styles(colors):
             f.write(gtk4_css)
     except Exception as e:
         print(f"Error while overriding gtk stylesheets: {e}")
-        sys.exit(1)
+        return
 
     print("GTK stylesheets updated successfully.")
 
@@ -69,7 +69,7 @@ def update_kitty_styles(colors):
             kitty_template = f.read()
     except FileNotFoundError:
         print("Error: kitty-template.conf not found in the script directory.")
-        sys.exit(1)
+        return
 
     kitty_conf = kitty_template
     for color_name, color_value in colors.items():
@@ -99,9 +99,7 @@ def update_kitty_styles(colors):
         print("Kitty terminal colors updated successfully.")
     except Exception as e:
         print(f"Error while updating kitty configuration: {e}")
-        sys.exit(1)
-
-
+        return
 
 def update_kde_colors(colors):
     colorscheme_path = f"{os.path.expanduser('~')}/.local/share/color-schemes/MaterialYou.colors"
@@ -112,7 +110,7 @@ def update_kde_colors(colors):
             kdeglobals_template_content = f.read()
     except FileNotFoundError:
         print("Error: kdeglobals-template not found in the script directory.")
-        sys.exit(1)
+        return
 
     # Prepare replacements from the template
     replacements = {}
@@ -134,7 +132,7 @@ def update_kde_colors(colors):
             kdeglobals_content = f.readlines()
     except FileNotFoundError:
         print(f"Error: {default_colorscheme_path} not found.")
-        sys.exit(1)
+        return
 
     new_kdeglobals_content = []
     current_section = None
@@ -168,7 +166,7 @@ def update_kde_colors(colors):
         print("KDE colors updated successfully.")
     except Exception as e:
         print(f"Error while updating KDE configuration: {e}")
-        sys.exit(1)
+        return
 
 def main():
     if len(sys.argv) != 2:

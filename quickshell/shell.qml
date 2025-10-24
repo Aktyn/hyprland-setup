@@ -30,7 +30,5 @@ ShellRoot {
     Hyprland.dispatch("exec killall kded6");
 
     console.info("Aktyn quickshell started");
-    // Cliphist.refresh()
-    // MaterialThemeLoader.reapplyTheme()
   }
 }

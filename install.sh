@@ -2,9 +2,6 @@
 
 set -e
 
-#TODO: check repo version and ask user if they want to update if there is a newer version
-#TODO: allow option to setup only of of: quickshell/hyprland/sddm
-
 is_installed() {
     local package="$1"
     pacman -Q "$package" > /dev/null 2>&1
@@ -57,48 +54,48 @@ if [ "$EUID" -eq 0 ]; then
     exit 1
 fi
 
-curr=$(dirname $0)
-temp_dir="$curr/temp"
-
-echo "######################################################################"
-echo "### Hyprland should be already installed on your system            ###"
-echo "### This script will override your existing hyprland configuration ###"
-echo "### Login screen will be replaced with SDDM and its custom theme   ###"
-echo "### Confirm that you want to proceed by typing your sudo password  ###"
-echo "######################################################################"
-echo ""
-sudo -v
-
 battery_level=$(check_battery_level)
 if [ "$battery_level" -lt 20 ]; then
     echo "Battery level is too low ($battery_level%). Please charge your device and try again."
     exit 1
 fi
 
+curr=$(realpath $(dirname $0))
+
+echo "######################################################################"
+echo "### Hyprland should be already installed on your system            ###"
+echo "### This script will override your existing hyprland configuration ###"
+echo "### SDDM with custom theme will be used as login manager           ###"
+echo "### Confirm that you want to proceed by typing your sudo password  ###"
+echo "######################################################################"
+echo ""
+sudo -v
+
 install_package git
+install_package python
 install_package base-devel
 install_package kate
 install_package blueman # bluetooth gui
 install_package xclip
 install_package cliphist
+install_package wl-clipboard
+install_package gnome-keyring
+install_package polkit-kde-agent
 install_package kdialog
 install_package gnome-system-monitor
+install_package warp-terminal
 
 if ! which yay > /dev/null 2>&1; then
     echo "Installing yay"
+    temp_dir="$curr/temp"
     mkdir -p "$temp_dir"
     cd "$temp_dir"
     rm -rf ./yay
     git clone https://aur.archlinux.org/yay.git
     cd ./yay
-    pwd
-    makepkg -si
+    makepkg -si --noconfirm
     cd "$curr"
-    rm -rf "$curr/temp"
-fi
-
-if ! which yay > /dev/null 2>&1; then
-    install_aur_package warp-terminal-bin
+    rm -rf "$temp_dir"
 fi
 
 # Quickshell setup
@@ -122,20 +119,40 @@ install_aur_package quickshell
 install_aur_package ttf-material-icons
 install_aur_package ttf-material-symbols-variable
 
-cd $curr
-#TODO: clone repository if required files are not found locally
+required_dirs=("defaults" "quickshell" "sddm")
+missing_dirs=()
+
+for dir in "${required_dirs[@]}"; do
+    if [ ! -d "$curr/$dir" ]; then
+        missing_dirs+=("$dir")
+    fi
+done
+
+if [ ${#missing_dirs[@]} -gt 0 ]; then
+    echo "Missing required directories: ${missing_dirs[*]}"
+    echo "Cloning Aktyn/hyprland-setup repository to temporary directory..."
+    
+    clone_temp_dir=$(mktemp -d)
+    trap "rm -rf $clone_temp_dir" EXIT
+    
+    git clone https://github.com/Aktyn/hyprland-setup.git "$clone_temp_dir"
+    
+    curr="$clone_temp_dir"
+    
+    echo "Repository cloned successfully. Using cloned files for setup."
+fi
 
 echo "Copying hyprland config files"
-cp -r ./defaults/. ~/.config/hypr/
+cp -r "$curr/defaults/." ~/.config/hypr/
 
 echo "Copying quickshell config files"
 mkdir -p ~/.config/quickshell/aktyn
-cp -r ./quickshell/* ~/.config/quickshell/aktyn/
+cp -r "$curr/quickshell/*" ~/.config/quickshell/aktyn/
 
 killall qs > /dev/null 2>&1 || true
 hyprctl reload > /dev/null 2>&1 || true
 qs -c aktyn > /dev/null 2>&1 &
 
-$curr/sddm/setup.sh
+"$curr"/sddm/setup.sh
 
 echo "Setup complete. System restart is recommended."

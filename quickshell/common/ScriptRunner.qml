@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Io
 
 import "."
@@ -69,7 +70,8 @@ Singleton {
     console.info("Setting Hyprland option:", option, "to", value, "in", dynamicConfigFile);
 
     Quickshell.execDetached(["python", Quickshell.shellPath("scripts/set-hyprland-option.py"), dynamicConfigFile, option, value]);
-    Quickshell.execDetached(["hyprctl", "reload"]);
+    // Quickshell.execDetached(["hyprctl", "reload"]);
+    Hyprland.refreshWorkspaces();
   }
 
   function copyToClipboard(text: string) {
