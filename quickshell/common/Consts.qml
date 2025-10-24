@@ -13,7 +13,6 @@ Singleton {
 
     property string configFile: this.config + "/aktyn-quickshell/config.json"
     property string colorsFile: this.cache + "/aktyn-quickshell/colors.json"
-    property string dynamicHyprlandConfig: this.config + "/hypr/dynamic.conf"
     property string recentAppsFile: this.cache + "/aktyn-quickshell/recent.json"
   }
 

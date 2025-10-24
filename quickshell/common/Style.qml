@@ -306,17 +306,6 @@ Singleton {
         property string tertiaryFixedDimLight: "#e8b9d4"
         property string colorOnTertiaryFixedLight: "#2e1125"
         property string colorOnTertiaryFixedVariantLight: "#5f3c52"
-
-        onOutlineChanged: {
-          if (Colors.ready) {
-            ScriptRunner.setHyprlandOption("general:col.active_border", `rgb(${outline.replace("#", "")})`);
-          }
-        }
-        onOutlineVariantChanged: {
-          if (Colors.ready) {
-            ScriptRunner.setHyprlandOption("general:col.inactive_border", `rgb(${outlineVariant.replace("#", "")})`);
-          }
-        }
       }
 
       property bool is_dark: true

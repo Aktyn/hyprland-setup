@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Io
 
 import "."
@@ -37,6 +36,8 @@ Singleton {
     stdout: StdioCollector {
       onStreamFinished: {
         console.log("adjustSystemColorsProcess output:\n", root.parseScriptStdout(this.text));
+
+        Quickshell.execDetached(["hyprctl", "reload"]);
       }
     }
   }
@@ -63,15 +64,6 @@ Singleton {
     console.info("Generating json with material you colors based on: " + imagePath);
     generateColorsProcess.command = ["python", Quickshell.shellPath("scripts/generate-material-you-colors.py"), imagePath, Utils.trimFileProtocol(Consts.path.colorsFile)];
     generateColorsProcess.running = true;
-  }
-
-  function setHyprlandOption(option: string, value: string) {
-    const dynamicConfigFile = Utils.trimFileProtocol(Consts.path.dynamicHyprlandConfig);
-    console.info("Setting Hyprland option:", option, "to", value, "in", dynamicConfigFile);
-
-    Quickshell.execDetached(["python", Quickshell.shellPath("scripts/set-hyprland-option.py"), dynamicConfigFile, option, value]);
-    // Quickshell.execDetached(["hyprctl", "reload"]);
-    Hyprland.refreshWorkspaces();
   }
 
   function copyToClipboard(text: string) {
