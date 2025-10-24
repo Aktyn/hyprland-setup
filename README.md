@@ -85,6 +85,8 @@ ${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-set
 ### Hyprland Ecosystem
 
 - **hyprsunset** - Blue light filter
+- **hypridle** - Hyprland’s idle management daemon
+- **hyprlock** - Screen lock for Hyprland
 - **quickshell** (AUR) - Customizable desktop shell
 - **ttf-material-icons** (AUR) - Material Design icons
 - **ttf-material-symbols-variable** (AUR) - Variable Material symbols font

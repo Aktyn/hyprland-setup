@@ -111,6 +111,8 @@ install_package qt5-declarative
 install_package qt5-graphicaleffects
 
 install_package hyprsunset
+install_package hypridle
+install_package hyprlock
 install_package cava
 install_package gwenview
 install_aur_package imagemagick
