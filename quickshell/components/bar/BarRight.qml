@@ -7,6 +7,7 @@ import Quickshell.Services.Notifications
 import "../../common"
 import "../../services"
 import "."
+import "../settings"
 import "../widgets"
 import "../widgets/common"
 import "../widgets/audio"
@@ -166,6 +167,12 @@ BarSection {
           Layout.minimumWidth: 320
         }
       }
+    }
+
+    LazyLoader {
+      activeAsync: GlobalState.rightSidebar.settingsWindowOpen
+
+      component: SettingsWindow {}
     }
   }
 

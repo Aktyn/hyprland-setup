@@ -92,6 +92,8 @@ Singleton {
     property bool open: false
     property ShellScreen screen: Quickshell.screens[0]
     property var requestFocus
+
+    property bool settingsWindowOpen: false
   }
 
   // --------------------------------------------------------------------------------

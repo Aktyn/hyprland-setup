@@ -23,7 +23,7 @@ fi
 if ! which sddm > /dev/null 2>&1; then
     echo "SDDM is not installed. Installing it now."
     
-    sudo pacman -S --needed --noconfirm sddm
+    yay -S --needed --noconfirm sddm-git
     sudo systemctl enable sddm.service
     sudo systemctl start sddm.service
     

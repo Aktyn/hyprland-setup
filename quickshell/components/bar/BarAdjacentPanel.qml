@@ -87,9 +87,12 @@ Scope {
 
   PanelWindow {
     id: panel
+
     property int cornersCount: root.side === BarAdjacentPanel.Side.Middle || !root.adhesive ? 2 : 1
+    property real topMargin: root.detached ? Config.bar.height + HyprlandInfo.general.gapsIn[0] : Config.bar.height
+
     implicitWidth: panelContent.width + root.innerPadding * 2 - 2 + (root.detached ? 0 : root.cornerSize * this.cornersCount) + 2 // + 2 to accommodate borders
-    implicitHeight: panelContent.height + root.innerPadding * 2
+    implicitHeight: Math.min(panelContent.height + root.innerPadding * 2, root.screen.height - this.topMargin)
     visible: !!root.screen
 
     screen: root.screen
@@ -105,7 +108,7 @@ Scope {
     color: "transparent"
 
     anchors.top: true
-    margins.top: root.detached ? Config.bar.height + HyprlandInfo.general.gapsIn[0] : Config.bar.height
+    margins.top: this.topMargin
     margins.left: root.side === BarAdjacentPanel.Side.Left ? root.screenEdgeOffset : 0
     margins.right: root.side === BarAdjacentPanel.Side.Right ? root.screenEdgeOffset : 0
     anchors.left: root.side === BarAdjacentPanel.Side.Left

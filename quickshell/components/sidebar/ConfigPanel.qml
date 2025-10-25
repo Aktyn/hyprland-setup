@@ -26,6 +26,18 @@ ColumnLayout {
     }
   }
 
+  ActionButton {
+    Layout.fillWidth: true
+
+    iconName: "settings"
+    content: "Open settings"
+    onClicked: {
+      GlobalState.rightSidebar.open = false;
+      GlobalState.rightSidebar.requestFocus?.(false);
+      GlobalState.rightSidebar.settingsWindowOpen = true;
+    }
+  }
+
   ColumnLayout {
     spacing: Style.sizes.spacingSmall
     Layout.fillWidth: true
@@ -83,7 +95,7 @@ ColumnLayout {
 
       onClicked: {
         ScriptRunner.selectWallpaperProcess.running = true;
-        GlobalState.rightSidebar.requestFocus?.(false)
+        GlobalState.rightSidebar.requestFocus?.(false);
         GlobalState.rightSidebar.open = false;
       }
     }
