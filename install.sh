@@ -81,7 +81,9 @@ install_package cliphist
 install_package wl-clipboard
 install_package gnome-keyring
 install_package polkit-kde-agent
+# TODO: consider installing nwg-look
 install_package kdialog
+install_package dolphin
 install_package gnome-system-monitor
 install_package warp-terminal
 
@@ -113,7 +115,13 @@ install_package qt5-graphicaleffects
 install_package hyprsunset
 install_package hypridle
 install_package hyprlock
+install_package hyprpicker
+install_package hyprshot
+install_package grim
+install_package slurp
+install_package tesseract
 install_package cava
+install_package pavucontrol
 install_package gwenview
 install_aur_package imagemagick
 

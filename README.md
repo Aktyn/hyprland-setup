@@ -57,6 +57,7 @@ ${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-set
 
 - **gnome-system-monitor** - System resource monitor
 - **blueman** - Bluetooth management GUI
+- **pavucontrol** - Volume control GUI
 - **cava** - Audio visualizer
 
 ### Clipboard & Utilities
@@ -67,6 +68,10 @@ ${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-set
 - **gnome-keyring** - GNOME Keyring daemon for securely storing sensitive information
 - **polkit-kde-agent** - PolicyKit authentication agent that handles privilege elevation prompts
 - **kdialog** - KDE dialog boxes for scripts
+- **Dolphin** - KDE's file manager
+- **grim**, **slurp**, **tesseract** - Packages required for OCR features
+- **ttf-material-icons** (AUR) - Material Design icons
+- **ttf-material-symbols-variable** (AUR) - Variable Material symbols font
 
 ### Image Viewing & Processing
 
@@ -87,9 +92,9 @@ ${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-set
 - **hyprsunset** - Blue light filter
 - **hypridle** - Hyprland’s idle management daemon
 - **hyprlock** - Screen lock for Hyprland
+- **hyprpicker** - Color picker
+- **hyprshot** - Screenshot utility
 - **quickshell** (AUR) - Customizable desktop shell
-- **ttf-material-icons** (AUR) - Material Design icons
-- **ttf-material-symbols-variable** (AUR) - Variable Material symbols font
 
 ### Display Manager
 

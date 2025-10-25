@@ -14,27 +14,37 @@ ColumnLayout {
 
   spacing: Style.sizes.spacingMedium
 
-  ActionButton {
+  GridLayout {
     Layout.fillWidth: true
 
-    iconName: "data_object"
-    content: "Open config file"
-    onClicked: {
-      Quickshell.execDetached(["xdg-open", Consts.path.configFile]);
-      GlobalState.rightSidebar.open = false;
-      GlobalState.rightSidebar.requestFocus?.(false);
+    rows: 1
+    columns: 2
+
+    uniformCellWidths: true
+    uniformCellHeights: true
+
+    ActionButton {
+      Layout.fillWidth: true
+
+      iconName: "data_object"
+      content: "Open config file"
+      onClicked: {
+        Quickshell.execDetached(["xdg-open", Consts.path.configFile]);
+        GlobalState.rightSidebar.open = false;
+        GlobalState.rightSidebar.requestFocus?.(false);
+      }
     }
-  }
 
-  ActionButton {
-    Layout.fillWidth: true
+    ActionButton {
+      Layout.fillWidth: true
 
-    iconName: "settings"
-    content: "Open settings"
-    onClicked: {
-      GlobalState.rightSidebar.open = false;
-      GlobalState.rightSidebar.requestFocus?.(false);
-      GlobalState.rightSidebar.settingsWindowOpen = true;
+      iconName: "settings"
+      content: "Open settings"
+      onClicked: {
+        GlobalState.rightSidebar.open = false;
+        GlobalState.rightSidebar.requestFocus?.(false);
+        GlobalState.rightSidebar.settingsWindowOpen = true;
+      }
     }
   }
 
