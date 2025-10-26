@@ -36,7 +36,12 @@ if ! which sddm > /dev/null 2>&1; then
 fi
 
 # https://github.com/Keyitdev/sddm-astronaut-theme
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
+# Install sddm-astronaut-theme only if it's not already present
+if ! ls /usr/share/sddm/themes/sddm-astronaut-theme* > /dev/null 2>&1; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
+else
+    echo "sddm-astronaut-theme already installed. Skipping theme installation."
+fi
 # Edit ConfigFile property in /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop to change theme
 
 # Helper command for previewing the theme

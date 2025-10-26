@@ -22,7 +22,12 @@ Singleton {
     stdout: StdioCollector {
       onStreamFinished: {
         console.log("generateColorsProcess output:\n", root.parseScriptStdout(this.text));
-
+      }
+    }
+    onExited: function (exitCode) {
+      if (exitCode !== 0) {
+        console.info("Generating colors failed with exit code:", exitCode);
+      } else {
         adjustSystemColorsProcess.running = true;
       }
     }

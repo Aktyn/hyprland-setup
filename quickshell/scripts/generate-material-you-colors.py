@@ -1,6 +1,7 @@
 import argparse
 import json
 import typing as t
+import sys
 from PIL import Image
 from materialyoucolor.dynamiccolor.material_dynamic_colors import DynamicColor
 from materialyoucolor.dynamiccolor.material_dynamic_colors import MaterialDynamicColors
@@ -151,8 +152,10 @@ def generate_colors_sync(
         raise Exception("output_path is required")
 
     if use_color is None and image_path is not None:
+        print(f"Generating palette based on image: {image_path}")
         color = process_image(image_path, 4, 1024)
     elif use_color is not None and image_path is None:
+        print(f"Generating palette based on color: {use_color}")
         color = use_color
     else:
         raise TypeError("Either image_path or use_color should be not None.")
@@ -193,14 +196,18 @@ def main():
     )
     args = parser.parse_args()
 
-    generate_colors_sync(
-        image_path=args.image_path,
-        use_color=None,
-        is_dark=not args.light,
-        contrast_level=args.contrast_level,
-        output_path=args.output_path,
-    )
-    print(f"Colors generated and saved to {args.output_path}")
+    try:
+        generate_colors_sync(
+            image_path=args.image_path,
+            use_color=None,
+            is_dark=not args.light,
+            contrast_level=args.contrast_level,
+            output_path=args.output_path,
+        )
+        print(f"Colors generated and saved to {args.output_path}")
+    except Exception as e:
+        print(f"Couldn't generate material you colors: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

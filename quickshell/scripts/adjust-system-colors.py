@@ -153,6 +153,11 @@ def update_kde_colors(colors):
             new_kdeglobals_content.append(line)
 
     try:
+        # Ensure the parent directory exists so the colorscheme file can be created.
+        colors_dir = os.path.dirname(colorscheme_path)
+        if colors_dir and not os.path.exists(colors_dir):
+            os.makedirs(colors_dir, exist_ok=True)
+
         with open(colorscheme_path, 'w') as f:
             f.writelines(new_kdeglobals_content)
 
