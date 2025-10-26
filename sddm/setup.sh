@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script will configure SDDM custom theme
+# This script will configure sddm-astronaut-theme
 
 disable_service() {
     local service_name="$1"
@@ -35,11 +35,9 @@ if ! which sddm > /dev/null 2>&1; then
     exit 1
 fi
 
-echo "Setting up SDDM theme."
-sudo install -d -m 0755 /etc/sddm.conf.d
-sudo cp -f ./sddm/sddm.conf /etc/sddm.conf.d/aktyn.conf
-sudo mkdir -p /usr/share/sddm/themes/aktyn
-sudo cp -r -f ./sddm/theme/* /usr/share/sddm/themes/aktyn
+# https://github.com/Keyitdev/sddm-astronaut-theme
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
+# Edit ConfigFile property in /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop to change theme
 
 # Helper command for previewing the theme
 # sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/aktyn
