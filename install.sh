@@ -85,6 +85,8 @@ install_package polkit-kde-agent
 install_package kdialog
 install_package dolphin
 install_package gnome-system-monitor
+install_package kitty
+install_package fish
 install_package warp-terminal
 
 if ! which yay > /dev/null 2>&1; then
@@ -128,6 +130,7 @@ install_aur_package imagemagick
 install_aur_package quickshell
 install_aur_package ttf-material-icons
 install_aur_package ttf-material-symbols-variable
+install_aur_package ttf-jetbrains-mono-nerd
 
 required_dirs=("defaults" "quickshell" "sddm")
 missing_dirs=()
@@ -153,7 +156,20 @@ if [ ${#missing_dirs[@]} -gt 0 ]; then
 fi
 
 echo "Copying hyprland config files"
-cp -r "$curr/defaults/." ~/.config/hypr/
+mkdir -p ~/.config/hypr/
+cp -r "$curr/defaults/hypr/." ~/.config/hypr/
+
+echo "Copying kitty config files with fish set as shell"
+mkdir -p ~/.config/kitty/
+cp -r "$curr/defaults/kitty/." ~/.config/kitty/
+
+# Add fish to system shells
+if ! grep -qxF '/usr/bin/fish' /etc/shells; then
+    echo /usr/bin/fish | sudo tee -a /etc/shells
+fi
+
+# Set fish as a system-wide default shell
+# chsh -s /usr/bin/fish #TODO: test before uncommenting
 
 echo "Copying quickshell config files"
 mkdir -p ~/.config/quickshell/aktyn
