@@ -52,6 +52,8 @@ ${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-set
 
 - **kate** - Advanced text editor with syntax highlighting
 - **warp-terminal** - Modern terminal emulator
+- **kitty** - Default terminal for quick tasks
+- **fish** - Default shell
 
 ### System Monitoring & Management
 
