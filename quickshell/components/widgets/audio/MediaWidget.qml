@@ -12,7 +12,6 @@ Item {
   readonly property MprisPlayer activePlayer: MprisController.activePlayer
   readonly property string cleanedTitle: (Utils.cleanMusicTitle(activePlayer?.trackTitle) || "No media  ") //2 spaces for right padding
 
-  visible: !!this.activePlayer
   implicitWidth: rowLayout.implicitWidth
   implicitHeight: rowLayout.implicitHeight
 

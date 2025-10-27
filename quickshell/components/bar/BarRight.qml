@@ -256,6 +256,8 @@ BarSection {
     }
 
     StyledButton {
+      visible: !!MprisController.activePlayer
+
       Layout.alignment: Qt.AlignVCenter
       implicitWidth: mediaWidget.width
       implicitHeight: mediaWidget.height
