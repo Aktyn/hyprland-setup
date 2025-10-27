@@ -8,6 +8,7 @@
 	"settings": {
 		"cSpell.words": [
 			"activeworkspace",
+			"Adwaita",
 			"agsv",
 			"aktyn",
 			"antialiasing",
@@ -46,6 +47,7 @@
 			"graphicaleffects",
 			"grayscale",
 			"Grotesk",
+			"gsettings",
 			"gwenview",
 			"halign",
 			"hypr",
@@ -73,6 +75,7 @@
 			"layerrule",
 			"Layershell",
 			"levendist",
+			"libdbusmenu",
 			"libexec",
 			"librewolf",
 			"magick",

@@ -87,7 +87,7 @@ install_package plasma-nm
 install_package plasma-activities
 install_package polkit-kde-agent
 install_package systemsettings
-# TODO: consider installing nwg-look
+install_package nwg-look
 install_package kdialog
 install_package dolphin
 install_package gnome-system-monitor
@@ -171,7 +171,13 @@ fi
 
 echo "Copying hyprland config files"
 mkdir -p ~/.config/hypr/
-cp -r "$curr/defaults/hypr/." ~/.config/hypr/
+for f in "$curr"/defaults/hypr/*; do
+  if [[ "$(basename "$f")" == "custom.conf" && -f ~/.config/hypr/custom.conf ]]; then
+    echo "Skipping existing custom.conf"
+  else
+    cp -r "$f" ~/.config/hypr/
+  fi
+done
 
 echo "Copying kitty config files with fish set as shell"
 mkdir -p ~/.config/kitty/
