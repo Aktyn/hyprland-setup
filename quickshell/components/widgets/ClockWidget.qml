@@ -23,6 +23,8 @@ RowLayout {
   Text {
     id: clockText
 
+    Layout.minimumHeight: Style.sizes.iconLarge
+
     color: Style.colors.colorOnBackground
     text: Time.time
     horizontalAlignment: Text.AlignHCenter

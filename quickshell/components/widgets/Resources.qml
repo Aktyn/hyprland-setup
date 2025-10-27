@@ -19,6 +19,7 @@ StyledButton {
 
     anchors.centerIn: parent
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+    Layout.minimumHeight: Style.sizes.iconLarge
 
     spacing: Style.sizes.spacingMedium
 

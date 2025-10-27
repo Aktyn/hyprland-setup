@@ -98,8 +98,6 @@ LazyLoader {
           Rectangle {
             id: contentRoot
             anchors.fill: parent
-            anchors.leftMargin: Style.rounding.hyprland
-            anchors.rightMargin: Style.rounding.hyprland
             color: "transparent"
 
             RowLayout {
@@ -109,7 +107,6 @@ LazyLoader {
 
               BarLeft {
                 id: leftSection
-                Layout.fillHeight: true
                 implicitWidth: Math.max(0, (contentRoot.width - middleSection.implicitWidth) / 2 - row.spacing)
               }
 
@@ -119,8 +116,7 @@ LazyLoader {
               }
 
               BarRight {
-                Layout.fillHeight: true
-                implicitWidth: leftSection.width
+                implicitWidth: leftSection.implicitWidth
                 screen: barPanel.screen
               }
             }
