@@ -93,7 +93,6 @@ install_package dolphin
 install_package gnome-system-monitor
 install_package kitty
 install_package fish
-install_aur_package warp-terminal-bin
 
 if ! which yay > /dev/null 2>&1; then
     echo "Installing yay"
@@ -107,6 +106,8 @@ if ! which yay > /dev/null 2>&1; then
     cd "$curr"
     rm -rf "$temp_dir"
 fi
+
+install_aur_package warp-terminal-bin
 
 # Quickshell setup
 install_package qt5-wayland
@@ -172,11 +173,11 @@ fi
 echo "Copying hyprland config files"
 mkdir -p ~/.config/hypr/
 for f in "$curr"/defaults/hypr/*; do
-  if [[ "$(basename "$f")" == "custom.conf" && -f ~/.config/hypr/custom.conf ]]; then
-    echo "Skipping existing custom.conf"
-  else
-    cp -r "$f" ~/.config/hypr/
-  fi
+    if [[ "$(basename "$f")" == "custom.conf" && -f ~/.config/hypr/custom.conf ]]; then
+        echo "Skipping existing custom.conf"
+    else
+        cp -r "$f" ~/.config/hypr/
+    fi
 done
 
 echo "Copying kitty config files with fish set as shell"
