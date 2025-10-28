@@ -47,20 +47,27 @@ ${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-set
 - **python** - Python programming language
 - **base-devel** - Development tools (make, gcc, etc.)
 - **yay** - AUR helper (automatically installed if missing)
+- **python-pillow** - Python Imaging Library fork
+- **python-materialyoucolor-git** (AUR) - Python library for generating Material You color schemes
 
 ### Text Editors & Terminals
 
 - **kate** - Advanced text editor with syntax highlighting
-- **warp-terminal** - Modern terminal emulator
+- **warp-terminal-bin** (AUR) - Modern terminal emulator
 - **kitty** - Default terminal for quick tasks
 - **fish** - Default shell
 
 ### System Monitoring & Management
 
 - **gnome-system-monitor** - System resource monitor
+- **btop** - Resource monitor that shows usage and stats
 - **blueman** - Bluetooth management GUI
 - **pavucontrol** - Volume control GUI
 - **cava** - Audio visualizer
+- **plasma-nm** - KDE's network manager applet
+- **plasma-activities** - KDE activities service
+- **systemsettings** - KDE system settings
+- **nwg-look** - GTK3 settings editor for wlroots compositors
 
 ### Clipboard & Utilities
 
@@ -72,8 +79,17 @@ ${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-set
 - **kdialog** - KDE dialog boxes for scripts
 - **Dolphin** - KDE's file manager
 - **grim**, **slurp**, **tesseract** - Packages required for OCR features
+- **playerctl** (AUR) - Command-line utility to control media players
+- **libdbusmenu-gtk3** (AUR) - Library for passing menu structures over DBus
+
+### Theming & Fonts
+
+- **gnome-themes-extra** - Extra GTK themes
 - **ttf-material-icons** (AUR) - Material Design icons
 - **ttf-material-symbols-variable** (AUR) - Variable Material symbols font
+- **ttf-jetbrains-mono-nerd** (AUR) - JetBrains Mono Nerd Font
+- **ttf-readex-pro** (AUR) - Readex Pro font
+- **ttf-rubik-vf** (AUR) - Rubik font
 
 ### Image Viewing & Processing
 
@@ -105,6 +121,15 @@ ${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-set
 ## 🔄 Updates
 
 To update to the newest version, simply run the installation script again. It will automatically update your Hyprland and Quickshell setup while preserving your customizations.
+
+## 📸 Previews
+
+Here's a glimpse of the customized Hyprland setup with Quickshell integration:
+
+![Preview 1](previews/1.png)
+![Preview 2](previews/2.png)
+![Preview 3](previews/3.png)
+![Preview 4](previews/4.png)
 
 ## 🎯 Features
 
