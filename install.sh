@@ -74,6 +74,7 @@ sudo -v
 install_package git
 install_package python
 install_package base-devel
+install_package pacman-contrib
 install_package kate
 install_package blueman # bluetooth gui
 install_package btop
@@ -90,6 +91,8 @@ install_package systemsettings
 install_package nwg-look
 install_package kdialog
 install_package dolphin
+install_package ffmpegthumbnailer # Video thumbnail in Dolphin (select "3GPP multimedia file" in dolphin's previews settings to work)
+install_package mpv
 install_package gnome-system-monitor
 install_package kitty
 install_package fish
@@ -107,7 +110,12 @@ if ! which yay > /dev/null 2>&1; then
     rm -rf "$temp_dir"
 fi
 
-install_aur_package warp-terminal-bin
+if ! which warp-terminal > /dev/null 2>&1; then
+    install_aur_package warp-terminal-bin
+fi
+
+install_aur_package Konsole # Used in Dolphin as integrated terminal
+install_aur_package yt-dlp
 
 # Quickshell setup
 install_package qt5-wayland
@@ -142,6 +150,7 @@ install_aur_package ttf-material-symbols-variable
 install_aur_package ttf-jetbrains-mono-nerd
 install_aur_package ttf-readex-pro
 install_aur_package ttf-rubik-vf
+install_aur_package ttf-twemoji
 
 # Python packages
 install_package python-pillow
@@ -199,24 +208,39 @@ else
     echo "Default shell is already /usr/bin/fish; skipping chsh"
 fi
 
-# TODO: fix cursors installation
-# echo "Installing Vimix-cursors"
-# temp_cursor_dir=$(mktemp -d)
-# trap "rm -rf $temp_cursor_dir" EXIT
-# git clone https://github.com/vinceliuice/Vimix-cursors.git "$temp_cursor_dir"
-# cd "$temp_cursor_dir"
-# "$temp_cursor_dir"/install.sh
-
+echo "Installing Vimix-cursors"
+temp_cursor_dir=$(mktemp -d)
+trap "rm -rf $temp_cursor_dir" EXIT
+git clone https://github.com/vinceliuice/Vimix-cursors.git "$temp_cursor_dir"
+cd "$temp_cursor_dir"
+sudo ./install.sh
 cd "$curr"
+
+# Configure some defaults
+xdg-mime default org.kde.kate.desktop text/plain
+xdg-mime default org.kde.gwenview.desktop image/png
+xdg-mime default org.kde.gwenview.desktop image/jpg
+xdg-mime default org.kde.gwenview.desktop image/jpeg
+xdg-mime default org.kde.gwenview.desktop image/gif
+xdg-mime default org.kde.gwenview.desktop image/bmp
+xdg-mime default org.kde.gwenview.desktop image/webp
+xdg-mime default org.kde.gwenview.desktop image/tif
+xdg-mime default org.kde.gwenview.desktop image/tiff
+xdg-mime default org.kde.gwenview.desktop image/svg
+
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>&1 || true
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark' 2>&1 || true
+gsettings set org.gnome.desktop.interface cursor-theme 'Vimix-cursors'
+plasma-apply-desktoptheme breeze-dark 2>&1 || true
+plasma-apply-cursortheme Vimix-cursors 2>&1 || true
 
 echo "Copying quickshell config files"
 mkdir -p ~/.config/quickshell/aktyn
 cp -r "$curr/quickshell/." ~/.config/quickshell/aktyn/
 
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>&1 || true
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark' 2>&1 || true
-
 killall qs > /dev/null 2>&1 || true
+killall quickshell > /dev/null 2>&1 || true
+sleep 1
 hyprctl reload > /dev/null 2>&1 || true
 qs -c aktyn > /dev/null 2>&1 &
 
