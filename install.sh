@@ -218,6 +218,7 @@ cd "$curr"
 
 # Configure some defaults
 xdg-mime default org.kde.kate.desktop text/plain
+xdg-mime default org.kde.kate.desktop application/json
 xdg-mime default org.kde.gwenview.desktop image/png
 xdg-mime default org.kde.gwenview.desktop image/jpg
 xdg-mime default org.kde.gwenview.desktop image/jpeg
