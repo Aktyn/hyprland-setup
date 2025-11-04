@@ -155,6 +155,7 @@ install_aur_package ttf-twemoji
 # Python packages
 install_package python-pillow
 install_aur_package python-materialyoucolor-git # Try again couple of times if this fails
+install_aur_package adw-gtk-theme
 
 required_dirs=("defaults" "quickshell" "sddm")
 missing_dirs=()
@@ -230,7 +231,7 @@ xdg-mime default org.kde.gwenview.desktop image/tiff
 xdg-mime default org.kde.gwenview.desktop image/svg
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>&1 || true
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark' 2>&1 || true
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark' 2>&1 || true
 gsettings set org.gnome.desktop.interface cursor-theme 'Vimix-cursors'
 plasma-apply-desktoptheme breeze-dark 2>&1 || true
 plasma-apply-cursortheme Vimix-cursors 2>&1 || true
