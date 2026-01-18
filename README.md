@@ -1,6 +1,10 @@
 # Personalized [Hyprland](https://hypr.land/) Setup
 
-A comprehensive, feature-rich Hyprland configuration with Quickshell integration, custom SDDM theme, and carefully selected applications for an optimal desktop experience.
+A comprehensive, feature-rich Hyprland configuration with Quickshell integration, custom SDDM theme, and carefully selected applications for an optimal desktop experience.  
+This configuration is made for personal use although I'm happy to implement additional features upon request.  
+[Open an issue to request features](https://github.com/Aktyn/hyprland-setup/issues/new)
+
+![Preview 1](previews/combined.webp)
 
 ## 🚀 Installation
 
