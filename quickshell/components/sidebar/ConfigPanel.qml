@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 import Qt5Compat.GraphicalEffects
 
 import "../../common"
@@ -55,9 +56,51 @@ ColumnLayout {
     LabeledHSeparator {
       Layout.alignment: Qt.AlignHCenter
 
+      text: "HDR options"
+      color: Style.colors.outline
+    }
+
+    Repeater {
+      id: hdrOptions
+    
+      
+      model: HyprlandInfo.monitors
+      delegate: RowLayout {
+        id: hdrOptionRow
+
+        spacing: Style.sizes.spacingMedium
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignHCenter
+        
+        required property var modelData
+        
+        StyledSwitch {
+          checked: HyprlandInfo.monitors.find(monitor => monitor.name === hdrOptionRow.modelData.name && monitor.colorManagementPreset === 'hdr') ?? false
+          onCheckedChanged: () => {
+            const hdrInfo = HyprlandInfo.monitors.map(monitor => ({
+              name: monitor.name,
+              hdrEnabled: monitor.name === hdrOptionRow.modelData.name ? this.checked : monitor.colorManagementPreset === 'hdr'
+            })) 
+            ScriptRunner.toggleHDRSettings(hdrInfo)
+          }
+        }
+  
+        StyledText {
+          Layout.alignment: Qt.AlignVCenter
+          text: `Screen ${hdrOptionRow.modelData.name} (${hdrOptionRow.modelData.width}x${hdrOptionRow.modelData.height})`
+          color: Style.colors.outline
+        }
+      }
+    }
+
+
+    LabeledHSeparator {
+      Layout.alignment: Qt.AlignHCenter
+
       text: Config.wallpaper.path ? "Current wallpaper" : "No wallpaper selected"
       color: Style.colors.outline
     }
+
 
     Rectangle {
       id: wallpaperThumbnailContainer

@@ -48,6 +48,24 @@ Singleton {
   }
 
   Process {
+    id: toggleHDRSettingsProcess
+    workingDirectory: Quickshell.shellPath("scripts")
+    running: false
+    stdout: StdioCollector {
+      onStreamFinished: {
+        console.log("toggleHDRSettingsProcess output:\n", root.parseScriptStdout(this.text));
+      }
+    }
+  }
+
+  function toggleHDRSettings(hdrInfo) {
+    console.info("Setting the following HDR options: " + JSON.stringify(hdrInfo))
+    toggleHDRSettingsProcess.command = ["python", Quickshell.shellPath("scripts/toggle-hdr.py"), JSON.stringify(hdrInfo)]
+    toggleHDRSettingsProcess.running = true
+  }
+
+ 
+  Process {
     id: selectWallpaperProcess
     command: ["bash", "-c", "kdialog --getopenfilename ~/Pictures \"Images (*.png *.jpg *.jpeg *.gif *.bmp *.webp *.tif *.tiff *.svg);;All files (*)\""]
     running: false
@@ -71,6 +89,7 @@ Singleton {
     generateColorsProcess.running = true;
   }
 
+ 
   function copyToClipboard(text: string) {
     Quickshell.execDetached([Quickshell.shellPath("scripts/clip.sh"), text]);
   }

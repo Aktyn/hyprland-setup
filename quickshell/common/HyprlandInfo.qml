@@ -33,7 +33,12 @@ Singleton {
 
     function onRawEvent(event) {
       // console.info("Hyprland raw event name:", event.name);
-      hyprlandSingleton.update();
+      // Ignore some readonly events
+      const readonlyEventNames = ["activewindow", "activewindowv2", "focusedmon", "focusedmonv2", "workspace", "workspacev2", "closelayer"]
+      if(!readonlyEventNames.includes(event.name)) {
+        console.log("Updating HyprlandInfo due to event:", event.name)
+        hyprlandSingleton.update();
+      }
     }
   }
 
