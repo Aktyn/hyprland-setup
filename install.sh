@@ -154,7 +154,7 @@ install_aur_package ttf-twemoji
 
 # Python packages
 install_package python-pillow
-install_aur_package python-materialyoucolor-git # Try again couple of times if this fails
+install_aur_package python-materialyoucolor # Try python-materialyoucolor-git in case of this package not being available
 install_aur_package adw-gtk-theme
 
 required_dirs=("defaults" "quickshell" "sddm")
