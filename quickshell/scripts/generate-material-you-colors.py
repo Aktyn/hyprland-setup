@@ -5,7 +5,7 @@ import sys
 from PIL import Image
 from materialyoucolor.dynamiccolor.material_dynamic_colors import DynamicColor
 from materialyoucolor.dynamiccolor.material_dynamic_colors import MaterialDynamicColors
-from materialyoucolor.scheme.dynamic_scheme import DynamicScheme
+from materialyoucolor.dynamiccolor.dynamic_scheme import DynamicScheme
 from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot
 from materialyoucolor.hct import Hct
 
@@ -33,7 +33,8 @@ def format_color_name(color_name: str) -> str:
 
 
 class ColorsCache:
-    __slots__ = ("colors", "wallpaper", "original_color", "contrast_level", "is_dark")
+    __slots__ = ("colors", "wallpaper", "original_color",
+                 "contrast_level", "is_dark")
 
     def __init__(
         self,
@@ -182,7 +183,8 @@ def main():
         description="Generate Material You colors from an image."
     )
     parser.add_argument("image_path", help="Path to the input image.")
-    parser.add_argument("output_path", help="Path to the output JSON file for colors.")
+    parser.add_argument(
+        "output_path", help="Path to the output JSON file for colors.")
     parser.add_argument(
         "--light",
         action="store_true",
