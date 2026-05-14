@@ -186,13 +186,25 @@ for f in "$curr"/defaults/hypr/*; do
   if [[ "$(basename "$f")" == "custom.conf" && -f ~/.config/hypr/custom.conf ]]; then
     echo "Skipping existing custom.conf"
   else
-    cp -r "$f" ~/.config/hypr/
+    cp --recursive "$f" ~/.config/hypr/
   fi
 done
 
+echo "Copying mpv config files"
+mkdir -p ~/.config/mpv/
+cp --recursive "$curr/defaults/mpv/." ~/.config/mpv/ # This config contains support for HDR displays
+
 echo "Copying kitty config files with fish set as shell"
 mkdir -p ~/.config/kitty/
-cp -r "$curr/defaults/kitty/." ~/.config/kitty/
+cp --recursive "$curr/defaults/kitty/." ~/.config/kitty/
+
+echo "Copying btop config files"
+mkdir -p ~/.config/btop/
+cp --recursive "$curr/defaults/btop/." ~/.config/btop/
+
+echo "Copying fish config files"
+mkdir -p ~/.config/fish/
+cp --recursive "$curr/defaults/fish/." ~/.config/fish/
 
 # Add fish to system shells
 if ! grep -qxF '/usr/bin/fish' /etc/shells; then
@@ -217,6 +229,10 @@ cd "$temp_cursor_dir"
 sudo ./install.sh
 cd "$curr"
 
+echo "Copying Vimix theme"
+mkdir -p ~/.local/share/icons
+cp --recursive "$curr/defaults/icons/." ~/.local/share/icons/
+
 # Configure some defaults
 xdg-mime default org.kde.kate.desktop text/plain
 xdg-mime default org.kde.kate.desktop application/json
@@ -238,7 +254,7 @@ plasma-apply-cursortheme Vimix-cursors 2>&1 || true
 
 echo "Copying quickshell config files"
 mkdir -p ~/.config/quickshell/aktyn
-cp -r "$curr/quickshell/." ~/.config/quickshell/aktyn/
+cp --recursive "$curr/quickshell/." ~/.config/quickshell/aktyn/
 
 killall qs >/dev/null 2>&1 || true
 killall quickshell >/dev/null 2>&1 || true
@@ -249,3 +265,5 @@ qs -c aktyn >/dev/null 2>&1 &
 "$curr"/sddm/setup.sh
 
 echo "Setup complete. System restart is recommended."
+
+sleep 3; hyprctl reload >/dev/null 2>&1 || true

@@ -25,12 +25,7 @@ Item {
     onClicked: event => {
       if (event.button === Qt.LeftButton) {
         if (root.topLevel.wayland) {
-          const windowOccupyingScreen = root.topLevel.workspace.toplevels.values.find(topLevel => (topLevel.wayland?.maximized || topLevel.wayland?.fullscreen) && topLevel.address !== root.topLevel.address);
-
-          if (windowOccupyingScreen) {
-            root.topLevel.wayland.maximized = !!windowOccupyingScreen.wayland?.maximized;
-            root.topLevel.wayland.fullscreen = !!windowOccupyingScreen.wayland?.fullscreen;
-          }
+          root.topLevel.wayland.activate();
         }
       }
 

@@ -8,6 +8,7 @@ restart_qs() {
   killall qs >/dev/null 2>&1 || true
   killall kde6 >/dev/null 2>&1 || true
   qs -p . &
+  sleep 1; hyprctl reload
 }
 
 is_installed() {

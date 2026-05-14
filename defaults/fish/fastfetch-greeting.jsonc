@@ -1,0 +1,103 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "padding": {
+            "top": 2,
+            "right": 4
+        }
+    },
+    "display": {
+        "separator": ": ",
+        "color": {
+            "keys": "magenta"
+        }
+    },
+    "modules": [
+        {
+            "type": "custom",
+            "format": "☠ HollowSec the coffee race at dawn ..."
+        },
+        {
+            "type": "custom",
+            "format": "┌──────────────────────────────────────────────┐"
+        },
+        {
+            "type": "title",
+            "key": " User",
+            "keyColor": "white"
+        },
+        {
+            "type": "os",
+            "key": "󰣇 OS",
+            "keyColor": "green"
+        },
+        {
+            "type": "packages",
+            "key": "󰏗 Packages",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "cpu",
+            "key": "󰻠 CPU",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "gpu",
+            "key": "󰢮 GPU",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "memory",
+            "key": "󰍛 Memory",
+            "keyColor": "red"
+        },
+        {
+            "type": "custom",
+            "format": "└──────────────────────────────────────────────┘"
+        },
+        {
+            "type": "custom",
+            "format": "┌──────────────────────────────────────────────┐"
+        },
+        {
+            "type": "display",
+            "key": "󰍹 Display",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "wm",
+            "key": "󱂬 WM",
+            "keyColor": "red"
+        },
+        {
+            "type": "terminal",
+            "key": "󰆍 Terminal",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "uptime",
+            "key": "󱎫 Uptime",
+            "keyColor": "green"
+        },
+        {
+            "type": "command",
+            "key": "󰇄 OS Age",
+            "keyColor": "blue",
+            "text": "birth_date=$(head -n1 /var/log/pacman.log | cut -d' ' -f1 | tr -d '[]' | cut -dT -f1); echo \"$(( ( $(date +%s) - $(date -d $birth_date +%s) ) / 86400 )) days\""
+        },
+        {
+            "type": "disk",
+            "key": "󰋊 Disk",
+            "keyColor": "red"
+        },
+        {
+            "type": "custom",
+            "format": "└──────────────────────────────────────────────┘"
+        },
+        "break",
+        {
+            "type": "colors",
+            "symbol": "circle"
+        }
+    ]
+}
