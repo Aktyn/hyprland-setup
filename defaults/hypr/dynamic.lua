@@ -1,0 +1,2 @@
+-- This file stores Hyprland variables with colors generated based on selected wallpaper
+-- Do not edit manually

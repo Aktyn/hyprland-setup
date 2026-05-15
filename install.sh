@@ -114,7 +114,7 @@ if ! which warp-terminal >/dev/null 2>&1; then
   install_aur_package warp-terminal-bin
 fi
 
-install_aur_package Konsole # Used in Dolphin as integrated terminal
+install_aur_package konsole # Used in Dolphin as integrated terminal
 install_aur_package yt-dlp
 
 # Quickshell setup
@@ -183,8 +183,9 @@ fi
 echo "Copying hyprland config files"
 mkdir -p ~/.config/hypr/
 for f in "$curr"/defaults/hypr/*; do
-  if [[ "$(basename "$f")" == "custom.conf" && -f ~/.config/hypr/custom.conf ]]; then
-    echo "Skipping existing custom.conf"
+  fname=$(basename "$f")
+  if [[ ("$fname" == "custom.conf" && -f ~/.config/hypr/custom.conf) || ("$fname" == "custom.lua" && -f ~/.config/hypr/custom.lua) ]]; then
+    echo "Skipping existing $fname"
   else
     cp --recursive "$f" ~/.config/hypr/
   fi

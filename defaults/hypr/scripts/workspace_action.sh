@@ -1,2 +1,28 @@
 #!/usr/bin/env bash
-hyprctl dispatch "$1" $(((($(hyprctl activeworkspace -j | jq -r .id) - 1)  / 10) * 10 + $2))
+
+# action ($1): workspace, movetoworkspacesilent
+# key ($2): 1-10
+
+ACTIVE_ID=$(hyprctl activeworkspace -j | jq -r .id)
+
+# Handle special workspaces (usually negative IDs)
+if [ "$ACTIVE_ID" -lt 0 ]; then
+    GROUP=0
+else
+    GROUP=$(( ($ACTIVE_ID - 1) / 10 ))
+fi
+
+TARGET=$(( $GROUP * 10 + $2 ))
+
+case "$1" in
+    "workspace")
+        hyprctl dispatch "hl.dsp.focus({ workspace = '$TARGET' })"
+        ;;
+    "movetoworkspacesilent")
+        hyprctl dispatch "hl.dsp.window.move({ workspace = '$TARGET', follow = false })"
+        ;;
+    *)
+        # Fallback for other dispatchers
+        hyprctl dispatch "hl.dsp.$1({ workspace = '$TARGET' })"
+        ;;
+esac

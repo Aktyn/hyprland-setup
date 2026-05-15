@@ -1,0 +1,2 @@
+-- This file stores per display HDR-related configurations
+-- Do not edit manually
