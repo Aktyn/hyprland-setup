@@ -64,7 +64,7 @@ Rectangle {
     cursorShape: Qt.PointingHandCursor
 
     onClicked: {
-      Hyprland.dispatch(`workspace ${root.workspace?.id ?? root.workspaceIndex}`);
+      Hyprland.dispatch(`hl.dsp.focus({ workspace = "${root.workspace?.id ?? root.workspaceIndex}" })`);
     }
   }
 

@@ -1,4 +1,3 @@
--- Environment variables
 -- See https://wiki.hypr.land/Configuring/Environment-variables/
 
 hl.env("XCURSOR_SIZE", "24")
@@ -11,6 +10,7 @@ hl.env("XDG_MENU_PREFIX", "plasma-")
 hl.env("TERMINAL", "kitty")
 hl.env("QT_SCALE_FACTOR", "1")
 
+hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_THEME", "Vimix")
 
 hl.env("XDG_SESSION_TYPE", "wayland")

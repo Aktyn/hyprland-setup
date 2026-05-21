@@ -5,9 +5,7 @@
 -- https://wiki.hypr.land/Configuring/
 
 hl.config({
-    debug = {
-        disable_logs = false
-    }
+	debug = { disable_logs = false },
 })
 
 require("env")
@@ -18,3 +16,4 @@ require("keybinds")
 require("dynamic")
 require("hdr")
 require("custom")
+
