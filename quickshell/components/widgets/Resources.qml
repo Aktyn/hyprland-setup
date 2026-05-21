@@ -41,5 +41,5 @@ StyledButton {
     }
   }
 
-  onClicked: Hyprland.dispatch("exec [float] gnome-system-monitor")
+  onClicked: Hyprland.dispatch(`hl.dsp.exec_cmd("gnome-system-monitor", {float = true})`);
 }

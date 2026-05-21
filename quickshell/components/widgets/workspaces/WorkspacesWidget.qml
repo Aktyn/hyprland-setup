@@ -105,11 +105,11 @@ Item {
 
           if (event.angleDelta.y > 0) {
             if (Hyprland.focusedWorkspace?.id > 1) {
-              Hyprland.dispatch(`workspace m-1`);
+              Hyprland.dispatch(`hl.dsp.focus({ workspace = "m-1" })`);
             }
           } else if (event.angleDelta.y < 0) {
             if (Hyprland.focusedWorkspace?.id < Config.workspaces.count - 1) {
-              Hyprland.dispatch(`workspace m+1`);
+              Hyprland.dispatch(`hl.dsp.focus({ workspace = "m+1" })`);
             }
           }
         }

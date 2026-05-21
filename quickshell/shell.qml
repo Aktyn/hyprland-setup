@@ -27,7 +27,7 @@ ShellRoot {
   }
 
   Component.onCompleted: {
-    Hyprland.dispatch("exec killall kded6");
+    Hyprland.dispatch(`hl.dsp.exec_cmd("killall kded6")`);
 
     console.info("Aktyn quickshell started");
   }
