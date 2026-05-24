@@ -163,7 +163,7 @@ hl.bind(
 	"SUPER + W",
 	hl.dsp.exec_cmd(
 		launch_first_available
-			.. ' "google-chrome-stable" "brave" "zen-browser" "firefox" "chromium" "microsoft-edge-stable" "opera" "librewolf"'
+			.. ' "$BROWSER" "google-chrome-stable" "brave" "zen-browser" "firefox" "chromium" "microsoft-edge-stable" "opera" "librewolf"'
 	)
 )
 hl.bind(
