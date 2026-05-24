@@ -182,6 +182,7 @@ fi
 
 echo "Copying hyprland config files"
 mkdir -p ~/.config/hypr/
+shopt -s dotglob
 for f in "$curr"/defaults/hypr/*; do
   fname=$(basename "$f")
   if [[ ("$fname" == "custom.conf" && -f ~/.config/hypr/custom.conf) || ("$fname" == "custom.lua" && -f ~/.config/hypr/custom.lua) ]]; then
@@ -190,6 +191,7 @@ for f in "$curr"/defaults/hypr/*; do
     cp --recursive "$f" ~/.config/hypr/
   fi
 done
+shopt -u dotglob
 
 echo "Copying mpv config files"
 mkdir -p ~/.config/mpv/
