@@ -10,7 +10,7 @@ def update_hyprland_hdr_options(jsonData):
     for monitor in jsonData:
         name = monitor.get("name")
         cm = "hdr" if monitor.get("hdrEnabled") else "srgb"
-        configContent += f"hl.monitor({{\n  name = '{name}',\n  cm = '{cm}'\n}})\n"
+        configContent += f"hl.monitor({{\n  output = '{name}',\n  cm = '{cm}'\n}})\n"
 
     try:
         os.makedirs(os.path.dirname(hdr_lua_path), exist_ok=True)
