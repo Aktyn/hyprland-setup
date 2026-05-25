@@ -74,7 +74,7 @@ hl.bind("SUPER + SHIFT + Down", hl.dsp.window.move({ direction = "d" }))
 
 -- Window control
 hl.bind("ALT + F4", hl.dsp.window.kill())
-hl.bind("SUPER + Q", hl.dsp.window.kill())
+hl.bind("SUPER + Q", hl.dsp.window.close())
 hl.bind("SUPER + SHIFT + ALT + Q", hl.dsp.exec_cmd("hyprctl kill"))
 
 hl.bind("SUPER + SEMICOLON", hl.dsp.layout("splitratio -0.1")) -- Original bind: Super, Semicolon, layoutmsg, splitratio, -0.1
