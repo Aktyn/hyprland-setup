@@ -16,4 +16,4 @@ require("keybinds")
 require("dynamic")
 require("hdr")
 require("custom")
-
+require("floating-windows")

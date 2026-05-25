@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# action ($1): workspace, movetoworkspacesilent
-# key ($2): 1-10
-
 ACTIVE_ID=$(hyprctl activeworkspace -j | jq -r .id)
 
 # Handle special workspaces (usually negative IDs)
