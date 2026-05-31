@@ -35,13 +35,13 @@ cd hyprland-setup
 Run directly with wget:
 
 ```sh
-${SHELL:-sh} -c "$(wget -qO - https://raw.githubusercontent.com/Aktyn/hyprland-setup/main/install.sh)"
+wget -qO - https://raw.githubusercontent.com/Aktyn/hyprland-setup/main/install.sh | bash
 ```
 
 Or with curl:
 
 ```sh
-${SHELL:-sh} -c "$(curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-setup/main/install.sh)"
+curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-setup/main/install.sh | bash
 ```
 
 ## 📦 Installed Packages and Applications

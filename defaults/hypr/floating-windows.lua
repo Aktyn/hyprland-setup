@@ -69,10 +69,16 @@ local function remove_entry(hash)
 	end
 end
 
+local ignored_classes = {
+	"steam",
+}
+
 local function getHash(w)
 	local class = w.class or ""
 	local title = w.title or ""
-	if title == "" then -- if there is no title, we can't reliably identify the window, so we skip it
+
+	-- if there is no title, we can't reliably identify the window, so we skip it
+	if title == "" or ignored_classes[class] ~= nil then
 		return nil
 	end
 
