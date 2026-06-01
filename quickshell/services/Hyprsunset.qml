@@ -4,12 +4,10 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import "../common"
-
 Singleton {
   id: root
   property var manualActive
-  property int colorTemperature: 4000 //TODO: add to config
+  property int colorTemperature: 4000 //TODO: add to config and settings panel
   property bool firstEvaluation: true
   property bool active: false
 

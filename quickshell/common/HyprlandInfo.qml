@@ -32,7 +32,6 @@ Singleton {
     target: Hyprland
 
     function onRawEvent(event) {
-      // console.info("Hyprland raw event name:", event.name);
       // Ignore some readonly events
       const readonlyEventNames = ["activewindow", "activewindowv2", "focusedmon", "focusedmonv2", "workspace", "workspacev2", "closelayer"]
       if(!readonlyEventNames.includes(event.name)) {
@@ -42,15 +41,19 @@ Singleton {
     }
   }
 
-  property QtObject general: QtObject {
+  component GeneralType: QtObject {
     // top, right, bottom, left
     property var gapsIn: [0, 0, 0, 0]
     property var gapsOut: [0, 0, 0, 0]
   }
 
-  property QtObject decoration: QtObject {
+  readonly property GeneralType general: GeneralType {}
+
+  component DecorationType: QtObject {
     property int rounding: 16
   }
+
+  readonly property DecorationType decoration: DecorationType {}
 
   Process {
     id: getClients
@@ -60,8 +63,8 @@ Singleton {
       onStreamFinished: {
         hyprlandSingleton.windowList = JSON.parse(clientsCollector.text);
         let tempWinByAddress = {};
-        for (var i = 0; i < hyprlandSingleton.windowList.length; ++i) {
-          var win = hyprlandSingleton.windowList[i];
+        for (let i = 0; i < hyprlandSingleton.windowList.length; ++i) {
+          const win = hyprlandSingleton.windowList[i];
           tempWinByAddress[win.address] = win;
         }
         hyprlandSingleton.windowByAddress = tempWinByAddress;
@@ -77,7 +80,7 @@ Singleton {
         hyprlandSingleton.monitors = JSON.parse(this.text);
 
         if (Config.bar.screenList.length === 0 && Hyprland.monitors.length > 0) {
-          Config.bar.screenList = Hyprland.monitors.map(m => m.name);
+          Config.bar.screenList = Hyprland.monitors?.map(m => m.name) || [];
         }
       }
     }
@@ -105,14 +108,14 @@ Singleton {
     command: "hyprctl getoption general:gaps_in -j".split(" ")
     running: true
     stdout: StdioCollector {
-      onStreamFinished: hyprlandSingleton.general.gapsIn = JSON.parse(this.text).custom.split(" ").map(v => Number(v))
+      onStreamFinished: hyprlandSingleton.general.gapsIn = JSON.parse(this.text).custom?.split(" ").map(v => Number(v)) || [0, 0, 0, 0]
     }
   }
   Process {
     command: "hyprctl getoption general:gaps_out -j".split(" ")
     running: true
     stdout: StdioCollector {
-      onStreamFinished: hyprlandSingleton.general.gapsOut = JSON.parse(this.text).custom.split(" ").map(v => Number(v))
+      onStreamFinished: hyprlandSingleton.general.gapsOut = JSON.parse(this.text).custom?.split(" ").map(v => Number(v)) || [0, 0, 0, 0]
     }
   }
 }

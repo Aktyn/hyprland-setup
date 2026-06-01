@@ -73,7 +73,7 @@ Singleton {
   Process {
     running: true
     command: ["pkill", "-f", "swaync"]
-    onExited: function (exitCode) {
+    onExited: function (exitCode, exitStatus) {
       if (exitCode === 0) {
         console.log("swaync was killed");
       }

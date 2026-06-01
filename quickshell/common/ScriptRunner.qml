@@ -24,9 +24,9 @@ Singleton {
         console.log("generateColorsProcess output:\n", root.parseScriptStdout(this.text));
       }
     }
-    onExited: function (exitCode) {
+    onExited: function (exitCode, exitStatus) {
       if (exitCode !== 0) {
-        console.info("Generating colors failed with exit code:", exitCode);
+        console.info("Generating colors failed with exit code:", exitCode, "exit status:", exitStatus);
       } else {
         adjustSystemColorsProcess.running = true;
       }
@@ -59,12 +59,11 @@ Singleton {
   }
 
   function toggleHDRSettings(hdrInfo) {
-    console.info("Setting the following HDR options: " + JSON.stringify(hdrInfo))
-    toggleHDRSettingsProcess.command = ["python", Quickshell.shellPath("scripts/toggle-hdr.py"), JSON.stringify(hdrInfo)]
-    toggleHDRSettingsProcess.running = true
+    console.info("Setting the following HDR options: " + JSON.stringify(hdrInfo));
+    toggleHDRSettingsProcess.command = ["python", Quickshell.shellPath("scripts/toggle-hdr.py"), JSON.stringify(hdrInfo)];
+    toggleHDRSettingsProcess.running = true;
   }
 
- 
   Process {
     id: selectWallpaperProcess
     command: ["bash", "-c", "kdialog --getopenfilename ~/Pictures \"Images (*.png *.jpg *.jpeg *.gif *.bmp *.webp *.tif *.tiff *.svg);;All files (*)\""]
@@ -89,7 +88,6 @@ Singleton {
     generateColorsProcess.running = true;
   }
 
- 
   function copyToClipboard(text: string) {
     Quickshell.execDetached([Quickshell.shellPath("scripts/clip.sh"), text]);
   }
