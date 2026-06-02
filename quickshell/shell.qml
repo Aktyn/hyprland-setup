@@ -22,6 +22,10 @@ ShellRoot {
 
   //TODO: [optimization] create generic component for automatically unloading lazy loaded components
   LazyLoader {
+    loading: GlobalState.osd.cheetsheetOpen
+    component: Cheetsheet {}
+  }
+  LazyLoader {
     loading: GlobalState.osd.clipboardPanelOpen
     component: ClipboardHistoryPanel {}
   }

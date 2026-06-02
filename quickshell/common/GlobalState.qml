@@ -34,7 +34,6 @@ Singleton {
           timerRoot.paused = false;
           timerRoot.remainingSeconds = 0;
 
-          console.info("Timer finished");
           Quickshell.execDetached(["notify-send", "Timer finished!", "--urgency", "CRITICAL", "--transient", "--icon", Quickshell.shellPath("assets/icons/timer-alert.svg")]);
         }
       }
@@ -47,10 +46,12 @@ Singleton {
     property var requestFocus
   }
 
+  component CalendarPanelState: PanelState {
+    property TimerState timer: TimerState {}
+  }
+
   component BarState: QtObject {
-    property QtObject calendarPanel: PanelState {
-      property TimerState timer: TimerState {}
-    }
+    property CalendarPanelState calendarPanel: CalendarPanelState {}
 
     property PanelState notesPanel: PanelState {}
 
@@ -64,6 +65,7 @@ Singleton {
   component OsdState: QtObject {
     property bool volumeOpen: false
     property bool clipboardPanelOpen: false
+    property bool cheetsheetOpen: false
   }
 
   readonly property OsdState osd: OsdState {}
@@ -130,6 +132,15 @@ Singleton {
 
     onPressed: {
       root.osd.clipboardPanelOpen = !root.osd.clipboardPanelOpen;
+    }
+  }
+
+  GlobalShortcut {
+    name: "osdCheetsheetToggle"
+    description: "Toggles cheetsheet OSD on press"
+
+    onPressed: {
+      root.osd.cheetsheetOpen = !root.osd.cheetsheetOpen;
     }
   }
 }

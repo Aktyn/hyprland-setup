@@ -5,6 +5,7 @@ local player_next =
 	'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"`'
 
 local toggleLeftMenuDescription = "Toggle left menu"
+local toggleCheetsheetPanelDescription = "Toogle cheetsheet panel"
 local interruptOverviewDescription = "Interrupt overview toggle"
 local toggleMuteDescription = "Toggle mute"
 local toggleMicMuteDescription = "Toggle mic mute"
@@ -37,6 +38,17 @@ hl.bind(
 	"SUPER + SUPER_R",
 	hl.dsp.global("quickshell:overviewToggleRelease"),
 	{ release = true, description = toggleLeftMenuDescription }
+)
+
+hl.bind(
+	"SUPER + SLASH",
+	hl.dsp.global("quickshell:osdCheetsheetToggle"),
+		{ description = toggleCheetsheetPanelDescription }
+)
+hl.bind(
+	"SUPER + BACKSLASH",
+	hl.dsp.global("quickshell:osdCheetsheetToggle"),
+		{ description = toggleCheetsheetPanelDescription }
 )
 
 hl.bind("CTRL + SUPER_L", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
@@ -417,5 +429,3 @@ hl.bind(
 	),
 	{ description = "Launch System Monitor" }
 )
-
--- TODO: create cheatsheet window with a list of keybinding; add comments in this file that will be used for descriptions in the cheatsheet
