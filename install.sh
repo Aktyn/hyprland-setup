@@ -2,31 +2,97 @@
 
 set -e
 
+# --- Helper Functions ---
+
 is_installed() {
   local package="$1"
-  pacman -Q "$package" >/dev/null 2>&1
+  case "$PKG_MANAGER" in
+    pacman) pacman -Q "$package" >/dev/null 2>&1 ;;
+    apt) dpkg -l "$package" 2>/dev/null | grep -q "^ii" ;;
+    dnf) rpm -q "$package" >/dev/null 2>&1 ;;
+    zypper) rpm -q "$package" >/dev/null 2>&1 ;;
+    *) return 1 ;;
+  esac
+}
+
+map_package() {
+  local package="$1"
+  case "$PKG_MANAGER" in
+    apt)
+      case "$package" in
+        base-devel) echo "build-essential" ;;
+        python) echo "python3" ;;
+        python-pillow) echo "python3-pillow" ;;
+        qt5-wayland) echo "qtwayland5" ;;
+        qt6-wayland) echo "qt6-wayland" ;;
+        qt5-multimedia) echo "libqt5multimedia5" ;;
+        qt6-multimedia) echo "libqt6multimedia6" ;;
+        qt5-svg) echo "libqt5svg5" ;;
+        qt6-svg) echo "libqt6svg6" ;;
+        qt5-declarative) echo "qml-module-qtquick2" ;;
+        qt5-graphicaleffects) echo "qml-module-qtgraphicaleffects" ;;
+        libdbusmenu-gtk3) echo "libdbusmenu-gtk3-dev" ;;
+        gnome-themes-extra) echo "gnome-themes-standard" ;;
+        plasma-activities) echo "libkf5activities5" ;;
+        polkit-kde-agent) echo "polkit-kde-agent-1" ;;
+        *) echo "$package" ;;
+      esac
+      ;;
+    dnf)
+      case "$package" in
+        base-devel) echo "@development-tools" ;;
+        python) echo "python3" ;;
+        python-pillow) echo "python3-pillow" ;;
+        qt5-multimedia) echo "qt5-qtmultimedia" ;;
+        qt6-multimedia) echo "qt6-qtmultimedia" ;;
+        libdbusmenu-gtk3) echo "libdbusmenu-gtk3" ;;
+        *) echo "$package" ;;
+      esac
+      ;;
+    *) echo "$package" ;;
+  esac
 }
 
 install_package() {
-  if ! is_installed "$1"; then
-    echo "Installing $1"
-    sudo pacman -S --needed --noconfirm "$1"
+  local package=$(map_package "$1")
+  if ! is_installed "$package"; then
+    echo "Installing $package"
+    case "$PKG_MANAGER" in
+      pacman) sudo pacman -S --needed --noconfirm "$package" ;;
+      apt) sudo apt-get update && sudo apt-get install -y "$package" ;;
+      dnf) sudo dnf install -y "$package" ;;
+      zypper) sudo zypper install -y "$package" ;;
+      *) echo "Unknown package manager. Please install $package manually." ;;
+    esac
   fi
 }
 
-is_aur_installed() {
-  local package="$1"
-  pacman -Q "$package" >/dev/null 2>&1
-}
-
 install_aur_package() {
-  if ! is_aur_installed "$1"; then
-    echo "Installing $1 from aur"
-    yay -S --needed --noconfirm "$1"
+  local package="$1"
+  if [ "$PKG_MANAGER" == "pacman" ]; then
+    if ! is_installed "$package"; then
+      echo "Installing $package from AUR"
+      if command -v yay >/dev/null 2>&1; then
+        yay -S --needed --noconfirm "$package"
+      elif command -v paru >/dev/null 2>&1; then
+        paru -S --needed --noconfirm "$package"
+      else
+        echo "AUR helper not found. Please install $package manually."
+        return 1
+      fi
+    fi
+  else
+    echo "Searching for $package in standard repositories..."
+    # Don't let failure of an AUR-equivalent stop the script on non-Arch
+    install_package "$package" || echo "Warning: $package not found. You might need to install it manually."
   fi
 }
 
 check_battery_level() {
+  if ! command -v upower >/dev/null 2>&1; then
+    echo 100
+    return
+  fi
   local devices=$(upower --enumerate | grep battery)
   local lowest_percentage=100
 
@@ -42,9 +108,17 @@ check_battery_level() {
   echo "$lowest_percentage"
 }
 
-# Prevent from running on non-arch based systems
-if ! [ -f /etc/arch-release ]; then
-  echo "This script is intended to run on Arch-based systems only."
+# --- Detect Package Manager ---
+if command -v pacman >/dev/null 2>&1; then
+  PKG_MANAGER="pacman"
+elif command -v apt-get >/dev/null 2>&1; then
+  PKG_MANAGER="apt"
+elif command -v dnf >/dev/null 2>&1; then
+  PKG_MANAGER="dnf"
+elif command -v zypper >/dev/null 2>&1; then
+  PKG_MANAGER="zypper"
+else
+  echo "Unsupported package manager. This script supports pacman, apt, dnf, and zypper."
   exit 1
 fi
 
@@ -74,9 +148,12 @@ sudo -v
 install_package git
 install_package python
 install_package base-devel
-install_package pacman-contrib
+if [ "$PKG_MANAGER" == "pacman" ]; then
+  install_package pacman-contrib
+fi
+
 install_package kate
-install_package blueman # bluetooth gui
+install_package blueman
 install_package btop
 install_package curl
 install_package xclip
@@ -91,26 +168,29 @@ install_package systemsettings
 install_package nwg-look
 install_package kdialog
 install_package dolphin
-install_package ffmpegthumbnailer # Video thumbnail in Dolphin (select "3GPP multimedia file" in dolphin's previews settings to work)
+install_package ffmpegthumbnailer
 install_package mpv
 install_package gnome-system-monitor
 install_package kitty
 install_package fish
+install_package sddm
 
-if ! which yay >/dev/null 2>&1; then
-  echo "Installing yay"
-  temp_dir="$curr/temp"
-  mkdir -p "$temp_dir"
-  cd "$temp_dir"
-  rm -rf ./yay
-  git clone https://aur.archlinux.org/yay.git
-  cd ./yay
-  makepkg -si --noconfirm
-  cd "$curr"
-  rm -rf "$temp_dir"
+if [ "$PKG_MANAGER" == "pacman" ]; then
+  if ! command -v yay >/dev/null 2>&1 && ! command -v paru >/dev/null 2>&1; then
+    echo "Installing yay"
+    temp_dir="$curr/temp"
+    mkdir -p "$temp_dir"
+    cd "$temp_dir"
+    rm -rf ./yay
+    git clone https://aur.archlinux.org/yay.git
+    cd ./yay
+    makepkg -si --noconfirm
+    cd "$curr"
+    rm -rf "$temp_dir"
+  fi
 fi
 
-if ! which warp-terminal >/dev/null 2>&1; then
+if ! command -v warp-terminal >/dev/null 2>&1; then
   install_aur_package warp-terminal-bin
 fi
 
@@ -142,7 +222,7 @@ install_aur_package playerctl
 install_aur_package libdbusmenu-gtk3
 install_package pavucontrol
 install_package gwenview
-install_aur_package imagemagick
+install_package imagemagick
 
 install_aur_package quickshell
 install_aur_package ttf-material-icons
@@ -154,7 +234,7 @@ install_aur_package ttf-twemoji
 
 # Python packages
 install_package python-pillow
-install_aur_package python-materialyoucolor # Try python-materialyoucolor-git in case of this package not being available
+install_aur_package python-materialyoucolor
 install_aur_package adw-gtk-theme
 
 required_dirs=("defaults" "quickshell" "sddm")
@@ -195,9 +275,9 @@ shopt -u dotglob
 
 echo "Copying mpv config files"
 mkdir -p ~/.config/mpv/
-cp --recursive "$curr/defaults/mpv/." ~/.config/mpv/ # This config contains support for HDR displays
+cp --recursive "$curr/defaults/mpv/." ~/.config/mpv/
 
-echo "Copying kitty config files with fish set as shell"
+echo "Copying kitty config files"
 mkdir -p ~/.config/kitty/
 cp --recursive "$curr/defaults/kitty/." ~/.config/kitty/
 
@@ -210,18 +290,20 @@ mkdir -p ~/.config/fish/
 cp --recursive "$curr/defaults/fish/." ~/.config/fish/
 
 # Add fish to system shells
-if ! grep -qxF '/usr/bin/fish' /etc/shells; then
-  echo /usr/bin/fish | sudo tee -a /etc/shells
-fi
+FISH_PATH=$(command -v fish)
+if [ -n "$FISH_PATH" ]; then
+  if ! grep -qxF "$FISH_PATH" /etc/shells; then
+    echo "$FISH_PATH" | sudo tee -a /etc/shells
+  fi
 
-# Set fish as a system-wide default shell (only if not already)
-# Determine current user's login shell and switch only if different.
-current_shell=$(getent passwd "$USER" | cut -d: -f7)
-if [ "$current_shell" != "/usr/bin/fish" ]; then
-  echo "Changing default shell to /usr/bin/fish for user $USER"
-  chsh -s /usr/bin/fish
-else
-  echo "Default shell is already /usr/bin/fish; skipping chsh"
+  # Set fish as a system-wide default shell
+  current_shell=$(getent passwd "$USER" | cut -d: -f7)
+  if [ "$current_shell" != "$FISH_PATH" ]; then
+    echo "Changing default shell to $FISH_PATH for user $USER"
+    chsh -s "$FISH_PATH"
+  else
+    echo "Default shell is already $FISH_PATH; skipping chsh"
+  fi
 fi
 
 echo "Installing Vimix-cursors"
@@ -271,3 +353,4 @@ echo "Setup complete. System restart is recommended."
 
 hyprland --verify-config >/dev/null 2>&1 || echo "Warning: Hyprland configuration has issues. Please check your config files."
 sleep 3; hyprctl reload >/dev/null 2>&1 || true
+",file_path:

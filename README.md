@@ -15,7 +15,7 @@ The `install.sh` script automatically installs all required packages, suggested 
 
 ### Prerequisites
 
-- **Arch-based Linux distribution** (required)
+- **Linux** with one of the package managers: ***pacman***, ***apt***, ***dnf***, ***zypper***
 - **Hyprland** should already be installed on your system
 - **Sudo access** for package installation
 - **Minimum 20% battery level** (on laptops)
