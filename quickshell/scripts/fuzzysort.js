@@ -4,6 +4,11 @@
 // License: MIT | Copyright (c) 2018 Stephen Kamenar
 // A copy of the license is available in the `licenses` folder of this repository
 
+/**
+ * @param {string} search
+ * @param {string} target
+ * @returns {number}
+ */
 var single =  (search, target) => {
     if(!search || !target) return NULL
 
@@ -16,6 +21,12 @@ var single =  (search, target) => {
     return algorithm(preparedSearch, target)
 }
 
+/**
+ * @param {string} search
+ * @param {string[]} targets
+ * @param {object} options
+ * @returns {object[]}
+ */
 var go = (search, targets, options) => {
     if(!search) return options?.all ? all(targets, options) : noResults
 
@@ -158,9 +169,13 @@ var go = (search, targets, options) => {
     }
     }
 
-    if(resultsLen === 0) return noResults
+    if(resultsLen === 0) {
+        return noResults
+    }
     var results = new Array(resultsLen)
-    for(var i = resultsLen - 1; i >= 0; --i) results[i] = q.poll()
+    for(var i = resultsLen - 1; i >= 0; --i) {
+        results[i] = q.poll()
+    }
     results.total = resultsLen + limitedCount
     return results
 }

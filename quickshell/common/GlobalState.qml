@@ -103,17 +103,17 @@ Singleton {
     description: "Toggles left sidebar"
 
     onPressed: {
-      leftSidebar.superReleaseHelper = true;
+      root.leftSidebar.superReleaseHelper = true;
     }
 
     onReleased: {
-      if (!leftSidebar.superReleaseHelper) {
-        leftSidebar.superReleaseHelper = true;
+      if (!root.leftSidebar.superReleaseHelper) {
+        root.leftSidebar.superReleaseHelper = true;
         return;
       }
-      leftSidebar.open = !leftSidebar.open;
-      if (!leftSidebar.open && typeof leftSidebar.requestFocus === 'function') {
-        leftSidebar.requestFocus(false);
+      root.leftSidebar.open = !root.leftSidebar.open;
+      if (!root.leftSidebar.open && typeof root.leftSidebar.requestFocus === 'function') {
+        root.leftSidebar.requestFocus(false);
       }
     }
   }
@@ -122,7 +122,7 @@ Singleton {
     description: "Interrupts super release whenever shortcut consisting of super key has been pressed"
 
     onPressed: {
-      leftSidebar.superReleaseHelper = false;
+      root.leftSidebar.superReleaseHelper = false;
     }
   }
 

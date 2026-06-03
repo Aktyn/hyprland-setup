@@ -2,22 +2,49 @@
 // Original code license: GPLv3
 // Translated to Js from Cython with an LLM and reviewed
 
+/**
+ * @param {number} a 
+ * @param {number} b 
+ * @param {number} c 
+ * @returns {number}
+ */
 function min3(a, b, c) {
   return a < b && a < c ? a : b < c ? b : c;
 }
 
+/**
+ * @param {number} a 
+ * @param {number} b 
+ * @param {number} c 
+ * @returns {number}
+ */
 function max3(a, b, c) {
   return a > b && a > c ? a : b > c ? b : c;
 }
 
+/**
+ * @param {number} a 
+ * @param {number} b 
+ * @returns {number}
+ */
 function min2(a, b) {
   return a < b ? a : b;
 }
 
+/**
+ * @param {number} a 
+ * @param {number} b 
+ * @returns {number}
+ */
 function max2(a, b) {
   return a > b ? a : b;
 }
 
+/**
+ * @param {string} s1
+ * @param {string} s2
+ * @returns {number}
+ */
 function levenshteinDistance(s1, s2) {
   let len1 = s1.length;
   let len2 = s2.length;
@@ -49,6 +76,10 @@ function levenshteinDistance(s1, s2) {
   return prev[len2];
 }
 
+/**
+ * @param {string} shortS
+ * @param {string} longS
+*/
 function partialRatio(shortS, longS) {
   let lenS = shortS.length;
   let lenL = longS.length;
@@ -66,6 +97,10 @@ function partialRatio(shortS, longS) {
   return best;
 }
 
+/**
+ * @param {string} s1
+ * @param {string} s2
+*/
 function computeScore(s1, s2) {
   if (s1 === s2) return 1.0;
 
@@ -105,6 +140,10 @@ function computeScore(s1, s2) {
   return Math.max(0.0, Math.min(1.0, score));
 }
 
+/**
+ * @param {string} s1
+ * @param {string} s2
+*/
 function computeTextMatchScore(s1, s2) {
   if (s1 === s2) return 1.0;
 

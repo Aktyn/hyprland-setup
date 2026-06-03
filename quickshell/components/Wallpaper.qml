@@ -45,7 +45,7 @@ LazyLoader {
           visible: Config.wallpaper.path === ""
           anchors.centerIn: parent
           color: Qt.darker(Style.colors.colorOnSurface, 2)
-          text: "No wallpaper selected.\nScreen name: " + screen.name
+          text: "No wallpaper selected.\nScreen name: " + wallpaperPanel.screen.name
           font.pointSize: 24
           horizontalAlignment: Text.AlignHCenter
         }

@@ -12,6 +12,8 @@ import "../../common"
 import "../../services"
 import "../widgets/common"
 
+import "../../scripts/levendist.js" as Levendist
+
 Scope {
   id: root
   property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
@@ -97,23 +99,24 @@ Scope {
           shortcuts: groups[cat][desc]
         });
       }
-      items.sort((a, b) => a.description.localeCompare(b.description));
+      items.sort((a, b) => a.description.localeCompare(b.description) * 0.05 + Levendist.computeScore(a.description, b.description));
       model.push({
         category: cat,
         items: items
       });
     }
 
-    const catOrder = ["Workspaces", "Launchers", "System & Media", "Miscellaneous", "Windows"];
-    model.sort((a, b) => {
-      let iA = catOrder.indexOf(a.category);
-      let iB = catOrder.indexOf(b.category);
-      if (iA === -1)
-        iA = 999;
-      if (iB === -1)
-        iB = 999;
-      return iA - iB;
-    });
+    // const catOrder = ["Workspaces", "Launchers", "System & Media", "Miscellaneous", "Windows"];
+    // model.sort((a, b) => {
+    //   let iA = catOrder.indexOf(a.category);
+    //   let iB = catOrder.indexOf(b.category);
+    //   if (iA === -1)
+    //     iA = 999;
+    //   if (iB === -1)
+    //     iB = 999;
+    //   return iA - iB;
+    // });
+    model.sort((a, b) => b.items.length - a.items.length);
 
     root.bindsModel = model;
   }
@@ -185,7 +188,6 @@ Scope {
           clip: true
 
           color: GlobalState.backgroundColor
-          // color: Style.colors.surfaceContainer
           border.color: Style.colors.outlineVariant
           radius: Style.rounding.large
 

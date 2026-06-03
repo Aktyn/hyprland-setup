@@ -33,9 +33,9 @@ Singleton {
 
     function onRawEvent(event) {
       // Ignore some readonly events
-      const readonlyEventNames = ["activewindow", "activewindowv2", "focusedmon", "focusedmonv2", "workspace", "workspacev2", "closelayer"]
-      if(!readonlyEventNames.includes(event.name)) {
-        console.log("Updating HyprlandInfo due to event:", event.name)
+      const readonlyEventNames = ["activewindow", "activewindowv2", "focusedmon", "focusedmonv2", "workspace", "workspacev2", "closelayer"];
+      if (!readonlyEventNames.includes(event.name)) {
+        console.log("Updating HyprlandInfo due to event:", event.name);
         hyprlandSingleton.update();
       }
     }
@@ -79,7 +79,7 @@ Singleton {
       onStreamFinished: {
         hyprlandSingleton.monitors = JSON.parse(this.text);
 
-        if (Config.bar.screenList.length === 0 && Hyprland.monitors.length > 0) {
+        if (Config.bar.screenList.length === 0 && Array.isArray(Hyprland.monitors) && Hyprland.monitors.length > 0) {
           Config.bar.screenList = Hyprland.monitors?.map(m => m.name) || [];
         }
       }
