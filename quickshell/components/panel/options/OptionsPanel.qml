@@ -2,11 +2,10 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 
-import "../../common"
-import "../../services"
-
-import "../widgets/common"
 import "."
+import "../../widgets/common"
+import "../../../common"
+import "../../../services"
 
 ColumnLayout {
   id: root
@@ -47,8 +46,8 @@ ColumnLayout {
 
     onClicked: {
       Quickshell.execDetached(["xdg-open", "https://github.com/Aktyn"]);
-      GlobalState.rightSidebar.open = false;
-      GlobalState.rightSidebar.requestFocus?.(false);
+      GlobalState.bar.mainPanel.open = false;
+      GlobalState.bar.mainPanel.requestFocus?.(false);
     }
   }
 

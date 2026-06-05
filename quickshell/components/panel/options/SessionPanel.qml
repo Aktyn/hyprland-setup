@@ -3,9 +3,8 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 
-import "../../common"
-
-import "../widgets"
+import "../../widgets"
+import "../../../common"
 
 GridLayout {
   id: sessionButtonsLayout
@@ -53,8 +52,8 @@ GridLayout {
 
     onClicked: {
       Quickshell.execDetached(["loginctl", "lock-session"]);
-      GlobalState.rightSidebar.open = false;
-      GlobalState.rightSidebar.requestFocus?.(false);
+      GlobalState.bar.mainPanel.open = false;
+      GlobalState.bar.mainPanel.requestFocus?.(false);
     }
   }
 }

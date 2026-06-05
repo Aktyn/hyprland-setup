@@ -46,8 +46,23 @@ Singleton {
     property var requestFocus
   }
 
-  component CalendarPanelState: PanelState {
+  component CalendarPanelState: QtObject {
     property TimerState timer: TimerState {}
+  }
+
+  component AppSearchState: QtObject {
+    property int selectedEntryIndex: 0
+  }
+
+  component MainPanelState: PanelState {
+    property bool superReleaseHelper: true
+    property int mainPanelTabIndex: 0
+
+    property int currentContentWidth: 128
+    property int currentContentHeight: 128
+
+    property AppSearchState appSearch: AppSearchState {}
+    property bool settingsWindowOpen: false
   }
 
   component BarState: QtObject {
@@ -58,43 +73,17 @@ Singleton {
     property PanelState notificationsPanel: PanelState {}
 
     property PanelState mediaControls: PanelState {}
-  }
 
-  readonly property BarState bar: BarState {}
+    property MainPanelState mainPanel: MainPanelState {}
+  }
+  property BarState bar: BarState {}
 
   component OsdState: QtObject {
     property bool volumeOpen: false
     property bool clipboardPanelOpen: false
     property bool cheetsheetOpen: false
   }
-
-  readonly property OsdState osd: OsdState {}
-
-  component AppSearchState: QtObject {
-    property int selectedEntryIndex: 0
-  }
-
-  component LeftSidebarState: QtObject {
-    property bool open: false
-    property ShellScreen screen: Quickshell.screens[0]
-    property var requestFocus
-
-    property AppSearchState appSearch: AppSearchState {}
-
-    property bool superReleaseHelper: true
-  }
-
-  readonly property LeftSidebarState leftSidebar: LeftSidebarState {}
-
-  component RightSidebarState: QtObject {
-    property bool open: false
-    property ShellScreen screen: Quickshell.screens[0]
-    property var requestFocus
-
-    property bool settingsWindowOpen: false
-  }
-
-  readonly property RightSidebarState rightSidebar: RightSidebarState {}
+  property OsdState osd: OsdState {}
 
   // --------------------------------------------------------------------------------
 
@@ -103,17 +92,20 @@ Singleton {
     description: "Toggles left sidebar"
 
     onPressed: {
-      root.leftSidebar.superReleaseHelper = true;
+      root.bar.mainPanel.superReleaseHelper = true;
     }
 
     onReleased: {
-      if (!root.leftSidebar.superReleaseHelper) {
-        root.leftSidebar.superReleaseHelper = true;
+      if (!root.bar.mainPanel.superReleaseHelper) {
+        root.bar.mainPanel.superReleaseHelper = true;
         return;
       }
-      root.leftSidebar.open = !root.leftSidebar.open;
-      if (!root.leftSidebar.open && typeof root.leftSidebar.requestFocus === 'function') {
-        root.leftSidebar.requestFocus(false);
+      root.bar.mainPanel.open = !root.bar.mainPanel.open;
+      if (root.bar.mainPanel.open) {
+        root.bar.mainPanel.mainPanelTabIndex = 0;
+      }
+      if (!root.bar.mainPanel.open && typeof root.bar.mainPanel.requestFocus === 'function') {
+        root.bar.mainPanel.requestFocus(false);
       }
     }
   }
@@ -122,7 +114,7 @@ Singleton {
     description: "Interrupts super release whenever shortcut consisting of super key has been pressed"
 
     onPressed: {
-      root.leftSidebar.superReleaseHelper = false;
+      root.bar.mainPanel.superReleaseHelper = false;
     }
   }
 

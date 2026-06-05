@@ -106,16 +106,6 @@ Scope {
       });
     }
 
-    // const catOrder = ["Workspaces", "Launchers", "System & Media", "Miscellaneous", "Windows"];
-    // model.sort((a, b) => {
-    //   let iA = catOrder.indexOf(a.category);
-    //   let iB = catOrder.indexOf(b.category);
-    //   if (iA === -1)
-    //     iA = 999;
-    //   if (iB === -1)
-    //     iB = 999;
-    //   return iA - iB;
-    // });
     model.sort((a, b) => b.items.length - a.items.length);
 
     root.bindsModel = model;

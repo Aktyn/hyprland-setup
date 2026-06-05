@@ -11,13 +11,13 @@ FloatingWindow {
   id: root
 
   title: "Settings"
-  screen: GlobalState.rightSidebar.screen
+  screen: GlobalState.bar.mainPanel.screen
   implicitWidth: 828
   implicitHeight: 512
 
   color: Style.colors.surface
 
-  onClosed: GlobalState.rightSidebar.settingsWindowOpen = false
+  onClosed: GlobalState.bar.mainPanel.settingsWindowOpen = false
 
   property url appearanceSettings: "pages/AppearanceSettings.qml"
   property url barSettings: "pages/BarSettings.qml"
@@ -67,24 +67,29 @@ FloatingWindow {
 
             model: ["Appearance", "Bar", "Workspaces", "Notifications", "Battery"]
             delegate: ItemDelegate {
+              id: item
+
+              required property int index
+              required property string modelData
+
               width: parent.width
 
               background: Rectangle {
-                color: parent.highlighted ? Style.colors.primaryContainer : "transparent"
+                color: item.highlighted ? Style.colors.primaryContainer : "transparent"
                 radius: Style.rounding.small
               }
 
               contentItem: StyledText {
-                text: modelData
+                text: item.modelData
                 font.pixelSize: Style.font.pixelSize.large
-                color: parent.highlighted ? Style.colors.colorOnPrimaryContainer : Style.colors.colorOnSurface
+                color: item.highlighted ? Style.colors.colorOnPrimaryContainer : Style.colors.colorOnSurface
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
               }
 
               onClicked: {
-                categoryList.currentIndex = index;
-                settingsLoader.source = settingsByCategory[modelData];
+                categoryList.currentIndex = item.index;
+                settingsLoader.source = root.settingsByCategory[item.modelData];
               }
             }
           }

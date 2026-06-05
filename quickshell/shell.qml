@@ -20,7 +20,6 @@ ShellRoot {
   // --- OSDs ---
   VolumeChangeIndicator {}
 
-  //TODO: [optimization] create generic component for automatically unloading lazy loaded components
   LazyLoader {
     loading: GlobalState.osd.cheetsheetOpen
     component: Cheetsheet {}

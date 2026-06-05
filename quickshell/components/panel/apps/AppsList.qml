@@ -3,7 +3,8 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell
 
-import "../../common"
+import "../../../common"
+import "."
 
 ScrollView {
   id: root
@@ -17,14 +18,17 @@ ScrollView {
     Layout.fillWidth: true
     spacing: Style.sizes.spacingSmall
     model: root.apps
-    currentIndex: GlobalState.leftSidebar.appSearch.selectedEntryIndex
+    currentIndex: GlobalState.bar.mainPanel.appSearch.selectedEntryIndex
 
     delegate: EntryItem {
+      required property int index
+      required property DesktopEntry modelData
+
       anchors.left: parent?.left
       anchors.right: parent?.right
 
       entry: modelData
-      toggled: GlobalState.leftSidebar.appSearch.selectedEntryIndex === index
+      toggled: GlobalState.bar.mainPanel.appSearch.selectedEntryIndex === index
     }
   }
 }

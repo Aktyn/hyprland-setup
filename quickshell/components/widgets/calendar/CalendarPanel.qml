@@ -6,14 +6,21 @@ import ".."
 import "../common"
 import "../../../common"
 
-ColumnLayout {
+RowLayout {
+  id: root
+
   spacing: Style.sizes.spacingLarge
 
-  CalendarWidget {}
+  CalendarWidget {
+    id: calendarWidget
+  }
 
-  HSeparator {}
+  VSeparator {
+    Layout.fillHeight: true
+    Layout.maximumHeight: root.implicitHeight * 0.618
+  }
 
   TimerWidget {
-    Layout.preferredWidth: parent.width
+    Layout.minimumWidth: calendarWidget.width
   }
 }

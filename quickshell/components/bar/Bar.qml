@@ -14,6 +14,7 @@ import "../widgets/calendar"
 import "../widgets/notes"
 import "../widgets/audio"
 import "../sidebar"
+import "../panel"
 
 LazyLoader {
   id: bar
@@ -154,92 +155,42 @@ LazyLoader {
 
         // ------------------------ Dynamic panels ------------------------
 
-        // Left sidebar
+        // Main panel
         LazyLoader {
-          active: true
+          loading: true
 
+          //TODO: develop from scratch an improved version of BarAdjacentPanel for MainPanel
           BarAdjacentPanel {
-            id: leftSidebarContainer
-
-            side: BarAdjacentPanel.Side.Left
+            id: mainPanelContainer
 
             property bool hasFullScreen: !!Hyprland.monitorFor(this.screen).activeWorkspace?.toplevels.values.some(top => top.wayland?.fullscreen)
             adhesive: !hasFullScreen && !GlobalState.transparencyEnabled
             detached: hasFullScreen || GlobalState.transparencyEnabled
 
-            screen: GlobalState.leftSidebar.screen
-            show: GlobalState.leftSidebar.open
+            screen: GlobalState.bar.mainPanel.screen
+            show: GlobalState.bar.mainPanel.open
+            innerPadding: 0
 
-            closeOnBackgroundClick: GlobalState.leftSidebar.open
+            closeOnBackgroundClick: GlobalState.bar.mainPanel.open
             onBackgroundClick: function () {
-              GlobalState.leftSidebar.open = false;
+              GlobalState.bar.mainPanel.open = false;
             }
 
             Component.onCompleted: {
-              GlobalState.leftSidebar.requestFocus = leftSidebarContainer.onRequestFocus;
+              GlobalState.bar.mainPanel.requestFocus = mainPanelContainer.onRequestFocus;
             }
 
-            sourceComponent: LeftSidebar {
-              Layout.minimumWidth: 384
+            sourceComponent: MainPanel {
+              screen: GlobalState.bar.mainPanel.screen
             }
-          }
-        }
-
-        //Right sidebar
-        LazyLoader {
-          active: true
-
-          BarAdjacentPanel {
-            id: rightSidebarContainer
-
-            side: BarAdjacentPanel.Side.Right
-            adhesive: !GlobalState.transparencyEnabled
-
-            screen: GlobalState.rightSidebar.screen
-            show: GlobalState.rightSidebar.open
-
-            closeOnBackgroundClick: GlobalState.rightSidebar.open
-            onBackgroundClick: function () {
-              GlobalState.rightSidebar.open = false;
-            }
-
-            Component.onCompleted: {
-              GlobalState.rightSidebar.requestFocus = rightSidebarContainer.onRequestFocus;
-            }
-
-            sourceComponent: RightSidebar {
-              width: 384
-            }
-          }
-        }
-
-        // Calendar panel sheet
-        LazyLoader {
-          active: true
-
-          BarAdjacentPanel {
-            id: calendarPanelContainer
-
-            screen: GlobalState.bar.calendarPanel.screen
-            show: GlobalState.bar.calendarPanel.open
-
-            onBackgroundClick: function () {
-              GlobalState.bar.calendarPanel.open = false;
-            }
-
-            Component.onCompleted: {
-              GlobalState.bar.calendarPanel.requestFocus = calendarPanelContainer.onRequestFocus;
-            }
-
-            sourceComponent: CalendarPanel {}
           }
         }
 
         // Notes panel sheet
         LazyLoader {
-          active: true
+          loading: true
 
-          BarAdjacentPanel {
+          component: BarAdjacentPanel {
             id: notesPanelContainer
 
             screen: GlobalState.bar.notesPanel.screen
@@ -259,9 +210,9 @@ LazyLoader {
 
         // Media controls panel sheet
         LazyLoader {
-          active: true
+          loading: true
 
-          BarAdjacentPanel {
+          component: BarAdjacentPanel {
             id: mediaControlsPanelContainer
 
             screen: GlobalState.bar.mediaControls.screen

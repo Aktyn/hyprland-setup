@@ -2,10 +2,9 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../../common"
-import "../../services"
-
-import "../widgets/common"
+import "../../widgets/common"
+import "../../../common"
+import "../../../services"
 
 ColumnLayout {
   spacing: Style.sizes.spacingMedium

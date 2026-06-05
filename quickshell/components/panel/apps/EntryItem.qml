@@ -3,9 +3,9 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 import Quickshell
 
-import "../../common"
-import "../../services"
-import "../widgets/common"
+import "../../../common"
+import "../../../services"
+import "../../widgets/common"
 
 StyledButton {
   id: root
@@ -17,8 +17,8 @@ StyledButton {
   onClicked: {
     entry.execute();
     Utils.updateRecentApps(entry.name);
-    GlobalState.leftSidebar.open = false;
-    GlobalState.leftSidebar.requestFocus(false);
+    GlobalState.bar.mainPanel.open = false;
+    GlobalState.bar.mainPanel.requestFocus(false);
   }
 
   contentItem: RowLayout {

@@ -171,19 +171,19 @@ Scope {
 
         implicitHeight: panel.implicitHeight
         Behavior on implicitHeight {
-          animation: Style.animation.elementMove.numberAnimation.createObject(this)
-          // animation: SequentialAnimation {
-          //   PauseAnimation {
-          //     duration: 1000
-          //   } // Delay in milliseconds
-          //   NumberAnimation {
-          //     duration: Style.animation.elementMove.duration
-          //     easing.type: Style.animation.elementMove.type
-          //   }
-          // }
+          // animation: Style.animation.elementMove.numberAnimation.createObject(this)
+          animation: SequentialAnimation {
+            PauseAnimation {
+              duration: 100 // Delay in milliseconds
+            }
+            NumberAnimation {
+              duration: Style.animation.elementMove.duration
+              easing.type: Style.animation.elementMove.type
+            }
+          }
         }
 
-        clip: true
+        clip: false
 
         state: root.show ? "visible" : "hidden"
 

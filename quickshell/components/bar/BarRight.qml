@@ -19,58 +19,60 @@ BarSection {
   mirror: true
   stretch: true
 
-  BarIconButton {
-    id: rightSidebarButton
+  //TODO: cleanup
+  // BarIconButton {
+  //   id: rightSidebarButton
 
-    toggled: false
-    implicitWidth: Style.sizes.iconLarge * (Updates.hasUpdates ? 2 : 1) + Style.sizes.spacingExtraSmall * 2
-    implicitHeight: Style.sizes.iconLarge + Style.sizes.spacingExtraSmall * 2
-    onPressed: {
-      GlobalState.rightSidebar.open = !GlobalState.rightSidebar.open;
-    }
+  //   toggled: false
+  //   implicitWidth: Style.sizes.iconLarge * (Updates.hasUpdates ? 2 : 1) + Style.sizes.spacingExtraSmall * 2
+  //   implicitHeight: Style.sizes.iconLarge + Style.sizes.spacingExtraSmall * 2
+  //   onPressed: {
+  //     GlobalState.rightSidebar.open = !GlobalState.rightSidebar.open;
+  //   }
 
-    property real iconRotation: GlobalState.rightSidebar.open ? 90 : 0
-    // contentItem.rotation: iconRotation
-    Behavior on iconRotation {
-      animation: Style.animation.elementMove.numberAnimation.createObject(this)
-    }
+  //   property real iconRotation: GlobalState.rightSidebar.open ? 90 : 0
+  //   // contentItem.rotation: iconRotation
+  //   Behavior on iconRotation {
+  //     animation: Style.animation.elementMove.numberAnimation.createObject(this)
+  //   }
 
-    contentItem: RowLayout {
-      anchors.fill: parent
+  //   contentItem: RowLayout {
+  //     anchors.fill: parent
 
-      spacing: Style.sizes.spacingExtraSmall
+  //     spacing: Style.sizes.spacingExtraSmall
 
-      MaterialSymbol {
-        visible: Updates.hasUpdates
+  //TODO: move the update indicator icon
+  //     MaterialSymbol {
+  //       visible: Updates.hasUpdates
 
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+  //       Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        Layout.preferredHeight: Style.sizes.iconLarge
-        Layout.preferredWidth: Style.sizes.iconLarge
+  //       horizontalAlignment: Text.AlignHCenter
+  //       verticalAlignment: Text.AlignVCenter
+  //       Layout.preferredHeight: Style.sizes.iconLarge
+  //       Layout.preferredWidth: Style.sizes.iconLarge
 
-        text: "update"
-        iconSize: Style.font.pixelSize.large
-        color: Style.colors.primary
-      }
+  //       text: "update"
+  //       iconSize: Style.font.pixelSize.large
+  //       color: Style.colors.primary
+  //     }
 
-      MaterialSymbol {
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+  //     MaterialSymbol {
+  //       Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-        rotation: rightSidebarButton.iconRotation
+  //       rotation: rightSidebarButton.iconRotation
 
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        Layout.preferredHeight: Style.sizes.iconLarge
-        Layout.preferredWidth: Style.sizes.iconLarge
+  //       horizontalAlignment: Text.AlignHCenter
+  //       verticalAlignment: Text.AlignVCenter
+  //       Layout.preferredHeight: Style.sizes.iconLarge
+  //       Layout.preferredWidth: Style.sizes.iconLarge
 
-        text: "more_vert"
-        iconSize: Style.font.pixelSize.large
-        color: rightSidebarButton.toggled ? Style.colors.primary : Style.colors.colorOnSurface
-      }
-    }
-  }
+  //       text: "more_vert"
+  //       iconSize: Style.font.pixelSize.large
+  //       color: rightSidebarButton.toggled ? Style.colors.primary : Style.colors.colorOnSurface
+  //     }
+  //   }
+  // }
 
   BatteryWidget {}
 
@@ -170,7 +172,7 @@ BarSection {
     }
 
     LazyLoader {
-      activeAsync: GlobalState.rightSidebar.settingsWindowOpen
+      activeAsync: GlobalState.bar.mainPanel.settingsWindowOpen
 
       component: SettingsWindow {}
     }

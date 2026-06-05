@@ -81,7 +81,7 @@ ColumnLayout {
             MouseArea {
               anchors.fill: parent
               onClicked: {
-                GlobalState.bar.calendarPanel.requestFocus();
+                GlobalState.bar.mainPanel.requestFocus();
                 parent.forceActiveFocus();
               }
             }
@@ -100,7 +100,7 @@ ColumnLayout {
               }
             }
           }
-          // StyledText {
+
           MaterialSymbol {
             visible: timerLayout.index < 2
 

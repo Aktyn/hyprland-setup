@@ -6,14 +6,18 @@ import Quickshell
 import Quickshell.Io
 import Qt5Compat.GraphicalEffects
 
-import "../../common"
-
-import "../widgets/common"
+import "../../../common"
+import "../../widgets/common"
 
 ColumnLayout {
   id: root
 
   spacing: Style.sizes.spacingMedium
+
+  function closeMainPanel() {
+    GlobalState.bar.mainPanel.open = false;
+    GlobalState.bar.mainPanel.requestFocus?.(false);
+  }
 
   GridLayout {
     Layout.fillWidth: true
@@ -31,8 +35,7 @@ ColumnLayout {
       content: "Open config file"
       onClicked: {
         Quickshell.execDetached(["xdg-open", Consts.path.configFile]);
-        GlobalState.rightSidebar.open = false;
-        GlobalState.rightSidebar.requestFocus?.(false);
+        root.closeMainPanel();
       }
     }
 
@@ -42,9 +45,8 @@ ColumnLayout {
       iconName: "settings"
       content: "Open settings"
       onClicked: {
-        GlobalState.rightSidebar.open = false;
-        GlobalState.rightSidebar.requestFocus?.(false);
-        GlobalState.rightSidebar.settingsWindowOpen = true;
+        root.closeMainPanel();
+        GlobalState.bar.mainPanel.settingsWindowOpen = true;
       }
     }
   }
@@ -62,8 +64,7 @@ ColumnLayout {
 
     Repeater {
       id: hdrOptions
-    
-      
+
       model: HyprlandInfo.monitors
       delegate: RowLayout {
         id: hdrOptionRow
@@ -71,20 +72,20 @@ ColumnLayout {
         spacing: Style.sizes.spacingMedium
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
-        
+
         required property var modelData
-        
+
         StyledSwitch {
           checked: HyprlandInfo.monitors.find(monitor => monitor.name === hdrOptionRow.modelData.name && monitor.colorManagementPreset === 'hdr') ?? false
           onCheckedChanged: () => {
             const hdrInfo = HyprlandInfo.monitors.map(monitor => ({
-              name: monitor.name,
-              hdrEnabled: monitor.name === hdrOptionRow.modelData.name ? this.checked : monitor.colorManagementPreset === 'hdr'
-            })) 
-            ScriptRunner.toggleHDRSettings(hdrInfo)
+                  name: monitor.name,
+                  hdrEnabled: monitor.name === hdrOptionRow.modelData.name ? this.checked : monitor.colorManagementPreset === 'hdr'
+                }));
+            ScriptRunner.toggleHDRSettings(hdrInfo);
           }
         }
-  
+
         StyledText {
           Layout.alignment: Qt.AlignVCenter
           text: `Screen ${hdrOptionRow.modelData.name} (${hdrOptionRow.modelData.width}x${hdrOptionRow.modelData.height})`
@@ -93,14 +94,12 @@ ColumnLayout {
       }
     }
 
-
     LabeledHSeparator {
       Layout.alignment: Qt.AlignHCenter
 
       text: Config.wallpaper.path ? "Current wallpaper" : "No wallpaper selected"
       color: Style.colors.outline
     }
-
 
     Rectangle {
       id: wallpaperThumbnailContainer
@@ -147,9 +146,8 @@ ColumnLayout {
       content: "Select wallpaper"
 
       onClicked: {
+        root.closeMainPanel();
         ScriptRunner.selectWallpaperProcess.running = true;
-        GlobalState.rightSidebar.requestFocus?.(false);
-        GlobalState.rightSidebar.open = false;
       }
     }
   }

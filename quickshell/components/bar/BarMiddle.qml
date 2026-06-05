@@ -33,18 +33,46 @@ Item {
       implicitWidth: clockWidget.width + Style.sizes.spacingMedium * 2
       implicitHeight: clockWidget.height + Style.sizes.spacingExtraSmall * 2
 
-      toggled: GlobalState.bar.calendarPanel.open
+      toggled: GlobalState.bar.mainPanel.open
 
-      ClockWidget {
+      RowLayout {
         id: clockWidget
+        spacing: Style.sizes.spacingMedium
         anchors.centerIn: parent
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        color: Time.time.startsWith("13:37") ? Style.colors.primary : Style.colors.colorOnSurface
+
+        MaterialSymbol {
+          Layout.alignment: Qt.AlignVCenter
+
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+
+          text: "menu"
+          iconSize: Style.font.pixelSize.huge
+
+          property bool isPanelOpen: GlobalState.bar.mainPanel.open
+
+          color: clockWidgetButton.hovered || isPanelOpen ? Style.colors.primary : Qt.darker(Style.colors.colorOnSurface, 3)
+          Behavior on color {
+            animation: Style.animation.elementMoveFast.colorAnimation.createObject(this)
+          }
+
+          scale: clockWidgetButton.hovered && !isPanelOpen ? 1.25 : 1
+          Behavior on scale {
+            animation: Style.animation.elementMoveFast.numberAnimation.createObject(this)
+          }
+        }
+
+        ClockWidget {
+          Layout.alignment: Qt.AlignVCenter
+          // id: clockWidget
+          color: Time.time.startsWith("13:37") ? Style.colors.primary : Style.colors.colorOnSurface
+        }
       }
 
       onPressed: {
-        GlobalState.bar.calendarPanel.open = !GlobalState.bar.calendarPanel.open;
-        GlobalState.bar.calendarPanel.screen = section.screen;
+        GlobalState.bar.mainPanel.open = !GlobalState.bar.mainPanel.open;
+        GlobalState.bar.mainPanel.screen = section.screen;
       }
     }
 

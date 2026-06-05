@@ -2,7 +2,11 @@
 
 A comprehensive, feature-rich Hyprland configuration with Quickshell integration, custom SDDM theme, and carefully selected applications for an optimal desktop experience.  
 This project is made for personal use although I'm happy to implement additional features upon request.  
-Hyprland configuration is written in lua.  
+It is designed to be practical and efficient during daily usage and work.  
+The configuration does not favour either mouse- or keyboard-oriented users — everything can be done 'one-handed', depending on one's preference.
+
+Hyprland configuration is written in lua. [See why it matters](https://hypr.land/news/26_lua)
+
 [Open an issue to request features](https://github.com/Aktyn/hyprland-setup/issues/new)
 
 ![Preview 1](previews/combined.webp)

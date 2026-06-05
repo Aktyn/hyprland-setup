@@ -12,8 +12,8 @@ Item {
   property int monthShift: 0
   property var viewingDate: CalendarLayout.getDateInXMonthsTime(monthShift)
   property var calendarLayout: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
-  width: calendarColumn.width
-  implicitHeight: calendarColumn.height
+  implicitWidth: calendarColumn.implicitWidth
+  implicitHeight: calendarColumn.implicitHeight
 
   Keys.onPressed: event => {
     if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
@@ -92,6 +92,7 @@ Item {
       Repeater {
         model: CalendarLayout.weekDays
         delegate: CalendarDayButton {
+          required property var modelData
           day: modelData.day
           isToday: modelData.today
           bold: true
@@ -112,8 +113,11 @@ Item {
         Repeater {
           model: Array(7).fill(modelData)
           delegate: CalendarDayButton {
-            day: calendarLayout[modelData][index].day
-            isToday: calendarLayout[modelData][index].today
+            required property int index
+            required property var modelData
+
+            day: root.calendarLayout[modelData][index].day
+            isToday: root.calendarLayout[modelData][index].today
           }
         }
       }

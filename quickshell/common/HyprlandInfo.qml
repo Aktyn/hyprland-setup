@@ -97,25 +97,51 @@ Singleton {
     }
   }
 
+  function auditJsonStructure(json, expectedKeys) {
+    const keys = Object.keys(json);
+    for (const key of expectedKeys) {
+      if (!keys.includes(key)) {
+        console.warn("Unexpected JSON structure: " + JSON.stringify(json), '\nmissing key: "' + key + '"');
+        return false;
+      }
+    }
+    return true;
+  }
+
   Process {
     command: "hyprctl getoption decoration:rounding -j".split(" ")
     running: true
     stdout: StdioCollector {
-      onStreamFinished: Number(hyprlandSingleton.decoration.rounding = JSON.parse(this.text).int)
+      onStreamFinished: {
+        const json = JSON.parse(this.text);
+        if (hyprlandSingleton.auditJsonStructure(json, ["int"])) {
+          hyprlandSingleton.decoration.rounding = Math.max(0, Number(json.int));
+        }
+      }
     }
   }
   Process {
     command: "hyprctl getoption general:gaps_in -j".split(" ")
     running: true
     stdout: StdioCollector {
-      onStreamFinished: hyprlandSingleton.general.gapsIn = JSON.parse(this.text).custom?.split(" ").map(v => Number(v)) || [0, 0, 0, 0]
+      onStreamFinished: {
+        const json = JSON.parse(this.text);
+        if (hyprlandSingleton.auditJsonStructure(json, ["css"])) {
+          hyprlandSingleton.general.gapsIn = json.css?.split(" ").map(v => Number(v)) || [0, 0, 0, 0];
+        }
+      }
     }
   }
   Process {
     command: "hyprctl getoption general:gaps_out -j".split(" ")
     running: true
     stdout: StdioCollector {
-      onStreamFinished: hyprlandSingleton.general.gapsOut = JSON.parse(this.text).custom?.split(" ").map(v => Number(v)) || [0, 0, 0, 0]
+      onStreamFinished: {
+        const json = JSON.parse(this.text);
+        if (hyprlandSingleton.auditJsonStructure(json, ["css"])) {
+          hyprlandSingleton.general.gapsOut = json.css?.split(" ").map(v => Number(v)) || [0, 0, 0, 0];
+        }
+      }
     }
   }
 }

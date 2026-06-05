@@ -89,17 +89,13 @@ Singleton {
     property AnimationElementType elementMove: AnimationElementType {
       duration: 500
       type: Easing.InOutQuad
-      numberAnimation: Component {
-        NumberAnimation {
-          duration: root.animation.elementMove.duration
-          easing.type: root.animation.elementMove.type
-        }
+      numberAnimation: NumberAnimation {
+        duration: root.animation.elementMove.duration
+        easing.type: root.animation.elementMove.type
       }
-      colorAnimation: Component {
-        ColorAnimation {
-          duration: root.animation.elementMove.duration
-          easing.type: root.animation.elementMove.type
-        }
+      colorAnimation: ColorAnimation {
+        duration: root.animation.elementMove.duration
+        easing.type: root.animation.elementMove.type
       }
     }
 
@@ -107,17 +103,13 @@ Singleton {
       duration: 250
       type: Easing.InOutQuad
       velocity: 850
-      colorAnimation: Component {
-        ColorAnimation {
-          duration: root.animation.elementMoveFast.duration
-          easing.type: root.animation.elementMoveFast.type
-        }
+      colorAnimation: ColorAnimation {
+        duration: root.animation.elementMoveFast.duration
+        easing.type: root.animation.elementMoveFast.type
       }
-      numberAnimation: Component {
-        NumberAnimation {
-          duration: root.animation.elementMoveFast.duration
-          easing.type: root.animation.elementMoveFast.type
-        }
+      numberAnimation: NumberAnimation {
+        duration: root.animation.elementMoveFast.duration
+        easing.type: root.animation.elementMoveFast.type
       }
     }
   }

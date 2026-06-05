@@ -3,16 +3,16 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 
-import "../../scripts/levendist.js" as Levendist
-import "../../scripts/md5.js" as MD5
+import "../../../scripts/levendist.js" as Levendist
+import "../../../scripts/md5.js" as MD5
 
-import "../../common"
-import "../widgets/common"
+import "../../../common"
+import "../../widgets/common"
 
 ColumnLayout {
   id: root
 
-  property bool active: GlobalState.leftSidebar.open
+  property bool active: GlobalState.bar.mainPanel.open && GlobalState.bar.mainPanel.mainPanelTabIndex === 0
   property real scoreThreshold: 0.2
 
   readonly property list<DesktopEntry> allApps: Array.from(DesktopEntries.applications.values).filter(entry => !entry.noDisplay).sort((a, b) => {
@@ -50,22 +50,22 @@ ColumnLayout {
   property string appResultsHash: ""
   onAppResultsHashChanged: function () {
     if (appSearch.searchText.startsWith("!") && appSearch.searchText.length > 1) {
-      GlobalState.leftSidebar.appSearch.selectedEntryIndex = -1;
+      GlobalState.bar.mainPanel.appSearch.selectedEntryIndex = -1;
     } else {
-      GlobalState.leftSidebar.appSearch.selectedEntryIndex = 0;
+      GlobalState.bar.mainPanel.appSearch.selectedEntryIndex = 0;
     }
   }
 
   Keys.onPressed: event => {
     if (event.key === Qt.Key_Up) {
-      GlobalState.leftSidebar.appSearch.selectedEntryIndex--;
+      GlobalState.bar.mainPanel.appSearch.selectedEntryIndex--;
       event.accepted = true;
     } else if (event.key === Qt.Key_Down) {
-      GlobalState.leftSidebar.appSearch.selectedEntryIndex++;
+      GlobalState.bar.mainPanel.appSearch.selectedEntryIndex++;
       event.accepted = true;
     }
 
-    GlobalState.leftSidebar.appSearch.selectedEntryIndex = Utils.clamp(GlobalState.leftSidebar.appSearch.selectedEntryIndex, 0, this.appsList.length - 1);
+    GlobalState.bar.mainPanel.appSearch.selectedEntryIndex = Utils.clamp(GlobalState.bar.mainPanel.appSearch.selectedEntryIndex, 0, this.appsList.length - 1);
   }
 
   onActiveChanged: {
@@ -74,7 +74,7 @@ ColumnLayout {
         appSearch.focusInput();
       }
 
-      GlobalState.leftSidebar?.requestFocus();
+      GlobalState.bar.mainPanel?.requestFocus();
       clearTimeout.running = false;
     } else if (typeof appSearch.clear === "function") {
       clearTimeout.restart();
@@ -93,6 +93,13 @@ ColumnLayout {
 
   spacing: Style.sizes.spacingLarge
 
+  function runCommand(command: string) {
+    console.info("Executing command: " + command);
+    Quickshell.execDetached(["bash", "-c", command]);
+    GlobalState.bar.mainPanel.open = false;
+    GlobalState.bar.mainPanel.requestFocus(false);
+  }
+
   SearchField {
     id: appSearch
 
@@ -101,18 +108,18 @@ ColumnLayout {
 
     onEnter: function () {
       if (appSearch.searchText.startsWith("!") && appSearch.searchText.length > 1) {
-        Quickshell.execDetached(["bash", "-c", appSearch.searchText.substr(1)]);
+        root.runCommand(appSearch.searchText.substr(1));
         return;
       }
 
-      if (GlobalState.leftSidebar.appSearch.selectedEntryIndex < root.appsList.length) {
-        const app = root.appsList[GlobalState.leftSidebar.appSearch.selectedEntryIndex];
+      if (GlobalState.bar.mainPanel.appSearch.selectedEntryIndex < root.appsList.length) {
+        const app = root.appsList[GlobalState.bar.mainPanel.appSearch.selectedEntryIndex];
         if (app) {
           app.execute();
           Utils.updateRecentApps(app.name);
         }
-        GlobalState.leftSidebar.open = false;
-        GlobalState.leftSidebar.requestFocus(false);
+        GlobalState.bar.mainPanel.open = false;
+        GlobalState.bar.mainPanel.requestFocus(false);
       }
     }
   }
@@ -126,9 +133,7 @@ ColumnLayout {
     borderColor: Style.colors.outline
 
     onClicked: {
-      Quickshell.execDetached(["bash", "-c", appSearch.searchText.substr(1)]);
-      GlobalState.leftSidebar.open = false;
-      GlobalState.leftSidebar.requestFocus(false);
+      root.runCommand(appSearch.searchText.substr(1));
     }
   }
 
@@ -184,8 +189,8 @@ ColumnLayout {
         const result = root.calcResult.replace(/"/g, '\\"').replace(/\n$/, "");
         ScriptRunner.copyToClipboard(result);
 
-        GlobalState.leftSidebar.open = false;
-        GlobalState.leftSidebar.requestFocus(false);
+        GlobalState.bar.mainPanel.open = false;
+        GlobalState.bar.mainPanel.requestFocus(false);
       }
     }
   }
