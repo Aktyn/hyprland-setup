@@ -5,16 +5,14 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
 
-import "../../common"
-import "../../services"
-
 import "."
 import "../widgets/common"
 import "../widgets/calendar"
 import "../widgets/notes"
 import "../widgets/audio"
-import "../sidebar"
 import "../panel"
+import "../../common"
+import "../../services"
 
 LazyLoader {
   id: bar

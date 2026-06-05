@@ -10,7 +10,7 @@ ColumnLayout {
 
   SettingsRow {
     label: "Hide author link"
-    description: "Hide the link to the author's website in the sidebar."
+    description: "Hide the link to the author's website in the options panel."
     children: StyledSwitch {
       checked: Config.general.hideAuthorLink
       onCheckedChanged: Config.general.hideAuthorLink = checked

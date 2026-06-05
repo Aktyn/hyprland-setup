@@ -3,17 +3,19 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 
+import "."
 import "../../../scripts/levendist.js" as Levendist
 import "../../../scripts/md5.js" as MD5
-
 import "../../../common"
 import "../../widgets/common"
+
 
 ColumnLayout {
   id: root
 
   property bool active: GlobalState.bar.mainPanel.open && GlobalState.bar.mainPanel.mainPanelTabIndex === 0
   property real scoreThreshold: 0.2
+
 
   readonly property list<DesktopEntry> allApps: Array.from(DesktopEntries.applications.values).filter(entry => !entry.noDisplay).sort((a, b) => {
     const aIndex = Utils.recentApps.indexOf(a.name);
@@ -25,25 +27,46 @@ ColumnLayout {
     return bIndex - aIndex;
   })
 
-  readonly property list<DesktopEntry> appsList: {
+  readonly property list<var> appsList: {
+    function splitList(list) {
+      const listOfPairs = []
+      for(let i = 0; i < list.length; i += 2) {
+        listOfPairs.push({ 
+          left: list[i]?.entry || list[i],
+          right: list[i + 1]?.entry || list[i + 1]
+        })
+      }
+      return listOfPairs;
+    }
+
     if (appSearch.searchText.length < 1) {
-      return allApps;
+      return splitList(allApps);
     }
 
     const search = appSearch.searchText.toLowerCase();
 
-    const results = allApps.map(obj => ({
-          entry: obj,
-          score: Levendist.computeScore(obj.name.toLowerCase(), search)
-        })).filter(item => item.score > root.scoreThreshold).sort((a, b) => b.score - a.score);
+    const results = allApps.reduce((acc, entry) => {
+      const score = Levendist.computeScore(entry.name.toLowerCase(), search);
+      if (score > root.scoreThreshold) {
+        acc.push({
+          entry,
+          score
+        });
+      }
 
-    return results.map(item => item.entry);
+      return acc;
+    }, []).sort((a, b) => b.score - a.score);
+
+    return splitList(results);
   }
-  property bool noAppResults: !!appSearch.searchText && !root.appsList.length
+
+  readonly property int appsListCount: root.appsList.length * 2 - (root.appsList[root.appsList.length-1]?.right ? 0 : 1);
+
+  property bool noAppResults: !!appSearch.searchText && appsListCount <= 0
   property string calcResult: ""
 
   onAppsListChanged: {
-    const combinedNames = root.appsList.reduce((acc, app) => acc + app.name, "");
+    const combinedNames = root.appsList.reduce((acc, app) => acc + (app.left?.name || "") + (app.right?.name || ""), "");
     this.appResultsHash = MD5.md5(combinedNames);
   }
 
@@ -65,7 +88,7 @@ ColumnLayout {
       event.accepted = true;
     }
 
-    GlobalState.bar.mainPanel.appSearch.selectedEntryIndex = Utils.clamp(GlobalState.bar.mainPanel.appSearch.selectedEntryIndex, 0, this.appsList.length - 1);
+    GlobalState.bar.mainPanel.appSearch.selectedEntryIndex = Utils.clamp(GlobalState.bar.mainPanel.appSearch.selectedEntryIndex, 0, this.appsListCount - 1);
   }
 
   onActiveChanged: {
@@ -112,11 +135,12 @@ ColumnLayout {
         return;
       }
 
-      if (GlobalState.bar.mainPanel.appSearch.selectedEntryIndex < root.appsList.length) {
-        const app = root.appsList[GlobalState.bar.mainPanel.appSearch.selectedEntryIndex];
-        if (app) {
-          app.execute();
-          Utils.updateRecentApps(app.name);
+      if (GlobalState.bar.mainPanel.appSearch.selectedEntryIndex < root.appsListCount) {
+        const appsPair = root.appsList[Math.floor(GlobalState.bar.mainPanel.appSearch.selectedEntryIndex/2)];
+        const entry = GlobalState.bar.mainPanel.appSearch.selectedEntryIndex % 2 === 0 ? appsPair.left : appsPair.right;
+        if (entry) {
+          entry.execute();
+          Utils.updateRecentApps(entry.name);
         }
         GlobalState.bar.mainPanel.open = false;
         GlobalState.bar.mainPanel.requestFocus(false);
@@ -138,7 +162,7 @@ ColumnLayout {
   }
 
   AppsList {
-    visible: root.appsList.length > 0
+    visible: root.appsListCount > 0
     Layout.fillWidth: true
     Layout.maximumHeight: 640
 

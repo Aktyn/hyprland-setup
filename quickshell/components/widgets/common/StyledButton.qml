@@ -160,6 +160,10 @@ Button {
       animation: Style.animation.elementMoveFast.colorAnimation.createObject(this)
     }
 
+    Behavior on border.color {
+      animation: Style.animation.elementMoveFast.colorAnimation.createObject(this)
+    }
+
     layer.enabled: true
     layer.effect: OpacityMask {
       maskSource: Rectangle {

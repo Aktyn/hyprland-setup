@@ -10,7 +10,7 @@ import "../../widgets/common"
 StyledButton {
   id: root
 
-  property DesktopEntry entry
+  required property DesktopEntry entry
   buttonRadius: Style.rounding.verysmall
   clip: true
 

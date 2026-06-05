@@ -19,67 +19,28 @@ BarSection {
   mirror: true
   stretch: true
 
-  //TODO: cleanup
-  // BarIconButton {
-  //   id: rightSidebarButton
+  BarIconButton {
+    visible: Updates.hasUpdates
 
-  //   toggled: false
-  //   implicitWidth: Style.sizes.iconLarge * (Updates.hasUpdates ? 2 : 1) + Style.sizes.spacingExtraSmall * 2
-  //   implicitHeight: Style.sizes.iconLarge + Style.sizes.spacingExtraSmall * 2
-  //   onPressed: {
-  //     GlobalState.rightSidebar.open = !GlobalState.rightSidebar.open;
-  //   }
+    onPressed: {
+      GlobalState.bar.mainPanel.open = !GlobalState.bar.mainPanel.open;
+      GlobalState.bar.mainPanel.mainPanelTabIndex = 2;
+    }
+    iconName: "update"
 
-  //   property real iconRotation: GlobalState.rightSidebar.open ? 90 : 0
-  //   // contentItem.rotation: iconRotation
-  //   Behavior on iconRotation {
-  //     animation: Style.animation.elementMove.numberAnimation.createObject(this)
-  //   }
+    color: Style.colors.primary
 
-  //   contentItem: RowLayout {
-  //     anchors.fill: parent
-
-  //     spacing: Style.sizes.spacingExtraSmall
-
-  //TODO: move the update indicator icon
-  //     MaterialSymbol {
-  //       visible: Updates.hasUpdates
-
-  //       Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-
-  //       horizontalAlignment: Text.AlignHCenter
-  //       verticalAlignment: Text.AlignVCenter
-  //       Layout.preferredHeight: Style.sizes.iconLarge
-  //       Layout.preferredWidth: Style.sizes.iconLarge
-
-  //       text: "update"
-  //       iconSize: Style.font.pixelSize.large
-  //       color: Style.colors.primary
-  //     }
-
-  //     MaterialSymbol {
-  //       Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-
-  //       rotation: rightSidebarButton.iconRotation
-
-  //       horizontalAlignment: Text.AlignHCenter
-  //       verticalAlignment: Text.AlignVCenter
-  //       Layout.preferredHeight: Style.sizes.iconLarge
-  //       Layout.preferredWidth: Style.sizes.iconLarge
-
-  //       text: "more_vert"
-  //       iconSize: Style.font.pixelSize.large
-  //       color: rightSidebarButton.toggled ? Style.colors.primary : Style.colors.colorOnSurface
-  //     }
-  //   }
-  // }
+    StyledTooltip {
+      content: "Updates available"
+      side: StyledTooltip.TooltipSide.Left
+    }
+  }
 
   BatteryWidget {}
 
   BarIconButton {
     id: nightLightButton
-    property bool enabled: Hyprsunset.active
-    toggled: enabled
+    toggled: Hyprsunset.active
     iconName: "bedtime"
     onClicked: {
       Hyprsunset.toggle();

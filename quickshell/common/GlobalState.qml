@@ -89,7 +89,7 @@ Singleton {
 
   GlobalShortcut {
     name: "overviewToggleRelease"
-    description: "Toggles left sidebar"
+    description: "Toggles main panel"
 
     onPressed: {
       root.bar.mainPanel.superReleaseHelper = true;

@@ -9,26 +9,50 @@ import "."
 ScrollView {
   id: root
 
-  required property list<DesktopEntry> apps
+  required property list<var> apps
   clip: true
+
 
   ListView {
     id: listView
 
     Layout.fillWidth: true
-    spacing: Style.sizes.spacingSmall
+    spacing: Style.sizes.spacingMedium
     model: root.apps
     currentIndex: GlobalState.bar.mainPanel.appSearch.selectedEntryIndex
 
-    delegate: EntryItem {
+    delegate: Grid {
+      id: row
       required property int index
-      required property DesktopEntry modelData
+      required property var modelData
 
-      anchors.left: parent?.left
-      anchors.right: parent?.right
+      Layout.fillWidth: true
+      columns: 2
+      spacing: Style.sizes.spacingMedium
 
-      entry: modelData
-      toggled: GlobalState.bar.mainPanel.appSearch.selectedEntryIndex === index
+      anchors.left: parent.left
+      anchors.right: parent.right
+
+      ListEntry {
+        visible: !!row.modelData.left
+
+        width: (row.width - row.spacing) / 2
+        entry: row.modelData.left
+        toggled: listView.currentIndex === row.index*2
+      }
+
+      ListEntry {
+        visible: !!row.modelData.right
+
+        width: (row.width - row.spacing) / 2
+        entry: row.modelData.right
+        toggled: listView.currentIndex === row.index*2+1
+      }
     }
+  }
+
+  component ListEntry: EntryItem {
+    borderWidth: 1
+    borderColor: hovered ? Style.colors.outline : (toggled ? Style.colors.primary : "transparent")
   }
 }
