@@ -87,4 +87,17 @@ Singleton {
   function clamp(value: real, min: real, max: real): real {
     return Math.max(min, Math.min(max, value));
   }
+
+  function linearlyWeighterAverage(values: list<real>): real {
+    if (values.length === 0) {
+      return 0;
+    }
+    let totalWeight = 0;
+    let weightedSum = 0;
+    for (let i = 0; i < values.length; i++) {
+      totalWeight += (i+1); // More recent values get higher weight
+      weightedSum += values[i] * (i+1);
+    }
+    return totalWeight > 0 ? weightedSum / totalWeight : 0;
+  }
 }
