@@ -15,7 +15,9 @@ Hyprland configuration is written in lua. [See why it matters](https://hypr.land
 
 The `install.sh` script automatically installs all required packages, suggested applications, and sets up a customized Hyprland configuration with feature-rich Quickshell.
 
-**⚠️ Important:** This script will override your existing Hyprland configuration. Please backup your current setup before proceeding.
+**⚠️ Important:** This script will override your existing Hyprland configuration except **custom.lua** file. Please backup your current setup before proceeding.  
+After installation you should place all your customised Hyprland configuration inside `~/.config/hypr/custom.lua` file.  
+[Example **custom.lua** file](https://gist.github.com/Aktyn/4d5c047da59c43f5d10747a4f0ada5b8) (use it only as a reference, as it won't work with a different monitor configuration)
 
 ### Prerequisites
 
