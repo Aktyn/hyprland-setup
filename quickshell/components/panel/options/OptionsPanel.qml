@@ -16,18 +16,20 @@ ColumnLayout {
     visible: !Config.general.hideAuthorLink
     Layout.fillWidth: true
 
+    background.implicitHeight: Style.sizes.heightExtraLarge
+
     contentItem: Item {
       anchors.fill: parent
 
       RowLayout {
         anchors.centerIn: parent
 
-        spacing: Style.sizes.spacingLarge
+        spacing: Style.sizes.spacingMedium
 
         CustomIcon {
           id: aktynLogoIcon
 
-          implicitWidth: Style.sizes.iconExtraLarge
+          implicitWidth: Style.sizes.iconMedium
           implicitHeight: this.implicitWidth
 
           source: "aktyn-logo"
@@ -36,10 +38,10 @@ ColumnLayout {
         }
 
         Text {
-          text: "Aktyn"
+          text: "More about author"
           color: Style.colors.colorOnSurface
           font.weight: Font.Medium
-          font.pixelSize: Style.font.pixelSize.huge
+          font.pixelSize: Style.font.pixelSize.small
         }
       }
     }
@@ -74,3 +76,4 @@ ColumnLayout {
     Layout.fillWidth: true
   }
 }
+

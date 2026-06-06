@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
 import Qt5Compat.GraphicalEffects
 
 import "../../../common"
@@ -12,7 +11,7 @@ import "../../widgets/common"
 ColumnLayout {
   id: root
 
-  spacing: Style.sizes.spacingMedium
+  spacing: Style.sizes.spacingLarge
 
   function closeMainPanel() {
     GlobalState.bar.mainPanel.open = false;
@@ -51,16 +50,18 @@ ColumnLayout {
     }
   }
 
-  ColumnLayout {
-    spacing: Style.sizes.spacingSmall
-    Layout.fillWidth: true
+  LabeledHSeparator {
+    Layout.alignment: Qt.AlignHCenter
 
-    LabeledHSeparator {
-      Layout.alignment: Qt.AlignHCenter
+    text: "HDR options"
+    color: Style.colors.outline
+  }
 
-      text: "HDR options"
-      color: Style.colors.outline
-    }
+  GridLayout {
+    columns: 2
+    columnSpacing: Style.sizes.spacingExtraLarge
+    rowSpacing: Style.sizes.spacingMedium
+    Layout.alignment: Qt.AlignHCenter
 
     Repeater {
       id: hdrOptions
@@ -93,25 +94,42 @@ ColumnLayout {
         }
       }
     }
+  }
 
-    LabeledHSeparator {
-      Layout.alignment: Qt.AlignHCenter
+  LabeledHSeparator {
+    Layout.alignment: Qt.AlignHCenter
 
-      text: Config.wallpaper.path ? "Current wallpaper" : "No wallpaper selected"
-      color: Style.colors.outline
-    }
+    text: Config.wallpaper.path ? "Current wallpaper" : "No wallpaper selected"
+    color: Style.colors.outline
+  }
 
+  ColumnLayout {
+    Layout.fillWidth: true
+    Layout.alignment: Qt.AlignHCenter
+
+    //TODO: horizontally scrollable strip of recent wallpapers surronding currently selected one; goin left/right will change wallpaper to it
     Rectangle {
       id: wallpaperThumbnailContainer
       visible: !!Config.wallpaper.path
 
-      Layout.fillWidth: true
-      Layout.preferredHeight: wallpaperThumbnail.height + 2
+      readonly property int borderWidth: 2
+      readonly property int maximumHeight: 256
+
+      Layout.alignment: Qt.AlignHCenter
+      Layout.preferredHeight: wallpaperThumbnail.height + borderWidth*2
+      Layout.preferredWidth: wallpaperThumbnail.width + borderWidth*2
 
       color: "transparent"
-      border.width: 1
-      border.color: Style.colors.outlineVariant
+      border.width: borderWidth
+      border.color: colorQuantizer?.colors[0] ?? Style.colors.outlineVariant
       radius: Style.rounding.normal
+
+      ColorQuantizer {
+        id: colorQuantizer
+        source: Qt.resolvedUrl(Config.wallpaper.path)
+        depth: 0
+        rescaleSize: 64 // Rescale to 64x64 for faster processing
+      }
 
       Image {
         id: wallpaperThumbnail
@@ -125,15 +143,16 @@ ColumnLayout {
         fillMode: Image.PreserveAspectFit
 
         sourceSize {
-          width: wallpaperThumbnailContainer.width - 2
+          height: wallpaperThumbnailContainer.maximumHeight
         }
+
 
         layer.enabled: true
         layer.effect: OpacityMask {
           maskSource: Rectangle {
             width: wallpaperThumbnail.width
             height: wallpaperThumbnail.height
-            radius: wallpaperThumbnailContainer.radius
+            radius: wallpaperThumbnailContainer.radius - wallpaperThumbnailContainer.borderWidth
           }
         }
       }

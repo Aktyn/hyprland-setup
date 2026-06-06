@@ -79,7 +79,7 @@ Button {
         x,
         y
       } = event;
-      startRipple(x, y);
+      root.startRipple(x, y);
     }
     onReleased: event => {
       root.down = false;

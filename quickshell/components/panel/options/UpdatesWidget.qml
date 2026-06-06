@@ -8,28 +8,36 @@ import "../../../services"
 
 ColumnLayout {
   spacing: Style.sizes.spacingMedium
+  Layout.fillWidth: true
+  Layout.alignment: Qt.AlignHCenter
 
-  Text {
-    Layout.fillWidth: true
+  GridLayout {
+    id: updatesRow
 
-    text: Updates.isUpdating ? "Updating..." : `Updates available (${Updates.updatesCount})`
-    horizontalAlignment: Text.AlignHCenter
-    font.pixelSize: Style.font.pixelSize.large
-    font.weight: Font.DemiBold
-    color: Style.colors.primary
-  }
+    columns: 2
+    columnSpacing: Style.sizes.spacingMedium
+    uniformCellWidths: true
 
-  ActionButton {
-    visible: !Updates.isUpdating
+    Text {
+      text: Updates.isUpdating ? "Updating..." : `Updates available (${Updates.updatesCount}):`
+      Layout.fillWidth: true
+      horizontalAlignment: Text.AlignRight
+      font.pixelSize: Style.font.pixelSize.large
+      font.weight: Font.DemiBold
+      color: Style.colors.primary
+    }
 
-    Layout.fillWidth: true
-    Layout.alignment: Qt.AlignHCenter
+    ActionButton {
+      visible: !Updates.isUpdating
 
-    iconName: "update"
-    content: "Update now"
+      Layout.alignment: Qt.AlignHCenter
 
-    onClicked: {
-      Updates.update();
+      iconName: "update"
+      content: "Update now"
+
+      onClicked: {
+        Updates.update();
+      }
     }
   }
 
