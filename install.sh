@@ -349,7 +349,7 @@ killall qs >/dev/null 2>&1 || true
 killall quickshell >/dev/null 2>&1 || true
 sleep 1
 hyprctl reload >/dev/null 2>&1 || true
-qs -c aktyn &
+nohup qs -c aktyn >/dev/null 2>&1 &
 
 "$curr"/sddm/setup.sh
 
