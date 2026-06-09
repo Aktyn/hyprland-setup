@@ -161,7 +161,7 @@
 		"cmake.cacheInit": "quickshell/qmlls.cmake",
 		"cmake.sourceDirectory": "${workspaceFolder}/quickshell",
 		"[qml]": {
-			"editor.defaultFormatter": "theqtcompany.qt-qml"
+			"editor.defaultFormatter": "qml-formatter.noQt-qml-formatter"
 		}
 	}
 }

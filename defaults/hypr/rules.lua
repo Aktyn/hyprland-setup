@@ -135,5 +135,7 @@ hl.layer_rule({ name = "rule_104", match = { namespace = "quickshell:panel" }, b
 hl.layer_rule({ name = "rule_105", match = { namespace = "quickshell:panel" }, ignore_alpha = 0.1 })
 hl.layer_rule({ name = "rule_106", match = { namespace = "quickshell:panel" }, xray = false })
 hl.layer_rule({ name = "rule_107", match = { namespace = "quickshell:panel" }, no_anim = true })
+hl.layer_rule({ name = "rule_s01", match = { namespace = "quickshell:shadow" }, blur = false })
+hl.layer_rule({ name = "rule_s02", match = { namespace = "quickshell:shadow" }, no_anim = true })
 
 hl.window_rule({ name = "rule_108", match = { class = "org.quickshell", title = "^Settings$" }, float = true })

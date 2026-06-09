@@ -112,6 +112,32 @@ Singleton {
         easing.type: root.animation.elementMoveFast.type
       }
     }
+
+    property AnimationElementType easeOut: AnimationElementType {
+      duration: 250
+      type: Easing.OutQuad
+      colorAnimation: ColorAnimation {
+        duration: root.animation.easeOut.duration
+        easing.type: root.animation.easeOut.type
+      }
+      numberAnimation: NumberAnimation {
+        duration: root.animation.easeOut.duration
+        easing.type: root.animation.easeOut.type
+      }
+    }
+
+    property AnimationElementType easeIn: AnimationElementType {
+      duration: 250
+      type: Easing.InQuad
+      colorAnimation: ColorAnimation {
+        duration: root.animation.easeIn.duration
+        easing.type: root.animation.easeIn.type
+      }
+      numberAnimation: NumberAnimation {
+        duration: root.animation.easeIn.duration
+        easing.type: root.animation.easeIn.type
+      }
+    }
   }
 
   readonly property AnimationType animation: AnimationType {}

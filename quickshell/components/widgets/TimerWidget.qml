@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Window
-import Quickshell
 
 import "../../common"
 import "./common"
@@ -81,7 +80,11 @@ ColumnLayout {
             MouseArea {
               anchors.fill: parent
               onClicked: {
-                GlobalState.bar.mainPanel.requestFocus();
+                if (GlobalState.bar.mainPanel && typeof GlobalState.bar.mainPanel.requestFocus === 'function') {
+                  GlobalState.bar.mainPanel.requestFocus();
+                } else {
+                  console.warn("Cannot request focus on main panel");
+                }
                 parent.forceActiveFocus();
               }
             }

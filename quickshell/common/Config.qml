@@ -22,7 +22,7 @@ Singleton {
   component GeneralConfigType: JsonObject {
     property bool hideAuthorLink: false
     property int updatesCheckInterval: 60 * 60 * 1000 // 1 hour
-    property real panelsTransparency: 0.5 // causes bar and panels to be semi transparent with blurred background; set to 1 to disable transparency effect; requires shell restart if changed from disabled (== 1) to enabled (< 1)
+    property real panelsTransparency: 0.66 // causes bar and panels to be semi transparent with blurred background; set to 1 to disable transparency effect; requires shell restart if changed from disabled (== 1) to enabled (< 1)
   }
 
   component QuickLauncherConfigType: JsonObject {
@@ -32,7 +32,7 @@ Singleton {
   component BarConfigType: JsonObject {
     property list<string> screenList: []
     property int height: 36
-    property real shadowOpacity: 0.5
+    property real shadowOpacity: 1
     property real desaturateTrayIcons: 0.5 // 1.0 means fully grayscale
     property int panelSlideDuration: 350 //ms
 

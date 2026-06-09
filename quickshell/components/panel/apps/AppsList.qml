@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Quickshell
 
 import "../../../common"
 import "."
@@ -30,8 +29,8 @@ ScrollView {
       columns: 2
       spacing: Style.sizes.spacingMedium
 
-      anchors.left: parent.left
-      anchors.right: parent.right
+      anchors.left: parent?.left
+      anchors.right: parent?.right
 
       ListEntry {
         visible: !!row.modelData.left
@@ -45,7 +44,7 @@ ScrollView {
         visible: !!row.modelData.right
 
         width: (row.width - row.spacing) / 2
-        entry: row.modelData.right
+        entry: row.modelData.right ?? null
         toggled: listView.currentIndex === row.index*2+1
       }
     }

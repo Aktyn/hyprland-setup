@@ -20,6 +20,8 @@ RowLayout {
     Layout.maximumHeight: root.implicitHeight * 0.618
   }
 
+  //TODO: StopperWidget
+
   TimerWidget {
     Layout.minimumWidth: calendarWidget.width
   }

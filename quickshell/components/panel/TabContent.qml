@@ -7,7 +7,7 @@ Item {
   id: root
 
   property Component sourceComponent
-  required property bool active
+  required property bool focused
   property int padding: Style.sizes.spacingLarge
 
   property real targetWidth: loaderRoot.status === Loader.Ready ? loaderRoot.item.implicitWidth + root.padding * 2 : 128
@@ -19,30 +19,30 @@ Item {
 
   Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-  onActiveChanged: {
-    if (root.active) {
+  onFocusedChanged: {
+    if (root.focused) {
       GlobalState.bar.mainPanel.currentContentWidth = targetWidth;
       GlobalState.bar.mainPanel.currentContentHeight = targetHeight;
     }
   }
-
+ 
   Loader {
     id: loaderRoot
-    active: root.active || this.status === Loader.Ready
-    focus: root.active
+    active: root.focused || this.status === Loader.Ready
     asynchronous: true
+    focus: root.focused
 
     sourceComponent: root.sourceComponent
     anchors.fill: parent
     anchors.margins: root.padding
 
     onImplicitWidthChanged: {
-      if (root.active) {
+      if (root.focused) {
         GlobalState.bar.mainPanel.currentContentWidth = this.implicitWidth + root.padding * 2;
       }
     }
     onImplicitHeightChanged: {
-      if (root.active) {
+      if (root.focused) {
         GlobalState.bar.mainPanel.currentContentHeight = this.implicitHeight + root.padding * 2;
       }
     }

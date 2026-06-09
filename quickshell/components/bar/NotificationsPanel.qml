@@ -14,7 +14,10 @@ ColumnLayout {
 
   //TODO: show linear progress indicating when the list will auto-hide; pause auto-hide/newNotificationAutoHide on mouse hover
 
-  property int screenHeight: GlobalState.bar.notificationsPanel.screen?.height ?? 1080
+  property int screenHeight: {
+    const panelScreen = GlobalState.bar.notificationsPanel.screen;
+    return panelScreen && panelScreen.height ? panelScreen.height : 1080;
+  }
 
   property list<Notifications.NotificationObject> newNotifications: Notifications.list.filter(n => n.isNew)
   property list<Notifications.NotificationObject> acknowledgedNotifications: Notifications.list.filter(n => !n.isNew)

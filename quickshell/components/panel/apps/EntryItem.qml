@@ -26,7 +26,7 @@ StyledButton {
     Layout.fillWidth: true
 
     IconImage {
-      source: Quickshell.iconPath(AppSearch.guessIcon(root.entry.icon), "image-missing")
+      source: Quickshell.iconPath(AppSearch.guessIcon(root.entry?.icon), "image-missing")
       visible: !!this.source
       asynchronous: true
       mipmap: true
@@ -45,17 +45,17 @@ StyledButton {
         Layout.fillWidth: true
         elide: Text.ElideRight
 
-        text: root.entry.name
+        text: root.entry?.name ?? ""
         font.pixelSize: Style.font.pixelSize.small
         font.weight: Font.Bold
       }
 
       StyledText {
-        visible: !!root.entry.comment
+        visible: !!root.entry?.comment
         elide: Text.ElideRight
         Layout.fillWidth: true
 
-        text: root.entry.comment ?? ""
+        text: root.entry?.comment ?? ""
         font.pixelSize: Style.font.pixelSize.smaller
         color: Style.colors.outline
       }

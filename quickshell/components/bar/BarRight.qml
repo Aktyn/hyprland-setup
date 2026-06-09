@@ -23,7 +23,7 @@ BarSection {
     visible: Updates.hasUpdates
 
     onPressed: {
-      GlobalState.bar.mainPanel.open = !GlobalState.bar.mainPanel.open;
+      GlobalState.bar.mainPanel.open = true;
       GlobalState.bar.mainPanel.mainPanelTabIndex = 2;
     }
     iconName: "update"
@@ -110,7 +110,7 @@ BarSection {
         id: notificationsPanelContainer
 
         side: BarAdjacentPanel.Side.Right
-        property bool hasFullScreen: !!Hyprland.monitorFor(this.screen).activeWorkspace?.toplevels.values.some(top => top.wayland?.fullscreen)
+        property bool hasFullScreen: HyprlandInfo.hasFullScreen(section.screen)
         detached: hasFullScreen || GlobalState.transparencyEnabled
 
         screen: GlobalState.bar.notificationsPanel.screen

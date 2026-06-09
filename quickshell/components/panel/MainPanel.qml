@@ -16,6 +16,7 @@ ColumnLayout {
 
   spacing: 0
 
+
   TabBar {
     id: bar
     Layout.preferredWidth: root.width
@@ -30,13 +31,13 @@ ColumnLayout {
         iconName: getIconName(modelData)
         function getIconName(name: string): string {
           switch (name) {
-          case "APPS":
+            case "APPS":
             return "apps";
-          case "TIME TOOLS":
+            case "TIME TOOLS":
             return "acute";
-          case "OPTIONS":
+            case "OPTIONS":
             return "dashboard";
-          case "CONFIG":
+            case "CONFIG":
             return "tune";
           }
 
@@ -44,19 +45,21 @@ ColumnLayout {
         }
       }
     }
+ 
 
     background: Rectangle {
-      color: Qt.lighter(Style.colors.surface, 2)
+      color: GlobalState.transparencyEnabled ? "transparent" : Qt.lighter(Style.colors.surface, 2)
     }
 
     currentIndex: GlobalState.bar.mainPanel.mainPanelTabIndex
-    onCurrentIndexChanged: {
-      GlobalState.bar.mainPanel.mainPanelTabIndex = currentIndex;
+    onCurrentIndexChanged: { 
+      bar.currentIndex = GlobalState.bar.mainPanel.mainPanelTabIndex;
     }
   }
 
   StackLayout {
-    currentIndex: bar.currentIndex
+    id: layout
+    currentIndex: GlobalState.bar.mainPanel.mainPanelTabIndex 
 
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
     Layout.fillWidth: true
@@ -66,17 +69,17 @@ ColumnLayout {
     Layout.preferredHeight: GlobalState.bar.mainPanel.currentContentHeight
 
     TabContent {
-      active: bar.currentIndex === 0
+      focused: layout.currentIndex === 0
       sourceComponent: AppsPanel {}
     }
 
     TabContent {
-      active: bar.currentIndex === 1
+      focused: layout.currentIndex === 1
       sourceComponent: CalendarPanel {}
     }
 
     TabContent {
-      active: bar.currentIndex === 2
+      focused: layout.currentIndex === 2
       sourceComponent: OptionsPanel {}
     }
   }

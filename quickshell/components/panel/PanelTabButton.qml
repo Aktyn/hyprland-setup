@@ -9,14 +9,21 @@ TabButton {
   id: root
 
   required property string iconName
+  required property int index
   padding: 0
+
+  checked: GlobalState.bar.mainPanel.mainPanelTabIndex === this.index 
+  onClicked: {
+    GlobalState.bar.mainPanel.mainPanelTabIndex = root.index
+  }
 
   contentItem: ColumnLayout {
     id: tabLayout
 
     Layout.fillWidth: true
 
-    Rectangle {
+    // Top padding
+    Rectangle { 
       Layout.preferredHeight: Style.sizes.spacingSmall
       color: "transparent"
     }
@@ -63,6 +70,7 @@ TabButton {
       }
     }
 
+    // Indicator
     Rectangle {
       Layout.alignment: Qt.AlignHCenter
       Layout.preferredHeight: Style.sizes.spacingSmall
@@ -81,6 +89,6 @@ TabButton {
 
   background: Rectangle {
     implicitHeight: 64
-    color: Style.colors.surface
+    color: GlobalState.transparencyEnabled ? "transparent" : Style.colors.surface
   }
 }

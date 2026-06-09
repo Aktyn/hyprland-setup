@@ -18,6 +18,21 @@ Singleton {
   property var monitors: []
   property var layers: ({})
 
+  function hasFullScreen(screen: ShellScreen): bool {
+    const monitor = Hyprland.monitorFor(screen);
+    const workspace = monitor && monitor.activeWorkspace;
+    const toplevels = workspace && workspace.toplevels;
+    const values = toplevels && toplevels.values;
+
+    if (!values || !values.some) {
+      return false;
+    }
+
+    return values.some(function (top) {
+      return top.wayland && top.wayland.fullscreen;
+    });
+  }
+
   function update() {
     getClients.running = true;
     getMonitors.running = true;

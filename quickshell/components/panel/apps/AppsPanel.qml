@@ -16,7 +16,6 @@ ColumnLayout {
   property bool active: GlobalState.bar.mainPanel.open && GlobalState.bar.mainPanel.mainPanelTabIndex === 0
   property real scoreThreshold: 0.2
 
-
   readonly property list<DesktopEntry> allApps: Array.from(DesktopEntries.applications.values).filter(entry => !entry.noDisplay).sort((a, b) => {
     const aIndex = Utils.recentApps.indexOf(a.name);
     const bIndex = Utils.recentApps.indexOf(b.name);
