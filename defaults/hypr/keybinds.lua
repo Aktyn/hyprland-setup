@@ -433,5 +433,5 @@ hl.bind(
 hl.bind(
 	"CTRL + SUPER + A",
 	hl.dsp.exec_cmd(scripts_dir .. "toggle_quickshell.sh"),
-	{ description = "Start or exit quickshell" }
+	{ description = "Start or exit shell" }
 )

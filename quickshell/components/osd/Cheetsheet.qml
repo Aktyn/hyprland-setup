@@ -18,6 +18,45 @@ Scope {
   id: root
   property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
   property var bindsModel: []
+  property string searchText: ""
+
+  readonly property var filteredBindsModel: {
+    if (searchText.length < 1) return bindsModel;
+
+    const search = searchText.toLowerCase();
+    const threshold = 0.2;
+
+    return bindsModel.map(catGroup => {
+      let maxCatScore = 0;
+      const filteredItems = catGroup.items.map(item => {
+        const descScore = Levendist.computeScore(item.description.toLowerCase(), search);
+
+        let maxKeyScore = 0;
+        item.shortcuts.forEach(shortcut => {
+          const shortcutStr = shortcut.join("+").toLowerCase();
+          const keyScore = Levendist.computeScore(shortcutStr, search);
+          if (keyScore > maxKeyScore) maxKeyScore = keyScore;
+        });
+
+        const score = Math.max(descScore, maxKeyScore);
+        if (score > maxCatScore) maxCatScore = score;
+
+        return {
+          description: item.description,
+          shortcuts: item.shortcuts,
+          score: score
+        };
+      }).filter(item => item.score > threshold)
+        .sort((a, b) => b.score - a.score);
+
+      return { 
+        category: catGroup.category, 
+        items: filteredItems,
+        score: maxCatScore
+      };
+    }).filter(catGroup => catGroup.items.length > 0)
+      .sort((a, b) => b.score - a.score);
+  }
 
   function parseBinds(jsonStr) {
     const catRules = {
@@ -113,9 +152,24 @@ Scope {
 
   Loader {
     active: GlobalState.osd.cheetsheetOpen
+    onActiveChanged: {
+      if (!active)
+        root.searchText = "";
+    }
 
     sourceComponent: PanelWindow {
       id: osdRoot
+
+      HyprlandFocusGrab {
+        id: grab
+        windows: [osdRoot]
+
+        onActiveChanged: {
+          if (!this.active) {
+            GlobalState.osd.cheetsheetOpen = false;
+          }
+        }
+      }
 
       Connections {
         target: root
@@ -153,6 +207,9 @@ Scope {
 
       Component.onCompleted: {
         bindsProcess.running = true;
+        searchField.focusInput();
+        grab.active = true;
+
         if (this.WlrLayershell && GlobalState.transparencyEnabled) {
           this.WlrLayershell.namespace = "quickshell:panel";
           this.WlrLayershell.layer = WlrLayer.Top;
@@ -167,6 +224,13 @@ Scope {
         anchors.bottomMargin: Style.sizes.spacingMedium
         anchors.horizontalCenter: parent.horizontalCenter
 
+        Keys.onPressed: event => {
+          if (event.key === Qt.Key_Escape) {
+            GlobalState.osd.cheetsheetOpen = false;
+            event.accepted = true;
+          }
+        }
+
         Rectangle {
           Layout.maximumHeight: root.focusedScreen ? root.focusedScreen.height * 0.8 : 800
           Layout.maximumWidth: root.focusedScreen ? root.focusedScreen.width * 0.8 : 1200
@@ -175,7 +239,11 @@ Scope {
           implicitHeight: layout.implicitHeight + Style.sizes.spacingExtraLarge * 2
           implicitWidth: layout.implicitWidth + Style.sizes.spacingExtraLarge * 2
 
-          clip: true
+          Behavior on implicitHeight {
+            animation: Style.animation.elementMoveFast.numberAnimation.createObject(this, {
+              duration: 1000
+            })
+          }
 
           color: GlobalState.backgroundColor
           border.color: Style.colors.outlineVariant
@@ -187,13 +255,28 @@ Scope {
             anchors.margins: Style.sizes.spacingExtraLarge
             spacing: Style.sizes.spacingLarge
 
-            Text {
-              Layout.alignment: Qt.AlignHCenter
-              text: "Cheatsheet"
-              color: Style.colors.colorOnSurface
-              font.weight: Font.DemiBold
-              font.pixelSize: Style.font.pixelSize.huge
-              font.family: Style.font.family.title
+            RowLayout {
+              Layout.fillWidth: true
+              spacing: Style.sizes.spacingLarge
+
+              Text {
+                text: "Cheatsheet"
+                color: Style.colors.colorOnSurface
+                font.weight: Font.DemiBold
+                font.pixelSize: Style.font.pixelSize.huge
+                font.family: Style.font.family.title
+              }
+
+              SearchField {
+                id: searchField
+                Layout.fillWidth: true
+                placeholder: "Search keybindings..."
+                onSearchTextChanged: root.searchText = searchField.searchText
+
+                onPressed: grab.active = true
+                onActiveFocusChanged: if (this.hasFocus)
+                  grab.active = true
+              }
             }
 
             ScrollView {
@@ -209,7 +292,7 @@ Scope {
                 spacing: Style.sizes.spacingLarge
 
                 Repeater {
-                  model: root.bindsModel
+                  model: root.filteredBindsModel
 
                   delegate: Rectangle {
                     id: categoryDelegate

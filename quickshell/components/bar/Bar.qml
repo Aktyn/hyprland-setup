@@ -37,7 +37,6 @@ LazyLoader {
 
 
         PanelWindow {
-          // ------------------------ Dynamic panels ------------------------
           id: barPanel
 
           property bool shouldCoverScreen: GlobalState.bar.mainPanel.open
