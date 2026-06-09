@@ -9,7 +9,6 @@ import Quickshell.Hyprland
 import Quickshell.Io
 
 import "../../common"
-import "../../services"
 import "../widgets/common"
 
 import "../../scripts/levendist.js" as Levendist

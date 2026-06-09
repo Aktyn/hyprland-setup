@@ -6,6 +6,7 @@ import Quickshell
 import Qt5Compat.GraphicalEffects
 
 import "../../../common"
+import "../../../services"
 import "../../widgets/common"
 
 ColumnLayout {
@@ -22,7 +23,7 @@ ColumnLayout {
     Layout.fillWidth: true
 
     rows: 1
-    columns: 2
+    columns: Updates.commitOutdated ? 3 : 2
 
     uniformCellWidths: true
     uniformCellHeights: true
@@ -35,6 +36,19 @@ ColumnLayout {
       onClicked: {
         Quickshell.execDetached(["xdg-open", Consts.path.configFile]);
         root.closeMainPanel();
+      }
+    }
+
+
+    ActionButton {
+      visible: Updates.commitOutdated
+
+      Layout.fillWidth: true
+      iconName: "update"
+      content: "Update this shell"
+
+      onClicked: {
+        Updates.updateShell();
       }
     }
 

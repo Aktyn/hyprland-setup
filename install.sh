@@ -7,49 +7,49 @@ set -e
 is_installed() {
   local package="$1"
   case "$PKG_MANAGER" in
-    pacman) pacman -Q "$package" >/dev/null 2>&1 ;;
-    apt) dpkg -l "$package" 2>/dev/null | grep -q "^ii" ;;
-    dnf) rpm -q "$package" >/dev/null 2>&1 ;;
-    zypper) rpm -q "$package" >/dev/null 2>&1 ;;
-    *) return 1 ;;
+  pacman) pacman -Q "$package" >/dev/null 2>&1 ;;
+  apt) dpkg -l "$package" 2>/dev/null | grep -q "^ii" ;;
+  dnf) rpm -q "$package" >/dev/null 2>&1 ;;
+  zypper) rpm -q "$package" >/dev/null 2>&1 ;;
+  *) return 1 ;;
   esac
 }
 
 map_package() {
   local package="$1"
   case "$PKG_MANAGER" in
-    apt)
-      case "$package" in
-        base-devel) echo "build-essential" ;;
-        python) echo "python3" ;;
-        python-pillow) echo "python3-pillow" ;;
-        qt5-wayland) echo "qtwayland5" ;;
-        qt6-wayland) echo "qt6-wayland" ;;
-        qt5-multimedia) echo "libqt5multimedia5" ;;
-        qt6-multimedia) echo "libqt6multimedia6" ;;
-        qt5-svg) echo "libqt5svg5" ;;
-        qt6-svg) echo "libqt6svg6" ;;
-        qt5-declarative) echo "qml-module-qtquick2" ;;
-        qt5-graphicaleffects) echo "qml-module-qtgraphicaleffects" ;;
-        libdbusmenu-gtk3) echo "libdbusmenu-gtk3-dev" ;;
-        gnome-themes-extra) echo "gnome-themes-standard" ;;
-        plasma-activities) echo "libkf5activities5" ;;
-        polkit-kde-agent) echo "polkit-kde-agent-1" ;;
-        *) echo "$package" ;;
-      esac
-      ;;
-    dnf)
-      case "$package" in
-        base-devel) echo "@development-tools" ;;
-        python) echo "python3" ;;
-        python-pillow) echo "python3-pillow" ;;
-        qt5-multimedia) echo "qt5-qtmultimedia" ;;
-        qt6-multimedia) echo "qt6-qtmultimedia" ;;
-        libdbusmenu-gtk3) echo "libdbusmenu-gtk3" ;;
-        *) echo "$package" ;;
-      esac
-      ;;
+  apt)
+    case "$package" in
+    base-devel) echo "build-essential" ;;
+    python) echo "python3" ;;
+    python-pillow) echo "python3-pillow" ;;
+    qt5-wayland) echo "qtwayland5" ;;
+    qt6-wayland) echo "qt6-wayland" ;;
+    qt5-multimedia) echo "libqt5multimedia5" ;;
+    qt6-multimedia) echo "libqt6multimedia6" ;;
+    qt5-svg) echo "libqt5svg5" ;;
+    qt6-svg) echo "libqt6svg6" ;;
+    qt5-declarative) echo "qml-module-qtquick2" ;;
+    qt5-graphicaleffects) echo "qml-module-qtgraphicaleffects" ;;
+    libdbusmenu-gtk3) echo "libdbusmenu-gtk3-dev" ;;
+    gnome-themes-extra) echo "gnome-themes-standard" ;;
+    plasma-activities) echo "libkf5activities5" ;;
+    polkit-kde-agent) echo "polkit-kde-agent-1" ;;
     *) echo "$package" ;;
+    esac
+    ;;
+  dnf)
+    case "$package" in
+    base-devel) echo "@development-tools" ;;
+    python) echo "python3" ;;
+    python-pillow) echo "python3-pillow" ;;
+    qt5-multimedia) echo "qt5-qtmultimedia" ;;
+    qt6-multimedia) echo "qt6-qtmultimedia" ;;
+    libdbusmenu-gtk3) echo "libdbusmenu-gtk3" ;;
+    *) echo "$package" ;;
+    esac
+    ;;
+  *) echo "$package" ;;
   esac
 }
 
@@ -58,11 +58,11 @@ install_package() {
   if ! is_installed "$package"; then
     echo "Installing $package"
     case "$PKG_MANAGER" in
-      pacman) sudo pacman -S --needed --noconfirm "$package" ;;
-      apt) sudo apt-get update && sudo apt-get install -y "$package" ;;
-      dnf) sudo dnf install -y "$package" ;;
-      zypper) sudo zypper install -y "$package" ;;
-      *) echo "Unknown package manager. Please install $package manually." ;;
+    pacman) sudo pacman -S --needed --noconfirm "$package" ;;
+    apt) sudo apt-get update && sudo apt-get install -y "$package" ;;
+    dnf) sudo dnf install -y "$package" ;;
+    zypper) sudo zypper install -y "$package" ;;
+    *) echo "Unknown package manager. Please install $package manually." ;;
     esac
   fi
 }
@@ -134,7 +134,7 @@ if [ "$battery_level" -lt 20 ]; then
   exit 1
 fi
 
-curr=$(realpath $(dirname "$0"))
+curr=$(realpath "$(dirname "$0")")
 
 echo "######################################################################"
 echo "### Hyprland should be already installed on your system            ###"
@@ -246,6 +246,8 @@ for dir in "${required_dirs[@]}"; do
   fi
 done
 
+repository_url="https://github.com/Aktyn/hyprland-setup.git"
+
 if [ ${#missing_dirs[@]} -gt 0 ]; then
   echo "Missing required directories: ${missing_dirs[*]}"
   echo "Cloning Aktyn/hyprland-setup repository to temporary directory..."
@@ -253,7 +255,7 @@ if [ ${#missing_dirs[@]} -gt 0 ]; then
   clone_temp_dir=$(mktemp -d)
   trap 'rm -rf $clone_temp_dir' EXIT
 
-  git clone https://github.com/Aktyn/hyprland-setup.git "$clone_temp_dir"
+  git clone $repository_url "$clone_temp_dir"
 
   curr="$clone_temp_dir"
 
@@ -338,18 +340,22 @@ plasma-apply-desktoptheme breeze-dark 2>&1 || true
 plasma-apply-cursortheme Vimix-cursors 2>&1 || true
 
 echo "Copying quickshell config files"
-mkdir -p ~/.config/quickshell/aktyn
-cp --recursive "$curr/quickshell/." ~/.config/quickshell/aktyn/
+aktyn_shell_dir="$HOME/.config/quickshell/aktyn"
+mkdir -p "$aktyn_shell_dir"
+cp --recursive "$curr/quickshell/." "$aktyn_shell_dir/"
+git ls-remote $repository_url HEAD | awk '{printf $1}' > "$aktyn_shell_dir/COMMIT.txt" # Copy version file for auto-update checks
 
 killall qs >/dev/null 2>&1 || true
 killall quickshell >/dev/null 2>&1 || true
 sleep 1
 hyprctl reload >/dev/null 2>&1 || true
-qs -c aktyn >/dev/null 2>&1 &
+qs -c aktyn &
 
 "$curr"/sddm/setup.sh
 
 echo "Setup complete. System restart is recommended."
+echo ""
 
 hyprland --verify-config >/dev/null 2>&1 || echo "Warning: Hyprland configuration has issues. Please check your config files."
-sleep 3; hyprctl reload >/dev/null 2>&1 || true
+sleep 3
+hyprctl reload >/dev/null 2>&1 || true

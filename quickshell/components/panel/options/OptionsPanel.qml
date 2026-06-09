@@ -62,8 +62,13 @@ ColumnLayout {
     Layout.fillWidth: true
   }
 
-  HSeparator {
-    visible: Updates.hasUpdates
+  LabeledHSeparator {
+    visible: Updates.hasUpdates || Updates.commitOutdated
+    Layout.alignment: Qt.AlignHCenter
+
+    columnSpacing: Updates.commitOutdated ? Style.sizes.spacingLarge : 0
+    text: Updates.commitOutdated ? "New shell version available!" : ""
+    color: Updates.commitOutdated ? Style.colors.primary : Style.colors.outline
   }
 
   ConfigPanel {

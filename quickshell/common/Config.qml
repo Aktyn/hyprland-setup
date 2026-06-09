@@ -4,13 +4,14 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import "../services"
 import "."
+import "../services"
 
 Singleton {
   id: root
   property bool ready: false
 
+  readonly property string commitHash: commitFile.text() || null
   property alias general: configJsonAdapter.general
   property alias bar: configJsonAdapter.bar
   property alias wallpaper: configJsonAdapter.wallpaper
@@ -66,6 +67,11 @@ Singleton {
 
   component WorkspacesConfigType: JsonObject {
     property int count: 6
+  }
+
+  FileView {
+    id: commitFile
+    path: Qt.resolvedUrl(Consts.path.config + "/quickshell/aktyn/COMMIT.txt")
   }
 
   FileView {

@@ -3,46 +3,46 @@
 # This script will configure sddm-astronaut-theme
 
 disable_service() {
-    local service_name="$1"
-    if systemctl is-active --quiet "$service_name"; then
-        sudo systemctl disable "$service_name"
-        sudo systemctl stop "$service_name"
-    fi
+  local service_name="$1"
+  if systemctl is-active --quiet "$service_name"; then
+    sudo systemctl disable "$service_name"
+    sudo systemctl stop "$service_name"
+  fi
 }
 
-if which gdm > /dev/null 2>&1; then
-    echo "GDM is installed. Disabling it to avoid conflicts with SDDM."
-    disable_service gdm.service
+if which gdm >/dev/null 2>&1; then
+  echo "GDM is installed. Disabling it to avoid conflicts with SDDM."
+  disable_service gdm.service
 fi
 
-if which lightdm > /dev/null 2>&1; then
-    echo "LightDM is installed. Disabling it to avoid conflicts with SDDM."
-    disable_service lightdm.service
+if which lightdm >/dev/null 2>&1; then
+  echo "LightDM is installed. Disabling it to avoid conflicts with SDDM."
+  disable_service lightdm.service
 fi
 
-if ! which sddm > /dev/null 2>&1; then
-    echo "SDDM is not installed. Installing it now."
-    
-    yay -S --needed --noconfirm sddm-git
-    sudo systemctl enable sddm.service
-    sudo systemctl start sddm.service
-    
-    echo "SDDM installed and enabled."
+if ! which sddm >/dev/null 2>&1; then
+  echo "SDDM is not installed. Installing it now."
+
+  yay -S --needed --noconfirm sddm-git
+  sudo systemctl enable sddm.service
+  sudo systemctl start sddm.service
+
+  echo "SDDM installed and enabled."
 fi
 
-if ! which sddm > /dev/null 2>&1; then
-    echo "SDDM installation failed. Please install it manually."
-    exit 1
+if ! which sddm >/dev/null 2>&1; then
+  echo "SDDM installation failed. Please install it manually."
+  exit 1
 fi
 
 # https://github.com/Keyitdev/sddm-astronaut-theme
 # Install sddm-astronaut-theme only if it's not already present
-if ! ls /usr/share/sddm/themes/sddm-astronaut-theme* > /dev/null 2>&1; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
+if ! ls /usr/share/sddm/themes/sddm-astronaut-theme* >/dev/null 2>&1; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
 else
-    echo "sddm-astronaut-theme already installed. Skipping theme installation."
+  echo "sddm-astronaut-theme already installed. Skipping theme installation."
 fi
 # Edit ConfigFile property in /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop to change theme
 
 # Helper command for previewing the theme
-# sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/aktyn
+# sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/sddm-astronaut-theme

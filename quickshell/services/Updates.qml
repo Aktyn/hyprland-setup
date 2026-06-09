@@ -11,6 +11,7 @@ Singleton {
 
   property int updatesCount: 0
   property bool hasUpdates: this.updatesCount > 0
+  property bool commitOutdated: false
   property bool hasYay: false
 
   Process {
@@ -48,14 +49,26 @@ Singleton {
     }
   }
 
+  Process {
+    id: commitChecker
+    running: true
+    command: ["bash", "-c", "git ls-remote https://github.com/Aktyn/hyprland-setup.git HEAD | awk '{printf $1}'"]
+    stdout: StdioCollector {
+      onStreamFinished: {
+        if(this.text.trim() !== Config.commitHash) {
+          root.commitOutdated = true;
+        }
+      }
+    }
+  }
+
   // ------------------------------------------------------
 
   property bool isUpdating: updateProcess.running
-  property string lastUpdateOutput: updateStdout.text
 
   Process {
     id: updateProcess
-    command: ["pkexec", "bash", "-c", `pacman -Syu --noconfirm${root.hasYay ? " && yay -Syu --noconfirm" : ""}`]
+    command: ["kitty", "--hold", "fish", "-c", `sudo pacman -Syu --noconfirm${root.hasYay ? " && yay -Syu --noconfirm" : ""}`]
     running: false
 
     stdout: StdioCollector {
@@ -70,8 +83,27 @@ Singleton {
     }
   }
 
+  Process {
+    id: updateShellProcess
+    command: ["kitty", "--hold", "fish", "-c", `curl -Ls https://raw.githubusercontent.com/Aktyn/hyprland-setup/main/install.sh | bash`]
+    running: false
+
+    stdout: StdioCollector {
+      waitForEnd: false
+      onStreamFinished: {
+        console.log("Shell update finished.");
+      }
+    }
+  }
   property var update: function () {
-    console.log("Starting system update...");
+    console.info("Starting system update...");
     updateProcess.running = true;
+    GlobalState.bar.mainPanel.open = false;
+  }
+
+  property var updateShell: function() {
+    console.info("Updating shell")
+    updateShellProcess.running = true;
+    GlobalState.bar.mainPanel.open = false;
   }
 }

@@ -11,7 +11,7 @@ GridLayout {
   property alias color: label.color
 
   columns: 3
-  columnSpacing: Style.sizes.spacingMedium
+  columnSpacing: Style.sizes.spacingLarge
 
   HSeparator {}
 
