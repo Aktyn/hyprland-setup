@@ -353,4 +353,3 @@ echo "Setup complete. System restart is recommended."
 
 hyprland --verify-config >/dev/null 2>&1 || echo "Warning: Hyprland configuration has issues. Please check your config files."
 sleep 3; hyprctl reload >/dev/null 2>&1 || true
-",file_path:
