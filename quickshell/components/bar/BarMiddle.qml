@@ -65,7 +65,6 @@ Item {
 
         ClockWidget {
           Layout.alignment: Qt.AlignVCenter
-          // id: clockWidget
           color: Time.time.startsWith("13:37") ? Style.colors.primary : Style.colors.colorOnSurface
         }
       }

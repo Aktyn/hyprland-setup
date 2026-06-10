@@ -55,7 +55,7 @@ Singleton {
     command: ["bash", "-c", "git ls-remote https://github.com/Aktyn/hyprland-setup.git HEAD | awk '{printf $1}'"]
     stdout: StdioCollector {
       onStreamFinished: {
-        if(this.text.trim() !== Config.commitHash) {
+        if (this.text.trim() !== Config.commitHash) {
           root.commitOutdated = true;
         }
       }
@@ -101,8 +101,8 @@ Singleton {
     GlobalState.bar.mainPanel.open = false;
   }
 
-  property var updateShell: function() {
-    console.info("Updating shell")
+  property var updateShell: function () {
+    console.info("Updating shell");
     updateShellProcess.running = true;
     GlobalState.bar.mainPanel.open = false;
   }

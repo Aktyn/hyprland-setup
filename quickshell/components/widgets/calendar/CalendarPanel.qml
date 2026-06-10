@@ -13,6 +13,7 @@ RowLayout {
 
   CalendarWidget {
     id: calendarWidget
+    Layout.fillWidth: true
   }
 
   VSeparator {
@@ -20,9 +21,19 @@ RowLayout {
     Layout.maximumHeight: root.implicitHeight * 0.618
   }
 
-  //TODO: StopperWidget
+  ColumnLayout {
+    spacing: Style.sizes.spacingLarge
+    Layout.fillWidth: true
+    Layout.alignment: Qt.AlignHCenter
 
-  TimerWidget {
-    Layout.minimumWidth: calendarWidget.width
+    StopperWidget {
+      Layout.minimumWidth: calendarWidget.width
+    }
+
+    HSeparator {}
+
+    TimerWidget {
+      Layout.minimumWidth: calendarWidget.width
+    }
   }
 }

@@ -120,13 +120,13 @@ Rectangle {
 
             ColumnLayout {
               anchors.fill: parent
-              anchors.margins: 8 //TODO: use values from Style file
-              spacing: 6
+              anchors.margins: Style.sizes.spacingMedium //TODO: use values from Style file
+              spacing: Style.sizes.spacingSmall
 
               RowLayout {
                 Layout.fillWidth: true
                 StyledText {
-                  text: name //TODO: ?
+                  text: name
                   color: Style.colors.colorOnSurfaceVariant
                   font.pixelSize: Style.font.pixelSize.normal
                   Layout.fillWidth: true

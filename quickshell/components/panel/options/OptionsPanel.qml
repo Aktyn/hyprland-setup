@@ -81,4 +81,3 @@ ColumnLayout {
     Layout.fillWidth: true
   }
 }
-

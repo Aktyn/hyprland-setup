@@ -46,8 +46,27 @@ Singleton {
     property var requestFocus
   }
 
+  component StopperState: QtObject {
+    id: stopperRoot
+
+    property bool running: false
+    property bool paused: false
+
+    property int elapsedSeconds: 0
+
+    property Timer stopwatchTimer: Timer {
+      interval: 1000
+      repeat: true
+      running: stopperRoot.running && !stopperRoot.paused
+      onTriggered: {
+        stopperRoot.elapsedSeconds++;
+      }
+    }
+  }
+
   component CalendarPanelState: QtObject {
     property TimerState timer: TimerState {}
+    property StopperState stopper: StopperState {}
   }
 
   component AppSearchState: QtObject {

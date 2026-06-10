@@ -10,13 +10,24 @@ RowLayout {
   property alias color: clockText.color
 
   CustomIcon {
-    visible: GlobalState.bar.calendarPanel.timer.running
+    visible: GlobalState.bar.calendarPanel.timer.running && !GlobalState.bar.calendarPanel.timer.paused
 
     Layout.preferredHeight: Style.sizes.iconMedium
     Layout.preferredWidth: this.Layout.preferredHeight
 
     source: "timer-sand"
     colorize: true
+    color: Style.colors.primary
+  }
+
+  MaterialSymbol {
+    visible: GlobalState.bar.calendarPanel.stopper.running && !GlobalState.bar.calendarPanel.stopper.paused
+
+    Layout.preferredHeight: Style.sizes.iconMedium
+    Layout.preferredWidth: this.Layout.preferredHeight
+
+    text: "acute"
+    iconSize: Style.font.pixelSize.huge
     color: Style.colors.primary
   }
 
