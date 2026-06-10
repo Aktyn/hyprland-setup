@@ -8,9 +8,8 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
 
-import "../../common"
 import "../widgets/common"
-
+import "../../common"
 import "../../scripts/levendist.js" as Levendist
 
 Scope {
@@ -19,8 +18,11 @@ Scope {
   property var bindsModel: []
   property string searchText: ""
 
+  readonly property var hints: ["You can right-click on an open app to pin it to the taskbar", "Click on the performance gauges to open the system monitor", "You can use the mouse wheel to toggle between workspaces in the list"]
+
   readonly property var filteredBindsModel: {
-    if (searchText.length < 1) return bindsModel;
+    if (searchText.length < 1)
+      return bindsModel;
 
     const search = searchText.toLowerCase();
     const threshold = 0.2;
@@ -34,27 +36,27 @@ Scope {
         item.shortcuts.forEach(shortcut => {
           const shortcutStr = shortcut.join("+").toLowerCase();
           const keyScore = Levendist.computeScore(shortcutStr, search);
-          if (keyScore > maxKeyScore) maxKeyScore = keyScore;
+          if (keyScore > maxKeyScore)
+            maxKeyScore = keyScore;
         });
 
         const score = Math.max(descScore, maxKeyScore);
-        if (score > maxCatScore) maxCatScore = score;
+        if (score > maxCatScore)
+          maxCatScore = score;
 
         return {
           description: item.description,
           shortcuts: item.shortcuts,
           score: score
         };
-      }).filter(item => item.score > threshold)
-        .sort((a, b) => b.score - a.score);
+      }).filter(item => item.score > threshold).sort((a, b) => b.score - a.score);
 
-      return { 
-        category: catGroup.category, 
+      return {
+        category: catGroup.category,
         items: filteredItems,
         score: maxCatScore
       };
-    }).filter(catGroup => catGroup.items.length > 0)
-      .sort((a, b) => b.score - a.score);
+    }).filter(catGroup => catGroup.items.length > 0).sort((a, b) => b.score - a.score);
   }
 
   function parseBinds(jsonStr) {
@@ -380,45 +382,62 @@ Scope {
               }
             }
 
-            ColumnLayout {
-              spacing: Style.sizes.spacingSmall
-              Layout.alignment: Qt.AlignHCenter
-              Layout.fillWidth: true
+            RowLayout {
+              Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+              spacing: Style.sizes.spacingExtraLarge
 
-              StyledText {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter
-                text: "Above list was generated based on currently defined hyprland bindings."
-                color: Style.colors.colorOnSurfaceVariant
-                font.pixelSize: Style.font.pixelSize.smaller
-                wrapMode: Text.Wrap
-                horizontalAlignment: Text.AlignHCenter
-              }
+              ColumnLayout {
+                Layout.alignment: Qt.AlignTop
 
-              Rectangle {
-                color: "transparent"
-                implicitWidth: openFileText.implicitWidth
-                implicitHeight: openFileText.implicitHeight
-                Layout.alignment: Qt.AlignHCenter
+                spacing: Style.sizes.spacingSmall
 
                 StyledText {
-                  id: openFileText
-                  text: "Open ~/.config/hypr/keybinds.lua for more details"
-                  color: Style.colors.primary
+                  text: "Above list was generated based on currently defined hyprland bindings."
+                  color: Style.colors.colorOnSurfaceVariant
                   font.pixelSize: Style.font.pixelSize.smaller
-                  font.underline: mouseArea.containsMouse
-                  horizontalAlignment: Text.AlignHCenter
+                  wrapMode: Text.Wrap
                 }
 
-                MouseArea {
-                  id: mouseArea
-                  anchors.fill: parent
-                  hoverEnabled: true
-                  cursorShape: Qt.PointingHandCursor
-                  onClicked: {
-                    Quickshell.execDetached(["xdg-open", Consts.path.config + "/hypr/keybinds.lua"]);
-                    GlobalState.osd.cheetsheetOpen = false;
+                Rectangle {
+                  color: "transparent"
+                  implicitWidth: openFileText.implicitWidth
+                  implicitHeight: openFileText.implicitHeight
+                  Layout.alignment: Qt.AlignHCenter
+
+                  StyledText {
+                    id: openFileText
+                    text: "Open ~/.config/hypr/keybinds.lua for more details"
+                    color: Style.colors.primary
+                    font.pixelSize: Style.font.pixelSize.smaller
+                    font.underline: mouseArea.containsMouse
+                    horizontalAlignment: Text.AlignHCenter
                   }
+
+                  MouseArea {
+                    id: mouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                      Quickshell.execDetached(["xdg-open", Consts.path.config + "/hypr/keybinds.lua"]);
+                      GlobalState.osd.cheetsheetOpen = false;
+                    }
+                  }
+                }
+              }
+
+              Repeater {
+                model: root.hints
+
+                delegate: StyledText {
+                  required property string modelData
+                  Layout.alignment: Qt.AlignTop
+                  Layout.maximumWidth: 384
+                  text: modelData
+                  color: Style.colors.colorOnSurfaceVariant
+                  font.pixelSize: Style.font.pixelSize.smaller
+                  wrapMode: Text.Wrap
+                  horizontalAlignment: Text.AlignHCenter
                 }
               }
             }
