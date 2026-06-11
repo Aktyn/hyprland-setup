@@ -217,6 +217,7 @@ install_package hyprshot
 install_package grim
 install_package slurp
 install_package tesseract
+install_package tesseract-data-eng
 install_package cava
 install_aur_package playerctl
 install_aur_package libdbusmenu-gtk3
