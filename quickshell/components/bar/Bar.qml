@@ -39,7 +39,7 @@ LazyLoader {
         PanelWindow {
           id: barPanel
 
-          property bool shouldCoverScreen: GlobalState.bar.mainPanel.open
+          property bool shouldCoverScreen: GlobalState.bar.mainPanel.open || GlobalState.bar.notesPanel.open
           onShouldCoverScreenChanged: function() {
             if(!shouldCoverScreen) {
               grab.active = false;
@@ -48,6 +48,7 @@ LazyLoader {
 
           function closePanels() {
             GlobalState.bar.mainPanel.open = false
+            GlobalState.bar.notesPanel.open = false
           }
 
           screen: delegateItem.modelData
@@ -59,8 +60,9 @@ LazyLoader {
           WlrLayershell.layer: WlrLayer.Top // layer above standard windows
           Component.onCompleted: {
             this.WlrLayershell.namespace = "quickshell:panel";
-            this.WlrLayershell.monitor = screen.monitor
+            this.WlrLayershell.monitor = screen.monitor;
             GlobalState.bar.mainPanel.requestFocus = this.onRequestFocus;
+            GlobalState.bar.notesPanel.requestFocus = this.onRequestFocus;   
           }
 
           implicitHeight: screen.height
@@ -184,21 +186,19 @@ LazyLoader {
                 top: parent.top
                 right: parent.right
               }
-
             }
-
           }
 
           BarPanel {
             id: mainPanelContainer
 
-            screen: GlobalState.bar.mainPanel.screen
+            // screen: GlobalState.bar.mainPanel.screen
             show: GlobalState.bar.mainPanel.open
 
-            closeOnBackgroundClick: true
-            onClose: function() {
-              GlobalState.bar.mainPanel.open = false;
-            }
+            // closeOnBackgroundClick: true
+            // onClose: function() {
+            //   GlobalState.bar.mainPanel.open = false;
+            // }
 
             content: MainPanel {
               screen: GlobalState.bar.mainPanel.screen
@@ -206,24 +206,9 @@ LazyLoader {
           }
 
           // Notes panel sheet
-          LazyLoader {
-            loading: true
-
-            component: BarAdjacentPanel {
-              id: notesPanelContainer
-
-              screen: GlobalState.bar.notesPanel.screen
-              show: GlobalState.bar.notesPanel.open
-              onBackgroundClick: function() {
-                GlobalState.bar.notesPanel.open = false;
-              }
-              Component.onCompleted: {
-                GlobalState.bar.notesPanel.requestFocus = notesPanelContainer.onRequestFocus;
-              }
-
-              sourceComponent: NotesPanel {
-              }
-            }
+          BarPanel {
+            show: GlobalState.bar.notesPanel.open
+            content: NotesPanel {}
           }
 
           // Media controls panel sheet
@@ -247,7 +232,6 @@ LazyLoader {
             }
           }
         }
-
 
         PanelWindow {
           id: shadowsPanel

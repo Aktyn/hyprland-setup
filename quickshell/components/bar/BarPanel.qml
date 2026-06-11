@@ -1,33 +1,28 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Effects
-import QtQuick.Layouts
 import Quickshell
-import Quickshell.Hyprland
-import Quickshell.Wayland
-import Qt5Compat.GraphicalEffects
 
 import "../../common"
-import "../../services"
 import "../widgets/common"
 
 Loader {
   id: root
 
-  active: true
-  asynchronous: true //TODO: wait for first show to start loading asynchronously
+  active: false
+  asynchronous: true
   anchors.horizontalCenter: parent.horizontalCenter
 
   // default property alias items: panelContent.children
   property Component content
-  required property ShellScreen screen
-  property bool hasFullScreen: HyprlandInfo.hasFullScreen(this.screen)
+  // required property ShellScreen screen
+  // property bool hasFullScreen: HyprlandInfo.hasFullScreen(this.screen)
   required property bool show
   property bool loadContent: false
 
   onShowChanged: {
     if (this.show) {
+      this.active = true
       this.loadContent = true;
       panelContentDelayedUnload.running = false;
     } else {
@@ -47,16 +42,11 @@ Loader {
   }
 
   // property int innerPadding: Style.sizes.spacingLarge
-  // readonly property int radius: Style.rounding.hyprland + (this.detached && root.side !== BarAdjacentPanel.Side.Middle ? HyprlandInfo.general.gapsOut[0] : 0)
   readonly property int radius: Style.rounding.hyprland
   readonly property int cornerSize: this.radius + HyprlandInfo.general.gapsOut[0]
 
-  // property int screenEdgeOffset: this.side !== BarAdjacentPanel.Side.Middle && !this.adhesive ? HyprlandInfo.general.gapsIn[0] : 0
-
-  property bool closeOnBackgroundClick: true
-  property var onClose //Does not actually closes the panel. Must be used as callback in parent
-
-  // property alias onRequestFocus: panel.onRequestFocus
+  // property bool closeOnBackgroundClick: true
+  // property var onClose //Does not actually closes the panel. Must be used as callback in parent
 
   sourceComponent: Item {
     id: rowLayout
@@ -85,7 +75,7 @@ Loader {
     }
 
     readonly property real cornerScaleThreshold: root.cornerSize * 1.5
-    property real cornerScale: this.height > this.cornerScaleThreshold ? 1 : this.height/this.cornerScaleThreshold
+    property real cornerScale: this.height > this.cornerScaleThreshold ? 1 : this.height / this.cornerScaleThreshold
 
     ReversedRoundedCorner {
       visible: root.loadContent // !root.detached && (!root.adhesive || root.side !== BarAdjacentPanel.Side.Right)
@@ -106,8 +96,7 @@ Loader {
     }
 
     ReversedRoundedCorner {
-      visible: root.loadContent // !root.detached && (!root.adhesive || root.side !== BarAdjacentPanel.Side.Right)
-
+      visible: root.loadContent
       anchors.top: parent.top
       anchors.left: parent.right
 

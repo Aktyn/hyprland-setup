@@ -16,7 +16,6 @@ ColumnLayout {
 
   spacing: 0
 
-
   TabBar {
     id: bar
     Layout.preferredWidth: root.width

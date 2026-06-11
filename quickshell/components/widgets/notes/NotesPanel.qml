@@ -6,22 +6,18 @@ import Quickshell.Io
 
 import "../../../common"
 import "../../../services"
-
 import "../common"
 
 Rectangle {
   id: root
   property var _editors: []
-  readonly property real margin: 10
+  readonly property real margin: Style.sizes.spacingLarge
   // Size
   implicitWidth: Math.min(Screen.width, Math.max(header.implicitWidth, notesRow.implicitWidth) + margin * 2)
-  implicitHeight: header.implicitHeight + notesContainer.implicitHeight + margin + 4
+  implicitHeight: header.implicitHeight + notesContainer.implicitHeight + margin + 4 + Style.sizes.spacingLarge
 
-  color: Style.colors.surfaceContainerHigh
-  radius: Style.rounding.small
-  border.width: 1
-  border.color: Style.colors.outlineVariant
-  clip: true
+  color: "transparent"
+  // clip: true
 
   property bool open: GlobalState.bar.notesPanel.open
 
@@ -31,12 +27,9 @@ Rectangle {
     }
   }
 
-  // Forward keystrokes to the editor if the root holds focus (unused in multi-note mode)
-  // Keys.forwardTo: []
-
   ColumnLayout {
     id: columnLayout
-    spacing: 6
+    spacing: Style.sizes.spacingMedium
     anchors {
       fill: parent
       leftMargin: root.margin
@@ -48,7 +41,8 @@ Rectangle {
     // Header
     RowLayout {
       id: header
-      spacing: 6
+      spacing: Style.sizes.spacingMedium
+      Layout.margins: Style.sizes.spacingMedium
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignHCenter
 
@@ -82,17 +76,13 @@ Rectangle {
       }
     }
 
-    Item {
-      height: 2
-      Layout.fillWidth: true
-    }
-
     // Notes list (horizontal)
     Flickable {
       id: notesContainer
       Layout.fillWidth: true
       implicitWidth: Math.min(notesRow.implicitWidth, Screen.width - root.margin * 2)
       implicitHeight: 480
+
       clip: true
       contentWidth: notesRow.implicitWidth
       contentHeight: notesRow.implicitHeight
@@ -102,7 +92,7 @@ Rectangle {
 
       Row {
         id: notesRow
-        spacing: 10
+        spacing: Style.sizes.spacingMedium
         anchors.top: parent.top
         anchors.left: parent.left
 
@@ -114,13 +104,16 @@ Rectangle {
             width: 280
             height: notesContainer.implicitHeight - 20
             radius: Style.rounding.verysmall
-            color: Style.colors.surfaceContainerHighest
+            color: Style.colors.surfaceContainer
             border.width: 1
             border.color: editor.activeFocus ? Style.colors.outline : Style.colors.outlineVariant
+            Behavior on border.color {
+              animation: Style.animation.elementMoveFast.colorAnimation.createObject(this)
+            }
 
             ColumnLayout {
               anchors.fill: parent
-              anchors.margins: Style.sizes.spacingMedium //TODO: use values from Style file
+              anchors.margins: Style.sizes.spacingMedium
               spacing: Style.sizes.spacingSmall
 
               RowLayout {
@@ -135,7 +128,7 @@ Rectangle {
                 MaterialSymbol {
                   text: "close"
                   iconSize: Style.font.pixelSize.large
-                  color: Style.colors.colorOnSurface
+                  color: closeArea.containsMouse ? Style.colors.primary : Style.colors.colorOnSurfaceVariant
                   MouseArea {
                     id: closeArea
                     anchors.fill: parent
@@ -146,12 +139,7 @@ Rectangle {
                 }
               }
 
-              Rectangle {
-                height: 1
-                Layout.fillWidth: true
-                color: Style.colors.outlineVariant
-                opacity: 0.5
-              }
+              HSeparator {}
 
               ScrollView {
                 id: editorScroll
@@ -182,16 +170,6 @@ Rectangle {
                   color: Style.colors.colorOnSurface
                   onTextChanged: saveDebounce.restart()
                   KeyNavigation.priority: KeyNavigation.BeforeItem
-
-                  // MouseArea {
-                  //   anchors.fill: parent
-                  //   onClicked: {
-                  //     if (!editor.activeFocus) {
-                  //       GlobalState.bar.notesPanel.requestFocus();
-                  //       editor.forceActiveFocus();
-                  //     }
-                  //   }
-                  // }
                 }
               }
 

@@ -71,6 +71,7 @@ end
 
 local ignored_classes = {
 	"steam",
+  "VirtualBox"
 }
 
 local function getHash(w)
@@ -78,7 +79,7 @@ local function getHash(w)
 	local title = w.title or ""
 
 	-- if there is no title, we can't reliably identify the window, so we skip it
-	if title == "" or ignored_classes[class] ~= nil then
+	if title == "" or ignored_classes[class:lower()] ~= nil then
 		return nil
 	end
 
