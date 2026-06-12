@@ -70,20 +70,22 @@ local function remove_entry(hash)
 end
 
 local ignored_classes = {
-	"steam",
-  "VirtualBox"
+	["steam"] = true,
+	["virtualbox"] = true,
 }
 
 local function getHash(w)
 	local class = w.class or ""
 	local title = w.title or ""
+	local initial_title = w.initial_title or ""
+	local initial_class = w.initial_class or ""
 
 	-- if there is no title, we can't reliably identify the window, so we skip it
 	if title == "" or ignored_classes[class:lower()] ~= nil then
 		return nil
 	end
 
-	local str = class .. "|" .. title
+	local str = class .. "|" .. title .. "|" .. initial_title .. "|" .. initial_class
 	local h = 5381
 	for i = 1, #str do
 		h = (h * 33 + string.byte(str, i)) % 4294967296
@@ -130,22 +132,19 @@ hl.on("window.open", function(w)
 	if window then
 		hl.dispatch(hl.dsp.window.float({
 			action = "enable",
-			class = w.class,
-			title = w.title,
+			address = w.address,
 		}))
 		hl.dispatch(hl.dsp.window.resize({
 			x = window.w,
 			y = window.h,
 			relative = false,
-			class = w.class,
-			title = w.title,
+			address = w.address,
 		}))
 		hl.dispatch(hl.dsp.window.move({
 			x = window.x,
 			y = window.y,
 			relative = false,
-			class = w.class,
-			title = w.title,
+			address = w.address,
 		}))
 	end
 end)
