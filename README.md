@@ -7,7 +7,8 @@ The configuration does not favour either mouse- or keyboard-oriented users — e
 
 Hyprland configuration is written in lua. [See why it matters](https://hypr.land/news/26_lua)
 
-[Open an issue to request features](https://github.com/Aktyn/hyprland-setup/issues/new)  
+[Open an issue to request features](https://github.com/Aktyn/hyprland-setup/issues/new)
+
 [![kofi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U6J222F0OJ)
 
 ![Preview 1](previews/combined.webp)
