@@ -146,11 +146,11 @@ hl.curve("menu_accel", { type = "bezier", points = { { 0.38, 0.04 }, { 1, 0.07 }
 hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0 }, { 0.35, 1 } } })
 
 -- Spring Curves
-hl.curve("spring_menu", { type = "spring", mass = 1, stiffness = 80, dampening = 14 })
-hl.curve("spring_window", { type = "spring", mass = 1, stiffness = 30, dampening = 8 })
-hl.curve("spring_open", { type = "spring", mass = 1, stiffness = 30, dampening = 8 })
-hl.curve("spring_workspace", { type = "spring", mass = 1.2, stiffness = 30, dampening = 10 })
-hl.curve("spring_special", { type = "spring", mass = 1, stiffness = 30, dampening = 8 })
+hl.curve("spring_menu", { type = "spring", mass = 1, stiffness = 213, dampening = 20 })
+hl.curve("spring_window", { type = "spring", mass = 1, stiffness = 213, dampening = 20 })
+hl.curve("spring_open", { type = "spring", mass = 1, stiffness = 213, dampening = 17 })
+hl.curve("spring_workspace", { type = "spring", mass = 1.2, stiffness = 213, dampening = 27 })
+hl.curve("spring_special", { type = "spring", mass = 1, stiffness = 213, dampening = 27 })
 
 -- Window animations
 hl.animation({ leaf = "windows", enabled = true, speed = 1, spring = "spring_window" })
