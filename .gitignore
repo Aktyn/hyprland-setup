@@ -4,3 +4,6 @@ build/
 .qtcreator/
 .qmlls.ini
 rust-shell-example/
+.opencode/
+graphify-out/
+AGENTS.md
