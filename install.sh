@@ -23,14 +23,18 @@ map_package() {
     base-devel) echo "build-essential" ;;
     python) echo "python3" ;;
     python-pillow) echo "python3-pillow" ;;
-    qt5-wayland) echo "qtwayland5" ;;
-    qt6-wayland) echo "qt6-wayland" ;;
-    qt5-multimedia) echo "libqt5multimedia5" ;;
-    qt6-multimedia) echo "libqt6multimedia6" ;;
-    qt5-svg) echo "libqt5svg5" ;;
-    qt6-svg) echo "libqt6svg6" ;;
-    qt5-declarative) echo "qml-module-qtquick2" ;;
-    qt5-graphicaleffects) echo "qml-module-qtgraphicaleffects" ;;
+    wayland) echo "libwayland-dev" ;;
+    wayland-protocols) echo "wayland-protocols" ;;
+    pkgconf) echo "pkg-config" ;;
+    libxkbcommon) echo "libxkbcommon-dev" ;;
+    libxkbcommon-x11) echo "libxkbcommon-x11-dev" ;;
+    libx11) echo "libx11-dev" ;;
+    libxcb) echo "libxcb1-dev" ;;
+    libx11-xcb) echo "libx11-xcb-dev" ;;
+    fontconfig) echo "libfontconfig1-dev" ;;
+    freetype2) echo "libfreetype6-dev" ;;
+    vulkan-headers) echo "libvulkan-dev" ;;
+    gtk3) echo "libgtk-3-dev" ;;
     libdbusmenu-gtk3) echo "libdbusmenu-gtk3-dev" ;;
     gnome-themes-extra) echo "gnome-themes-standard" ;;
     plasma-activities) echo "libkf5activities5" ;;
@@ -43,9 +47,36 @@ map_package() {
     base-devel) echo "@development-tools" ;;
     python) echo "python3" ;;
     python-pillow) echo "python3-pillow" ;;
-    qt5-multimedia) echo "qt5-qtmultimedia" ;;
-    qt6-multimedia) echo "qt6-qtmultimedia" ;;
+    wayland) echo "wayland-devel" ;;
+    wayland-protocols) echo "wayland-protocols-devel" ;;
+    pkgconf) echo "pkgconf-pkg-config" ;;
+    libxkbcommon) echo "libxkbcommon-devel" ;;
+    libxkbcommon-x11) echo "libxkbcommon-x11-devel" ;;
+    libx11) echo "libX11-devel" ;;
+    libxcb) echo "libxcb-devel" ;;
+    libx11-xcb) echo "libX11-xcb-devel" ;;
+    fontconfig) echo "fontconfig-devel" ;;
+    freetype2) echo "freetype-devel" ;;
+    vulkan-headers) echo "vulkan-headers" ;;
+    gtk3) echo "gtk3-devel" ;;
     libdbusmenu-gtk3) echo "libdbusmenu-gtk3" ;;
+    *) echo "$package" ;;
+    esac
+    ;;
+  zypper)
+    case "$package" in
+    base-devel) echo "devel_basis" ;;
+    pkgconf) echo "pkg-config" ;;
+    wayland) echo "wayland-devel" ;;
+    wayland-protocols) echo "wayland-protocols-devel" ;;
+    libxkbcommon) echo "libxkbcommon-devel" ;;
+    libxkbcommon-x11) echo "libxkbcommon-x11-devel" ;;
+    libx11) echo "libX11-devel" ;;
+    libxcb) echo "libxcb-devel" ;;
+    libx11-xcb) echo "libX11-xcb-devel" ;;
+    fontconfig) echo "fontconfig-devel" ;;
+    freetype2) echo "freetype2-devel" ;;
+    gtk3) echo "gtk3-devel" ;;
     *) echo "$package" ;;
     esac
     ;;
@@ -61,7 +92,13 @@ install_package() {
     pacman) sudo pacman -S --needed --noconfirm "$package" ;;
     apt) sudo apt-get update && sudo apt-get install -y "$package" ;;
     dnf) sudo dnf install -y "$package" ;;
-    zypper) sudo zypper install -y "$package" ;;
+    zypper)
+      if [ "$package" == "devel_basis" ]; then
+        sudo zypper install -y -t pattern "$package"
+      else
+        sudo zypper install -y "$package"
+      fi
+      ;;
     *) echo "Unknown package manager. Please install $package manually." ;;
     esac
   fi
@@ -148,6 +185,20 @@ sudo -v
 install_package git
 install_package python
 install_package base-devel
+install_package pkgconf
+install_package clang
+install_package cmake
+install_package wayland
+install_package wayland-protocols
+install_package libxkbcommon
+install_package libxkbcommon-x11
+install_package libx11
+install_package libxcb
+install_package libx11-xcb
+install_package fontconfig
+install_package freetype2
+install_package vulkan-headers
+install_package gtk3
 if [ "$PKG_MANAGER" == "pacman" ]; then
   install_package pacman-contrib
 fi
@@ -156,6 +207,11 @@ install_package kate
 install_package blueman
 install_package btop
 install_package curl
+if ! command -v rustup >/dev/null 2>&1; then
+  echo "Installing rustup"
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+fi
+export PATH="$HOME/.cargo/bin:$PATH"
 install_package xclip
 install_package cliphist
 install_package wl-clipboard
@@ -197,18 +253,6 @@ fi
 install_aur_package konsole # Used in Dolphin as integrated terminal
 install_aur_package yt-dlp
 
-# Quickshell setup
-install_package qt5-wayland
-install_package qt6-wayland
-install_package qt5-multimedia
-install_package qt6-multimedia
-install_package qt5-imageformats
-install_package qt6-imageformats
-install_package qt5-svg
-install_package qt6-svg
-install_package qt5-declarative
-install_package qt5-graphicaleffects
-
 install_package hyprsunset
 install_package hypridle
 install_package hyprlock
@@ -225,7 +269,6 @@ install_package pavucontrol
 install_package gwenview
 install_package imagemagick
 
-install_aur_package quickshell
 install_aur_package ttf-material-icons
 install_aur_package ttf-material-symbols-variable
 install_aur_package ttf-jetbrains-mono-nerd
@@ -238,7 +281,7 @@ install_package python-pillow
 install_aur_package python-materialyoucolor
 install_aur_package adw-gtk-theme
 
-required_dirs=("defaults" "quickshell" "sddm")
+required_dirs=("defaults" "gpui-shell" "sddm")
 missing_dirs=()
 
 for dir in "${required_dirs[@]}"; do
@@ -340,17 +383,20 @@ gsettings set org.gnome.desktop.interface cursor-theme 'Vimix-cursors'
 plasma-apply-desktoptheme breeze-dark 2>&1 || true
 plasma-apply-cursortheme Vimix-cursors 2>&1 || true
 
-echo "Copying quickshell config files"
-aktyn_shell_dir="$HOME/.config/quickshell/aktyn"
-mkdir -p "$aktyn_shell_dir"
-cp --recursive "$curr/quickshell/." "$aktyn_shell_dir/"
-git ls-remote $repository_url HEAD | awk '{printf $1}' > "$aktyn_shell_dir/COMMIT.txt" # Copy version file for auto-update checks
+echo "Installing GPUI shell scripts and assets"
+mkdir -p "$HOME/.local/share/aktyn-shell/scripts"
+cp "$curr/quickshell/scripts/generate-material-you-colors.py" "$HOME/.local/share/aktyn-shell/scripts/"
+chmod +x "$HOME/.local/share/aktyn-shell/scripts/generate-material-you-colors.py"
 
-killall qs >/dev/null 2>&1 || true
-killall quickshell >/dev/null 2>&1 || true
+echo "Building and installing the GPUI shell"
+(cd "$curr/gpui-shell" && cargo install --path . --locked --force --root "$HOME/.local")
+
+pkill -x qs >/dev/null 2>&1 || true
+pkill -x quickshell >/dev/null 2>&1 || true
+pkill -x aktyn-shell >/dev/null 2>&1 || true
 sleep 1
 hyprctl reload >/dev/null 2>&1 || true
-nohup qs -c aktyn >/dev/null 2>&1 &
+nohup "$HOME/.local/bin/aktyn-shell" >/dev/null 2>&1 &
 
 "$curr"/sddm/setup.sh
 
