@@ -1,7 +1,7 @@
 hl.on("hyprland.start", function()
-	hl.exec_cmd("qs -c aktyn &")
+	hl.exec_cmd("~/.local/bin/aktyn-shell &")
 
-	-- Core components (authentication, lock screen, notification daemon)
+	-- Core components (authentication and lock screen)
 	hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
 	hl.exec_cmd(
 		"/usr/lib/polkit-kde-authentication-agent-1 || /usr/libexec/polkit-kde-authentication-agent-1  || /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 || /usr/libexec/polkit-gnome-authentication-agent-1"

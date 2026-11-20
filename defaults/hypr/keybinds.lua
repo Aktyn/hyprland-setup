@@ -1,12 +1,12 @@
 local scripts_dir = os.getenv("HOME") .. "/.config/hypr/scripts/"
 local workspace_action = scripts_dir .. "workspace_action.sh"
 local launch_first_available = scripts_dir .. "launch_first_available.sh"
+local shell_bin = os.getenv("HOME") .. "/.local/bin/aktyn-shell"
 local player_next =
 	'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"`'
 
 local toggleLeftMenuDescription = "Toggle left menu"
 local toggleCheetsheetPanelDescription = "Toogle cheetsheet panel"
-local interruptOverviewDescription = "Interrupt overview toggle"
 local toggleMuteDescription = "Toggle mute"
 local toggleMicMuteDescription = "Toggle mic mute"
 local dragWindowDescription = "Drag window"
@@ -31,64 +31,27 @@ local launchTerminalDescription = "Launch Terminal"
 
 hl.bind(
 	"SUPER + SUPER_L",
-	hl.dsp.global("quickshell:overviewToggleRelease"),
+	hl.dsp.exec_cmd(shell_bin .. " --toggle"),
 	{ release = true, description = toggleLeftMenuDescription }
 )
 hl.bind(
 	"SUPER + SUPER_R",
-	hl.dsp.global("quickshell:overviewToggleRelease"),
+	hl.dsp.exec_cmd(shell_bin .. " --toggle"),
 	{ release = true, description = toggleLeftMenuDescription }
 )
 
 hl.bind(
 	"SUPER + SLASH",
-	hl.dsp.global("quickshell:osdCheetsheetToggle"),
-		{ description = toggleCheetsheetPanelDescription }
+	hl.dsp.exec_cmd(shell_bin .. " --cheatsheet"),
+	{ description = toggleCheetsheetPanelDescription }
 )
 hl.bind(
 	"SUPER + BACKSLASH",
-	hl.dsp.global("quickshell:osdCheetsheetToggle"),
-		{ description = toggleCheetsheetPanelDescription }
+	hl.dsp.exec_cmd(shell_bin .. " --cheatsheet"),
+	{ description = toggleCheetsheetPanelDescription }
 )
 
-hl.bind("CTRL + SUPER_L", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	description = interruptOverviewDescription,
-})
-hl.bind("CTRL + SUPER_R", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	description = interruptOverviewDescription,
-})
-hl.bind("SUPER + mouse:272", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	mouse = true,
-	description = interruptOverviewDescription,
-})
-hl.bind("SUPER + mouse:273", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	mouse = true,
-	description = interruptOverviewDescription,
-})
-hl.bind("SUPER + mouse:274", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	mouse = true,
-	description = interruptOverviewDescription,
-})
-hl.bind("SUPER + mouse:275", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	mouse = true,
-	description = interruptOverviewDescription,
-})
-hl.bind("SUPER + mouse:276", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	mouse = true,
-	description = interruptOverviewDescription,
-})
-hl.bind("SUPER + mouse:277", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	mouse = true,
-	description = interruptOverviewDescription,
-})
-hl.bind("SUPER + mouse_up", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	description = interruptOverviewDescription,
-})
-hl.bind("SUPER + mouse_down", hl.dsp.global("quickshell:overviewToggleReleaseInterrupt"), {
-	description = interruptOverviewDescription,
-})
-
-hl.bind("SUPER + V", hl.dsp.global("quickshell:overviewClipboardToggle"), {
+hl.bind("SUPER + V", hl.dsp.exec_cmd(shell_bin .. " --clipboard"), {
 	description = "Toggle clipboard history",
 })
 
@@ -123,7 +86,7 @@ hl.bind("SUPER + ALT + M", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ togg
 	description = toggleMicMuteDescription,
 })
 
-hl.bind("CTRL + SUPER + R", hl.dsp.exec_cmd("killall ags agsv1 gjs qs quickshell; qs -c aktyn &"), {
+hl.bind("CTRL + SUPER + R", hl.dsp.exec_cmd("pkill -x aktyn-shell; " .. shell_bin .. " &"), {
 	description = "Reload shell",
 })
 hl.bind(
@@ -432,6 +395,6 @@ hl.bind(
 
 hl.bind(
 	"CTRL + SUPER + A",
-	hl.dsp.exec_cmd(scripts_dir .. "toggle_quickshell.sh"),
+	hl.dsp.exec_cmd(scripts_dir .. "toggle_shell.sh"),
 	{ description = "Start or exit shell" }
 )
